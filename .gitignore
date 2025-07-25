@@ -1,0 +1,22 @@
+# Virtual Environment
+venv/
+env/
+.env
+
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# IDE
+.vscode/
+.qodo/
+.vscode/settings.json
+
+# Database
+*.db
+*.sqlite3
