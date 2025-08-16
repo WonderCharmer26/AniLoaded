@@ -1,13 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Navbar } from "../components/Navbar";
 
 export default function RootLayout() {
   return (
     <div className="app">
       <header className="app-header">
-        <nav>{/* TODO: Add navigation component */}</nav>
+        <Navbar />
       </header>
-      <main className="app-main">
+      <main className="mt-[72px] ">
         <Outlet />
       </main>
       <footer className="app-footer">

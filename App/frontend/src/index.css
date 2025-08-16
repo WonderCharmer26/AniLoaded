@@ -2,21 +2,6 @@
 
 /* TODO: Add styles for the different HTML elements */
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /* Font's Used*/
 .inter-titles {
   font-family: "Inter", sans-serif;
@@ -26,17 +11,12 @@
 
 body {
   /* NOTE: Might change later on*/
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
   @apply bg-[#101114] text-white;
 }
 
-p {
-  @apply font-["Inter"] text-[1rem] font-normal;
-}
+/* p { */
+/*   @apply font-["Inter"] text-[1rem] font-normal; */
+/* } */
 
 h1 {
   @apply text-3xl font-["Inter"] font-extrabold;
@@ -58,5 +38,9 @@ h3 {
 
   /* show card styling will get added in later on if needed*/
   .show-cards {
+  }
+
+  .nav-text {
+    @apply font-bold font-["Inter"];
   }
 }
