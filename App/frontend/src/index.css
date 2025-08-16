@@ -17,10 +17,46 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Font's Used*/
+.inter-titles {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 body {
+  /* NOTE: Might change later on*/
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  @apply bg-[#101114] text-white;
+}
+
+p {
+  @apply font-["Inter"] text-[1rem] font-normal;
+}
+
+h1 {
+  @apply text-3xl font-["Inter"] font-extrabold;
+}
+
+h3 {
+  @apply text-2xl font-bold;
+}
+
+/* will change later on */
+@layer components {
+  .review-cards {
+    @apply bg-[#1A2227] flex flex-col rounded-[10px];
+  }
+
+  .character-cards {
+    @apply bg-[#1A2227] flex flex-row rounded-[10px];
+  }
+
+  /* show card styling will get added in later on if needed*/
+  .show-cards {
+  }
 }
