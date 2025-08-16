@@ -20,6 +20,7 @@ export const Navbar = () => {
   ];
 
   return (
+    // NOTE: Space between the navbar and the rest of the content changable by the mt-4
     <nav className="flex mt-4 sticky top-0 w-full h-[2.875rem] items-center justify-between ">
       {" "}
       {/* TODO: replace with the real logo of the application */}
