@@ -4,6 +4,7 @@
 // import { Link } from "react-router-dom"; // used for the routing links to the different anime popular anime pages
 import { useQuery } from "@tanstack/react-query";
 import { getSliderPhotos } from "../services/getMainPagePhotos";
+import { toast } from "sonner";
 
 // TODO: make a interface for the slider card component, the slider will have the data from supabase to be displayed
 interface SliderCardI {
@@ -24,9 +25,15 @@ const { data, isLoading, error } = useQuery({
 
 export const SliderCard = () => {
   // TODO: add in a picker at the bottom of the image to move through the images
+
+  if (error) {
+    toast.error("There was an error loading the image");
+  }
+
   return (
     <div className="flex items-center justify-center p-2 w-full rounded-2xl bg-[#0C0C0C] h-[38.875rem]">
       <div className="flex items-center justify-center w-full rounded-2xl bg-blue-950 h-full">
+        {/* TODO: add sync loader component */}
         {isLoading ? <>Image Loading...</> : <>Actual Image</>}
       </div>
     </div>
