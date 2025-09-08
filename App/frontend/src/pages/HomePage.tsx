@@ -1,13 +1,13 @@
 // import React from "react";
 
-import { SliderCard } from "../components/SliderCard";
+import { CarouselComponent } from "../components/Carousel";
 
 export default function HomePage() {
   return (
     <div>
       <div className="">
         {/* TODO: have to connect to slidercard to the backend */}
-        <SliderCard />
+        <CarouselComponent />
       </div>
       {/* TODO: make a carousel of cards to show the users top 5 animes */}
       {/* TODO: make a carousel of cards to show the users top trending anime from the backend (popular shows from the API) */}

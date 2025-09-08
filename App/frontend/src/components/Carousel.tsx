@@ -5,9 +5,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSliderPhotos } from "../services/getMainPagePhotos";
 import { toast } from "sonner";
+import { ClockLoader } from "react-spinners";
 
 // TODO: make a interface for the slider card component, the slider will have the data from supabase to be displayed
-interface SliderCardI {
+interface CarouselI {
   // all the data will be fetched from supabase
   title: string;
   image: string;
@@ -23,9 +24,10 @@ const { data, isLoading, error } = useQuery({
   },
 });
 
-export const SliderCard = () => {
+export const CarouselComponent = () => {
   // TODO: add in a picker at the bottom of the image to move through the images
 
+  // toast error if error loading images
   if (error) {
     toast.error("There was an error loading the image");
   }
@@ -34,8 +36,9 @@ export const SliderCard = () => {
     <div className="flex items-center justify-center p-2 w-full rounded-2xl bg-[#0C0C0C] h-[38.875rem]">
       <div className="flex items-center justify-center w-full rounded-2xl bg-blue-950 h-full">
         {/* TODO: add sync loader component */}
-        {isLoading ? <>Image Loading...</> : <>Actual Image</>}
+        {isLoading ? <ClockLoader /> : <>Actual Image</>}
       </div>
+      {/* TODO: add in selectors to shuffle through the images */}
     </div>
   );
 };
