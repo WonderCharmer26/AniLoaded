@@ -5,7 +5,7 @@
 import { supabase } from "./supabaseConnection";
 
 // slider data fetching function
-const getSliderPhotos = async () => {
+export const getSliderPhotos = async () => {
   const { data, error } = await supabase.storage
     .from("Main Page")
     .list("Carousel");
@@ -16,5 +16,5 @@ const getSliderPhotos = async () => {
 
   // otherwise return the data
   // map through the data of the path names to get use the url to display the images
-  return data?.map((image) => {});
+  return data; // map data on the in the slider component
 };
