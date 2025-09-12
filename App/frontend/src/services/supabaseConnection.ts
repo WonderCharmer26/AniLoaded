@@ -3,7 +3,7 @@
 // imports
 import { createClient } from "@supabase/supabase-js";
 
-// bring in the .env variables
+// use meta import to get the environment variables
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 

@@ -36,7 +36,7 @@ export const CarouselComponent = () => {
     <div className="flex items-center justify-center p-2 w-full rounded-2xl bg-[#0C0C0C] h-[38.875rem]">
       <div className="flex items-center justify-center w-full rounded-2xl bg-blue-950 h-full">
         {/* TODO: add sync loader component */}
-        {isLoading ? <ClockLoader /> : <>Actual Image</>}
+        {isLoading ? <ClockLoader /> : <>{data}</>}
       </div>
       {/* TODO: add in selectors to shuffle through the images */}
     </div>
