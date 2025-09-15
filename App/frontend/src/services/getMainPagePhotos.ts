@@ -17,12 +17,13 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
   const bucket = import.meta.env.VITE_SUPABASE_BUCKET!;
   const folder = import.meta.env.VITE_SUPABASE_FOLDER!;
 
-  // check the buckets
+  //NOTE: check the buckets (remove this later)
   const { data: test, error: testError } = await supabase.storage.listBuckets();
   console.log("test bucket data:", test);
   console.log("test bucket error:", testError);
 
-  // Testing to see if the env variables are working
+  // NOTE: Testing to see if the env variables are working (remove this later)
+
   console.log("bucket", bucket);
   console.log("folder", folder);
   console.log("full path:", `${bucket}/${folder}`);
@@ -32,10 +33,11 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
     .from(bucket)
     .list(`${folder}`);
 
-  //testing the response from supabase
+  // NOTE: testing the response from supabase (remove this later)
   console.log("files data:", files);
   console.log("error data:", error);
 
+  // NOTE: if there is an error, return the results (remove this later)
   if (error) {
     console.log("error listing files:", error);
     return [];
@@ -47,7 +49,8 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
     return [];
   }
 
-  // otherwise the files are found and log the information for proof of concept
+  // NOTE: otherwise the files are found and log the information for proof of concept (remove this later)
+
   console.log("files were found:", files.length);
   console.log(
     "File names:",
@@ -56,10 +59,12 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
 
   // generate urls with the full folder path
   return files.map((file) => {
+    // gets the public url for each image in the bucket
     const { data } = supabase.storage
       .from(bucket)
       .getPublicUrl(`${folder}/${file.name}`);
 
+    // returns an object with the name and the url
     return {
       name: file.name,
       url: data.publicUrl,
