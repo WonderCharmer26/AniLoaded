@@ -33,6 +33,7 @@ export const CarouselComponent = () => {
             {data?.map((photo) => {
               console.log("Image URL:", photo.url);
               return (
+                // add in titles and genres for each of the images
                 <img
                   key={photo.name}
                   src={photo.url}
@@ -45,6 +46,15 @@ export const CarouselComponent = () => {
         )}
       </div>
       {/* TODO: add in selectors to shuffle through the images */}
+      <div className="flex flex-row items-center justify-center gap-2">
+        {/* TODO: edit the styles of the selectors to make them closer to the design */}
+        {/* might make it a button instead */}
+        <div className="w-2 h-2 rounded-full bg-white"></div>
+        <div className="w-2 h-2 rounded-full bg-white"></div>
+        <div className="w-2 h-2 rounded-full bg-white"></div>
+        <div className="w-2 h-2 rounded-full bg-white"></div>
+        <div className="w-2 h-2 rounded-full bg-white"></div>
+      </div>
     </div>
   );
 };
