@@ -21,9 +21,9 @@ body {
   padding: 0;
 }
 
-/* p { */
-/*   @apply font-["Inter"] text-[1rem] font-normal; */
-/* } */
+p {
+  @apply font-["Inter"] text-[1rem] font-normal;
+}
 
 h1 {
   @apply text-3xl font-["Inter"] font-extrabold;

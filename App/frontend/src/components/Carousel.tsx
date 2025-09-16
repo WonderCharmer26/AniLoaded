@@ -41,8 +41,10 @@ export const CarouselComponent = () => {
         {isFetched && data && data.length > 0 && (
           // add in the names for each of the anime and genres
           <div className="flex items-center justify-center w-full h-full relative">
-            <div className="absolute z-1">
+            <div className="absolute text-6xl z-1">
+              {/* title should always be uppercase */}
               <h1>{data[activeIndex].title.toUpperCase()}</h1>
+              <p className="font-bold">{data[activeIndex].genre}</p>
             </div>
             <img
               key={data[activeIndex].id}
