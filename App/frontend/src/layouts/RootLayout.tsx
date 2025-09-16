@@ -11,7 +11,7 @@ export default function RootLayout() {
       <main className="mt-[72px] ">
         <Outlet />
       </main>
-      <footer className="app-footer">
+      <footer className="bottom-0 absolute flex items-center justify-center">
         <p>&copy; 2024 AniLoaded. Your anime discovery platform.</p>
       </footer>
     </div>

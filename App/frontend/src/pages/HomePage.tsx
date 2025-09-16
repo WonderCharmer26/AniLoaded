@@ -5,8 +5,7 @@ import { CarouselComponent } from "../components/Carousel";
 export default function HomePage() {
   return (
     <div>
-      <div className="">
-        {/* TODO: have to connect to slidercard to the backend */}
+      <div>
         <CarouselComponent />
       </div>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}
