@@ -17,7 +17,7 @@ export const CarouselComponent = () => {
   });
 
   return (
-    <div className="flex items-center justify-center p-2 w-full rounded-2xl bg-[#0C0C0C] h-[38.875rem]">
+    <div className="flex items-center justify-center relative p-2 w-full rounded-2xl bg-[#0C0C0C] h-[38.875rem]">
       <div className="flex flex-row items-center justify-center overflow-x-scroll gap-1 w-full rounded-2xl bg-blue-950 h-full">
         {/* error handling */}
         {error && <div>There was an error loading the image</div>}
@@ -46,7 +46,7 @@ export const CarouselComponent = () => {
         )}
       </div>
       {/* TODO: add in selectors to shuffle through the images */}
-      <div className="flex flex-row items-center justify-center gap-2">
+      <div className="flex flex-row items-center absolute -bottom-2.5 justify-center gap-2">
         {/* TODO: edit the styles of the selectors to make them closer to the design */}
         {/* might make it a button instead */}
         <div className="w-2 h-2 rounded-full bg-white"></div>
