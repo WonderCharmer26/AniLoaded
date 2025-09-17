@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function SignUpPage() {
   return (
     <div>
@@ -8,5 +6,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-
-
