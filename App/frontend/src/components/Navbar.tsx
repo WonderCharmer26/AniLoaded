@@ -21,7 +21,7 @@ export const Navbar = () => {
 
   return (
     // NOTE: Space between the navbar and the rest of the content changable by the mt-4
-    <nav className="flex pt-5 sticky top-0 w-full h-[2.875rem] items-center justify-between ">
+    <nav className="flex pt-5 sticky top-0 w-full h-[2.875rem] items-center justify-between text-white">
       {" "}
       {/* TODO: replace with the real logo of the application */}
       <div>
@@ -45,7 +45,16 @@ export const Navbar = () => {
         <SearchBar />
       </div>
       {/* TODO: Add User Icon */}
-      <Menu size={30} />
+      <div className="flex items-center">
+        <div className="flex flex-row mr-2">
+          <Link to="/signin">
+            <button className="bg-[#0066a5] font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
+              Sign In
+            </button>
+          </Link>
+        </div>
+        <Menu size={30} />
+      </div>
     </nav>
   );
 };
