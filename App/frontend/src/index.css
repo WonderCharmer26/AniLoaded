@@ -14,9 +14,16 @@ body {
   @apply bg-[#101114] text-white;
 }
 
-/* p { */
-/*   @apply font-["Inter"] text-[1rem] font-normal; */
-/* } */
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  @apply font-["Inter"] font-normal;
+}
 
 h1 {
   @apply text-3xl font-["Inter"] font-extrabold;
