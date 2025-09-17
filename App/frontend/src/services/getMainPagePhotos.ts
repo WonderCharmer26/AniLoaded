@@ -1,5 +1,4 @@
 // functions to get the data from supabase for the main page
-// TODO: add in toast notifications, download the library
 
 // imports
 import { supabase } from "./supabaseConnection";
@@ -43,3 +42,5 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
     };
   });
 };
+
+// function to get the anime images from api

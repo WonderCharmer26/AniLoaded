@@ -22,7 +22,7 @@ body {
 }
 
 p {
-  @apply font-["Inter"] text-[1rem] font-normal;
+  @apply font-["Inter"] font-normal;
 }
 
 h1 {

@@ -21,7 +21,7 @@ export const Navbar = () => {
 
   return (
     // NOTE: Space between the navbar and the rest of the content changable by the mt-4
-    <nav className="flex mt-4 sticky top-0 w-full h-[2.875rem] items-center justify-between ">
+    <nav className="flex pt-5 sticky top-0 w-full h-[2.875rem] items-center justify-between ">
       {" "}
       {/* TODO: replace with the real logo of the application */}
       <div>
@@ -31,7 +31,8 @@ export const Navbar = () => {
       <div className="flex items-center flex-row">
         <ol className="flex flex-row">
           {navbarLinks.map((items: NavbarLinksI) => (
-            <li key={items.id} className="px-1.5">
+            // TODO: might make the spacing between the links slightly wider
+            <li key={items.id} className="px-3">
               <Link to={items.link}>
                 <p className="font-semibold font-[Inter] text-[0.75rem]">
                   {items.label}

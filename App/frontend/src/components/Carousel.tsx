@@ -11,8 +11,8 @@ import { useState } from "react";
 export const CarouselComponent = () => {
   // variables for to help handle the state in this carousel
 
-  // activeIndex is passed in to fetch specific images from the database
-  const [activeIndex, setActiveIndex] = useState(0); // index to track the cycling of the images in the carousel
+  // activeIndex is passed in to fetch specific images from the database when the buttons are clicked
+  const [activeIndex, setActiveIndex] = useState(0); // index to handle the cycling of the images in the carousel
 
   // make an array of objects for the names of the shows, might make a table in the database to fetch the names to display on the frontend
 
@@ -41,16 +41,19 @@ export const CarouselComponent = () => {
         {isFetched && data && data.length > 0 && (
           // add in the names for each of the anime and genres
           <div className="flex items-center justify-center w-full h-full relative">
-            <div className="absolute text-6xl z-1">
+            <div className="absolute flex flex-col items-center text-6xl z-1">
               {/* title should always be uppercase */}
-              <h1>{data[activeIndex].title.toUpperCase()}</h1>
-              <p className="font-bold">{data[activeIndex].genre}</p>
+              <h1 className="">{data[activeIndex].title.toUpperCase()}</h1>
+              <p className="font-bold text-xl -mt-1">
+                {data[activeIndex].genre}
+              </p>
             </div>
             <img
               key={data[activeIndex].id}
               src={data[activeIndex].url}
               alt={data[activeIndex].title}
-              className="w-full h-full scale-[1.01] object-cover rounded-2xl bg-black transition-opacity duration-500"
+              // lowered the brightness for the image to help with word legibility
+              className="w-full h-full scale-[1.01] brightness-[0.70] object-cover rounded-2xl bg-black transition-opacity duration-500"
             />
           </div>
         )}
