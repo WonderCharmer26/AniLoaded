@@ -1,4 +1,4 @@
-import React from "react";
+// This is the layout for the authentication pages
 import { Outlet } from "react-router-dom";
 
 export default function AuthLayout() {
