@@ -1,5 +1,6 @@
 // TODO: Add in the pop up add to the page
 // TODO: Finalize the sections for the anime that will be displayed
+import { Card } from "../components/Card";
 import { CarouselComponent } from "../components/Carousel";
 
 export default function HomePage() {
@@ -22,6 +23,8 @@ export default function HomePage() {
             </div>
             <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
           </div>
+          {/* cards go here */}
+          <Card />
         </div>
       </section>
       {/* second section for anime */}
@@ -34,6 +37,8 @@ export default function HomePage() {
             </div>
             <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
           </div>
+          {/* cards go here */}
+          <Card />
         </div>
       </section>
       {/* TODO: Add pop up goes here */}
@@ -48,6 +53,8 @@ export default function HomePage() {
             <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
           </div>
         </div>
+        {/* cards go here */}
+        <Card />
       </section>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}
       {/* TODO: make a carousel of cards to show the users top trending anime from the backend (popular shows from the API) */}
