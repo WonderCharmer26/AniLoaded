@@ -16,6 +16,7 @@ export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
         </div>
         <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
       </div>
+      {/* NOTE: add in the CardCarousel component here to combine components (still deciding) */}
     </>
   );
 };
