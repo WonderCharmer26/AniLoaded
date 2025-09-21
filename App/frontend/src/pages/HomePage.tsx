@@ -5,7 +5,6 @@ import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "../services/fetchAnimes";
-import { AxiosResponse } from "axios";
 import { Anime } from "../schemas/animeSchemas";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
@@ -33,6 +32,8 @@ export default function HomePage() {
   }
 
   const trendingData = data ?? [];
+
+  console.log(trendingData); // log the data to test
 
   return (
     <div>
