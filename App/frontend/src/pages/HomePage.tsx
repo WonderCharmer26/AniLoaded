@@ -1,13 +1,19 @@
 // TODO: Add in the pop up add to the page
 // TODO: Finalize the sections for the anime that will be displayed
-import { Card } from "../components/Card";
-import { CardCarousel } from "../components/CardCarousel";
+// import { Card } from "../components/Card";
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
 
 export default function HomePage() {
+  // test data
+  const testData = [
+    {
+      imgUrl: "placeholder",
+      animeTitle: "Anime Title",
+    },
+  ];
   return (
     <div>
       <section>
@@ -18,24 +24,21 @@ export default function HomePage() {
       {/* trending anime section here */}
       <section>
         <div>
-          <ShowcaseSection sectionName="TRENDING ANIME" />
+          <ShowcaseSection sectionName="TRENDING ANIME" cards={testData} />
           {/* TODO: map through the data and display the cards when database is connected */}
-          <CardCarousel Card={Card} />
         </div>
       </section>
       {/* popular section for anime */}
       <section>
         <div>
-          <ShowcaseSection sectionName="POPULAR ANIME" />
-          <CardCarousel Card={Card} />
+          <ShowcaseSection sectionName="POPULAR ANIME" cards={testData} />
         </div>
       </section>
       {/* TODO: Add pop up goes here */}
       {/* third section for anime */}
       <section>
         <div>
-          <ShowcaseSection sectionName="TOP RATED ANIME" />
-          <CardCarousel Card={Card} />
+          <ShowcaseSection sectionName="TOP RATED ANIME" cards={testData} />
         </div>
       </section>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}

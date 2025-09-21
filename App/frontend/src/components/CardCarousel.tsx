@@ -1,13 +1,21 @@
-import { JSX } from "react";
+// import { JSX } from "react";
+import React from "react";
+import { CardI } from "./Card";
+import { Card } from "./Card";
+
+interface CardCarouselI {
+  cards: CardI[];
+}
 
 // this component will be used to display cards for the different categories of anime cards
-interface CardCarouselI {
-  Card: () => JSX.Element;
-}
-export const CardCarousel: React.FC<CardCarouselI> = ({ Card }) => {
+export const CardCarousel: React.FC<CardCarouselI> = ({ cards }) => {
   return (
     <>
-      <div className="flex flex-row items-center">{<Card />}</div>
+      <div className="flex flex-row items-center">
+        {cards.map((card, idx) => (
+          <Card key={idx} {...card} />
+        ))}
+      </div>
     </>
   );
 };

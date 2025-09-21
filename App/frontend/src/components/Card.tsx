@@ -5,22 +5,21 @@
 // NOTE: get rid of export
 // interface for the props for this component
 export interface CardI {
-  imgUrl: string;
-  altText: string;
-  animeTitle: string;
+  imgUrl?: string;
+  animeTitle?: string;
 }
 
 // showcases anime images and the title
-export const Card = () => {
+export const Card: React.FC<CardI> = ({ imgUrl, animeTitle }) => {
   return (
     <div className="w-52 h-72 border border-black relative rounded-2xl">
       <img
-        src="../assets/images/1279113 1.png"
-        alt="Anime Placeholder"
+        src={imgUrl}
+        alt={animeTitle}
         className="w-full h-5/6 object-cover"
       />
       <div className="absolute -bottom-7 left-0 w-full text-center">
-        Anime Title
+        {animeTitle}
       </div>
     </div>
   );
