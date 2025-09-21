@@ -4,6 +4,7 @@
 
 # imports
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import httpx  # for handling the requests on the backend to get data from the Ani-list api
 
@@ -32,7 +33,7 @@ def root():
 
 
 # route to get the trending anime from Ani-list
-@app.get("/trending_anime")
+@app.get("/trending")
 async def get_trending_anime():
     # set up the query to get the trending anime
     query = """
@@ -62,16 +63,20 @@ async def get_trending_anime():
     # send the query to the Ani-list api
     async with httpx.AsyncClient() as client:  # use httpx to make the request to handle everything about the request
         # make a post request to the Ani-list api
-        response = await client.post(
-            "https://graphql.anilist.co",
-            # pass in the query and the varibales to get the items and the amount of items we want fetched
-            json={"query": query, "variables": variables},
-            # set the content type to json
-            headers={"Content-Type": "application/json"},
-        )
+        try:
+            response = await client.post(
+                "https://graphql.anilist.co",
+                # pass in the query and the varibales to get the items and the amount of items we want fetched
+                json={"query": query, "variables": variables},
+                # set the content type to json
+                headers={"Content-Type": "application/json"},
+            )
+            # package the data in a variable to send
+            data = response.json()
 
-    # package the data in a variable to send
-    data = response.json()
+            # return the data
+            return data
 
-    # return the data
-    return data
+        # log the error if it fails
+        except httpx.HTTPError as e:
+            raise HTTPException(status_code=500, detail=str(f"There was an error: {e}"))

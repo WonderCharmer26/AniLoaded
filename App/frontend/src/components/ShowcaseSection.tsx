@@ -1,6 +1,6 @@
 // NOTE: THIS COMPONENT WILL HAVE THE CardCarousel COMPONENT BY DEFAULT INSIDE OF IT
 // imports
-import { CardI } from "./Card";
+import { Anime } from "../schemas/animeSchemas";
 import { CardCarousel } from "./CardCarousel";
 // import { Card } from "./Card";
 import React from "react";
@@ -8,7 +8,7 @@ import React from "react";
 // this is a component for the showcase section on the homepage
 interface ShowcaseSectionI {
   sectionName: string;
-  cards: CardI[]; // might need to make this an array of card components
+  cards: Anime[]; // might need to make this an array of card components
 }
 
 export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({

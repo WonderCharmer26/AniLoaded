@@ -1,10 +1,10 @@
 // import { JSX } from "react";
 import React from "react";
-import { CardI } from "./Card";
 import { Card } from "./Card";
+import { Anime } from "../schemas/animeSchemas";
 
 interface CardCarouselI {
-  cards: CardI[];
+  cards: Anime[];
 }
 
 // this component will be used to display cards for the different categories of anime cards

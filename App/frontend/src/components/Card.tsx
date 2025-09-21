@@ -2,6 +2,8 @@
 // TODO: add in sync loader to show as the images load
 // TODO: add hover effect to display the show information (add later on maybe)
 
+import { Anime } from "../schemas/animeSchemas";
+
 // NOTE: get rid of export
 // interface for the props for this component
 export interface CardI {
@@ -10,16 +12,16 @@ export interface CardI {
 }
 
 // showcases anime images and the title
-export const Card: React.FC<CardI> = ({ imgUrl, animeTitle }) => {
+export const Card: React.FC<Anime> = ({ title, image }) => {
   return (
     <div className="w-52 h-72 border border-black relative rounded-2xl">
       <img
-        src={imgUrl}
-        alt={animeTitle}
+        src={image.large}
+        alt={title.english}
         className="w-full h-5/6 object-cover"
       />
       <div className="absolute -bottom-7 left-0 w-full text-center">
-        {animeTitle}
+        {title.english}
       </div>
     </div>
   );
