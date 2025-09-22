@@ -3,12 +3,15 @@ export interface Anime {
   title: Title;
   image: Image;
   url: string;
+  genre?: string;
+  averageScore?: number;
+  status?: string;
 }
 
 export interface Title {
-  romanji: string;
-  english: string;
-  native: string;
+  romaji: string | null;
+  english?: string | null;
+  native?: string;
 }
 
 interface Image {

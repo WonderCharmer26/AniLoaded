@@ -43,13 +43,18 @@ async def get_trending_anime():
            media(type: ANIME, sort: TRENDING_DESC) {
                id
                title {
-                romanji
+                romaji
                 english
                 native
                }      
                episodes
-               coverImage
-               large
+               coverImage {
+                large
+                medium
+               }
+               genres
+               averageScore
+               status
            } 
         }        
     }"""
@@ -71,12 +76,86 @@ async def get_trending_anime():
                 # set the content type to json
                 headers={"Content-Type": "application/json"},
             )
+            # show the response if it works
+            print(response)
+            response.raise_for_status()  # raise an exception for bad status codes (4xx or 5xx)
+
             # package the data in a variable to send
             data = response.json()
+
+            # handle errors in QL data fetched
+            if "error" in data:
+                print(f"GraphQL error: {data["error"]}")
+                raise HTTPException(status_code=400, detail=data["error"])
 
             # return the data
             return data
 
         # log the error if it fails
-        except httpx.HTTPError as e:
-            raise HTTPException(status_code=500, detail=str(f"There was an error: {e}"))
+        # handle if the status code is not 200
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=str(
+                    f"There was an error: {e.response.status_code} - {e.response.text}"
+                ),
+            )
+        # handle if the request fails
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=500, detail=str(f"Request error: {e}"))
+
+
+# route to get a specific anime by its id
+@app.get("/anime/{anime_id}")
+async def get_anime_by_id(anime_id: int):
+    # set up the query to get the anime by its id
+    query = """
+    query ($id: Int) {
+      Media(id: $id, type: ANIME) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          extraLarge
+          large
+          color
+        }
+        bannerImage
+        format
+        status
+        episodes
+        averageScore
+        genres
+        description(asHtml: false)
+      }
+    }
+    """
+
+    # variables that will be used to get the anime by its id
+    variables = {"id": anime_id}
+
+    # send the query to the Ani-list api
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(
+                "https://graphql.anilist.co",
+                json={"query": query, "variables": variables},
+                headers={"Content-Type": "application/json"},
+            )
+            response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
+            data = response.json()
+
+            # return the data
+            return data
+
+        # More specific error handling
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(
+                status_code=e.response.status_code,
+                detail=f"AniList API error: {e.response.text}",
+            )
+        except httpx.RequestError as e:
+            raise HTTPException(status_code=500, detail=f"Request error: {e}")

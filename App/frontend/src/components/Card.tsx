@@ -6,22 +6,22 @@ import { Anime } from "../schemas/animeSchemas";
 
 // NOTE: get rid of export
 // interface for the props for this component
-export interface CardI {
-  imgUrl?: string;
-  animeTitle?: string;
-}
+// export interface CardI {
+//   imgUrl?: string;
+//   animeTitle?: string;
+// }
 
 // showcases anime images and the title
-export const Card: React.FC<Anime> = ({ title, image }) => {
+export const Card: React.FC<Anime> = ({ title, image }: Anime) => {
   return (
     <div className="w-52 h-72 border border-black relative rounded-2xl">
       <img
+        alt={title.english ? title.english : ""}
         src={image.large}
-        alt={title.english}
         className="w-full h-5/6 object-cover"
       />
       <div className="absolute -bottom-7 left-0 w-full text-center">
-        {title.english}
+        {title.english ? title.english : ""}
       </div>
     </div>
   );

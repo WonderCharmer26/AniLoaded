@@ -8,12 +8,14 @@ interface CardCarouselI {
 }
 
 // this component will be used to display cards for the different categories of anime cards
-export const CardCarousel: React.FC<CardCarouselI> = ({ cards }) => {
+export const CardCarousel: React.FC<CardCarouselI> = ({
+  cards,
+}: CardCarouselI) => {
   return (
     <>
       <div className="flex flex-row items-center">
-        {cards.map((card, idx) => (
-          <Card key={idx} {...card} />
+        {cards.map((card) => (
+          <Card key={card.id} {...card} />
         ))}
       </div>
     </>

@@ -11,12 +11,12 @@ import { Anime } from "../schemas/animeSchemas";
 
 export default function HomePage() {
   // test data
-  const testData = [
-    {
-      imgUrl: "placeholder",
-      animeTitle: "Anime Title",
-    },
-  ];
+  // const testData = [
+  //   {
+  //     imgUrl: "placeholder",
+  //     animeTitle: "Anime Title",
+  //   },
+  // ];
 
   // function for making a request to get trending anime
   const { data, error, isLoading } = useQuery<Anime[], Error>({
@@ -24,6 +24,7 @@ export default function HomePage() {
     queryFn: getTrending,
   });
 
+  // NOTE: move the loading and error handling into the main component div
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
@@ -31,7 +32,11 @@ export default function HomePage() {
     return <h1>Error loading data</h1>;
   }
 
-  const trendingData = data ?? [];
+  // log the data to test what I get back
+  console.log(data);
+
+  // if data then set it to data, else set it to an empty array
+  const trendingData = data ? data : [];
 
   console.log(trendingData); // log the data to test
 
