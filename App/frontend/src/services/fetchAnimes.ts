@@ -2,7 +2,7 @@
 
 // imports needed
 import axios from "axios";
-import { Anime } from "../schemas/animeSchemas"; // handle the data that is fetched from the api
+import { media } from "../schemas/animeSchemas"; // handle the data that is fetched from the api
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
@@ -11,8 +11,8 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL!;
 console.log("backendUrl", backendUrl);
 
 // fumction to fetch the top animes ( top anime from the anime API)
-export async function getTrending(): Promise<Anime[]> {
-  const res = await axios.get<{ data: Anime[] }>(`${backendUrl}/trending`);
+export async function getTrending(): Promise<media[]> {
+  const res = await axios.get<{ data: media[] }>(`${backendUrl}/trending`);
   return res.data.data;
 }
 

@@ -1,11 +1,17 @@
-export interface Anime {
+export interface media {
   id: number;
   title: Title;
-  image: Image;
-  url: string;
-  genre?: string;
-  averageScore?: number;
-  status?: string;
+  episodes: number | null; // might not get episodes back
+  coverImage: Image;
+  genres?: string[];
+  averageScore?: number | null;
+  status?:
+    | "FINISHED"
+    | "RELEASING"
+    | "NOT_YET_RELEASED"
+    | "CANCELLED"
+    | "HIATUS"
+    | null;
 }
 
 export interface Title {
@@ -22,5 +28,5 @@ interface Image {
 
 // interface for trending_anime
 export interface TrendingAnimeI {
-  data: Anime[];
+  data: media[];
 }

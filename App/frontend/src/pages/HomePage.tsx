@@ -5,7 +5,7 @@ import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
 import { getTrending } from "../services/fetchAnimes";
-import { Anime } from "../schemas/animeSchemas";
+import { media } from "../schemas/animeSchemas";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
 
@@ -19,7 +19,7 @@ export default function HomePage() {
   // ];
 
   // function for making a request to get trending anime
-  const { data, error, isLoading } = useQuery<Anime[], Error>({
+  const { data, error, isLoading } = useQuery<media[], Error>({
     queryKey: ["trending"],
     queryFn: getTrending,
   });
