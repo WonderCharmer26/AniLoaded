@@ -25,8 +25,10 @@ export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
         </div>
         <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
       </div>
-      {/* NOTE: add in the CardCarousel component here to combine components */}
-      <CardCarousel cards={cards} />
+      <div className="flex flex-row overflow-hidden items-center justify-center">
+        {/* NOTE: add in the CardCarousel component here to combine components */}
+        <CardCarousel cards={cards} />
+      </div>
     </>
   );
 };

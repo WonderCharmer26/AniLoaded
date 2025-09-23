@@ -13,9 +13,11 @@ export const CardCarousel: React.FC<CardCarouselI> = ({
 }: CardCarouselI) => {
   return (
     <>
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center overflow-x-scroll scrollbar-hide overflow-hidden">
         {cards.map((card) => (
-          <Card key={card.id} {...card} />
+          <div className="mr-4">
+            <Card key={card.id} {...card} />
+          </div>
         ))}
       </div>
     </>
