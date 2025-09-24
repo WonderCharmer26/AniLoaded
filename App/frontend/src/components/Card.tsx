@@ -2,7 +2,7 @@
 // TODO: add in sync loader to show as the images load
 // TODO: add hover effect to display the show information (add later on maybe)
 
-import { media } from "../schemas/animeSchemas";
+import { AniListMedia } from "../schemas/animeSchemas";
 
 // NOTE: get rid of export
 // interface for the props for this component
@@ -12,7 +12,10 @@ import { media } from "../schemas/animeSchemas";
 // }
 
 // showcases anime images and the title
-export const Card: React.FC<media> = ({ title, coverImage }: media) => {
+export const Card: React.FC<AniListMedia> = ({
+  title,
+  coverImage,
+}: AniListMedia) => {
   return (
     <div className="w-42 cursor-pointer h-78 border border-white relative rounded-2xl">
       <img

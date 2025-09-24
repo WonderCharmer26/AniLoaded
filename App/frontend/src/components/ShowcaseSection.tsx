@@ -1,6 +1,6 @@
 // NOTE: THIS COMPONENT WILL HAVE THE CardCarousel COMPONENT BY DEFAULT INSIDE OF IT
 // imports
-import { media } from "../schemas/animeSchemas";
+import { AniListMedia } from "../schemas/animeSchemas";
 import { CardCarousel } from "./CardCarousel";
 // import { Card } from "./Card";
 import React from "react";
@@ -8,7 +8,7 @@ import React from "react";
 // this is a component for the showcase section on the homepage
 interface ShowcaseSectionI {
   sectionName: string;
-  cards: media[]; // might need to make this an array of card components
+  cards: AniListMedia[]; // might need to make this an array of card components
 }
 
 export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({

@@ -6,8 +6,9 @@ import { AniListMedia, TrendingResponse } from "../schemas/animeSchemas"; // typ
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
-const backendUrl = import.meta.env.VITE_BACKEND_URL!;
+const backendUrl = import.meta.env.VITE_BACKEND_URL!; // WARNING: import might not be working evaluate LSP
 
+// check if the env variable is brought over properly
 console.log("backendUrl", backendUrl);
 
 // function to fetch the top animes (top anime from the anime API)
