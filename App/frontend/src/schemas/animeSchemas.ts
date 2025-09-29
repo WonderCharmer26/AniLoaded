@@ -1,10 +1,13 @@
 // Raw AniList-like types (mirror GraphQL response)
+
+// title schema for the information for the title
 export interface AniListTitle {
   romaji: string | null;
   english?: string | null;
   native?: string | null;
 }
 
+// schema for the images that we get back
 export interface AniListImage {
   large?: string;
   medium?: string;
@@ -16,18 +19,13 @@ export interface AniListMedia {
   title: AniListTitle;
   episodes: number | null; // might not get episodes back
   coverImage: AniListImage;
-  genres?: string[];
+  genres?: string[]; // might get back an array of different genres
   averageScore?: number | null;
-  status?:
-    | "FINISHED"
-    | "RELEASING"
-    | "NOT_YET_RELEASED"
-    | "CANCELLED"
-    | "HIATUS"
-    | null;
+  status?: // predefined strings that we'll get back for the status of the show
+  "FINISHED" | "RELEASING" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS" | null;
 }
 
-// Corrected trending response envelope from backend
+// Structure for the data that we'll get back from GraphQL call
 export interface TrendingResponse {
   data: {
     Page: {

@@ -35,6 +35,10 @@ def root():
 # route to get the trending anime from Ani-list
 @app.get("/trending")
 async def get_trending_anime():
+    """
+    NOTE: May adjust for amount for rendering on trending anime page
+    and manually tweak the amount rendered in frontend component like CardCarousel
+    """
     # set up the query to get the trending anime
     query = """
 
@@ -60,6 +64,7 @@ async def get_trending_anime():
     }"""
 
     # variables that can be used to get the amount of items that I want
+    # NOTE: May tweak to more perPage later on after CardCarousel is completed and manually tweak on frontend
     variables = {
         "page": 1,
         "perPage": 10,
