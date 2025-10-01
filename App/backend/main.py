@@ -32,6 +32,88 @@ def root():
     return {"test_message": "This is a test message to show the backend is working"}
 
 
+# route to get the popular anime from Ani-list
+@app.get("/popular")
+async def get_popular_anime():
+    """
+    NOTE: This fetch gets the popular anime from Ani-list so that I can return the
+    anime to the frontend Carousel Component
+    """
+
+    # query that being sent
+    query = """
+    
+    query ($perPage: Int, $page: Int) {
+        Page(page: $page, perPage: $perPage) {
+            media(type: ANIME, sort: POPULARITY_DESC){
+                id 
+                title {
+                  romaji
+                  english
+                  native
+                }
+                episodes
+                coverImage {
+                  large
+                  medium
+                }
+                genres
+                averageScore
+                status(version: 2)
+            }
+        }
+    }
+    """
+
+    # pass in the variables that will be passed into the query when sent
+    variables = {
+        "page": 1,
+        "perPage": 10,
+    }  # amount of anime retrieved I might change later on
+
+    # send the query with the variables to get teh popular anime
+    async with httpx.AsyncClient() as client:
+        # make a post request to the Ani-list api
+        try:
+            response = await client.post(
+                "https://graphql.anilist.co",
+                json={"query": query, "variables": variables},
+                headers={"Content-Type": "application/json"},
+            )
+            # print the response to check
+            print(response)
+            # show the status if all goes good
+            response.raise_for_status()
+
+            # package the data to send back to the frontend
+            data = response.json()  # turn the data into json to send off
+
+            # handle the errors if anything pops up
+            if "errors" in data:
+                print(f"GraphQL error: {data['errors']}")
+                raise HTTPException(status_code=400, detail=data["errors"])
+
+            # return the data
+            return data
+
+        # log the error if it fails
+        # handle if the status code is not 200
+        except httpx.HTTPStatusError as error:
+            raise HTTPException(
+                status_code=500,
+                detail=str(
+                    f"There was an error: {error.response.status_code} - {error.response.text}"
+                ),
+            )
+
+        # handle if the request fails
+        except httpx.RequestError as error:
+            raise HTTPException(
+                status_code=500,
+                detail=str(f"There was an error in the request sent: {error}"),
+            )
+
+
 # route to get the trending anime from Ani-list
 @app.get("/trending")
 async def get_trending_anime():
@@ -90,7 +172,7 @@ async def get_trending_anime():
 
             # handle errors in QL data fetched
             if "error" in data:
-                print(f"GraphQL error: {data["error"]}")
+                print(f"GraphQL error: {data['error']}")
                 raise HTTPException(status_code=400, detail=data["error"])
 
             # return the data

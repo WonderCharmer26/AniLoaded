@@ -14,6 +14,7 @@ export interface AniListImage {
   small?: string;
 }
 
+// schema for the GraphQL querry
 export interface AniListMedia {
   id: number;
   title: AniListTitle;
@@ -26,7 +27,7 @@ export interface AniListMedia {
 }
 
 // Structure for the data that we'll get back from GraphQL call
-export interface TrendingResponse {
+export interface ShowcaseResponse {
   data: {
     Page: {
       media: AniListMedia[];

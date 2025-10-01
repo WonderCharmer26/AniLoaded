@@ -4,7 +4,7 @@
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
-import { getTrending } from "../services/fetchAnimes";
+import { getPopular, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
@@ -19,26 +19,51 @@ export default function HomePage() {
   // ];
 
   // function for making a request to get trending anime
-  const { data, error, isLoading } = useQuery<AniListMedia[], Error>({
+  const {
+    data: trending,
+    error: trendingError,
+    isLoading: trendingLoading,
+  } = useQuery<AniListMedia[], Error>({
     queryKey: ["trending"],
     queryFn: getTrending,
   });
 
-  // NOTE: move the loading and error handling into the main component div
-  if (isLoading) {
+  // function for making a request to get the most popular anime
+  const {
+    data: popular,
+    error: popularError,
+    isLoading: popularLoading,
+  } = useQuery<AniListMedia[], Error>({
+    queryKey: ["popular"],
+    queryFn: getPopular,
+  });
+
+  // NOTE: move the loading and error handling into the component with the trending showcase
+  if (trendingLoading) {
     return <h1>Loading...</h1>;
   }
-  if (error) {
+  if (trendingError) {
+    return <h1>Error loading data</h1>;
+  }
+
+  // NOTE: move the loading and error into the compontent for popular showcase section
+  if (popularLoading) {
+    return <h1>Loading...</h1>;
+  }
+  if (popularError) {
     return <h1>Error loading data</h1>;
   }
 
   // log the data to test what I get back
-  console.log(data);
+  console.log(trending); // check the trending data;
+  console.log(popular); // check the popular data
 
   // if data then set it to data, else set it to an empty array
-  const trendingData = data ? data : [];
+  const trendingData = trending ? trending : [];
+  const popularData = popular ? popular : [];
 
   console.log(trendingData); // log the data to test
+  console.log(popularData); // log the data to test
 
   return (
     <div>
@@ -57,7 +82,7 @@ export default function HomePage() {
       {/* popular section for anime */}
       <section>
         <div>
-          <ShowcaseSection sectionName="POPULAR ANIME" cards={trendingData} />
+          <ShowcaseSection sectionName="POPULAR ANIME" cards={popularData} />
         </div>
       </section>
       {/* TODO: Add pop up goes here */}

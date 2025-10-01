@@ -2,7 +2,7 @@
 
 // imports needed
 import axios from "axios";
-import { AniListMedia, TrendingResponse } from "../schemas/animeSchemas"; // types for AniList response
+import { AniListMedia, ShowcaseResponse } from "../schemas/animeSchemas"; // types for AniList response
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
@@ -13,8 +13,16 @@ console.log("backendUrl", backendUrl);
 
 // function to fetch the top animes (top anime from the anime API)
 export async function getTrending(): Promise<AniListMedia[]> {
-  const res = await axios.get<TrendingResponse>(`${backendUrl}/trending`);
+  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/trending`);
   const media = res.data?.data?.Page?.media ?? [];
+  return media;
+}
+
+// function to get the popular anime from backend api
+// NOTE: the promise that I get back is the AniListMedia that I define in the schema
+export async function getPopular(): Promise<AniListMedia[]> {
+  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/popular`);
+  const media = res.data?.data.Page?.media ?? []; // send empty array if no data found
   return media;
 }
 
