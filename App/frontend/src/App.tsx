@@ -1,5 +1,5 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+// import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import "./index.css";
 
@@ -14,6 +14,8 @@ import AnimeInfoPage from "./pages/AnimeInfoPage";
 import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
 
+// Fetching functions to get data for the HomePage
+
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -21,20 +23,26 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
+        // Main Page
         index: true,
         element: <HomePage />,
+        // TODO: add in a loader to help with loading the anime on the page
+        // use the animeFetching functions to get the data for the carousel and the cards
       },
       {
+        // Profile page
         path: "profile",
         element: <UserProfilePage />,
       },
       // NOTE: might make anime layout for all the anime pages
       {
+        // info about the anime (might route into it's parent route)
         path: "anime/:id",
         element: <AnimeInfoPage />,
       },
     ],
   },
+
   {
     // NOTE: route auth/login and auth/signup
     path: "auth",
