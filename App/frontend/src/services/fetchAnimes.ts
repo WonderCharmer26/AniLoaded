@@ -26,6 +26,11 @@ export async function getPopular(): Promise<AniListMedia[]> {
   return media;
 }
 
+// function to get the Top Rated Animes from the backend
+export async function getTopAnime() {
+  const res = axios.get(`${backendUrl}/Top`);
+}
+
 // function to get the users own top anime from supabase
 export function usersTopAnime() {}
 

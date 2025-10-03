@@ -17,13 +17,13 @@ export const Card: React.FC<AniListMedia> = ({
   coverImage,
 }: AniListMedia) => {
   return (
-    <div className="w-42 cursor-pointer h-78 relative rounded-2xl">
+    <div className="w-42 cursor-pointer h-80 relative rounded-2xl">
       <img
         alt={title.english ? title.english : ""}
         src={coverImage.large}
-        className="w-full h-72 object-cover rounded-2xl"
+        className="w-full h-72 object-cover border-4 border-black rounded-2xl"
       />
-      <div className="absolute flex justify-center items-center h-fit -bottom-8 left-0 w-full text-center">
+      <div className="absolute flex justify-center items-center mt-1 h-fit bottom-0 left-0 w-full text-center">
         {title.english ? title.english : ""}
       </div>
     </div>

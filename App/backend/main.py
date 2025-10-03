@@ -192,7 +192,14 @@ async def get_trending_anime():
             raise HTTPException(status_code=500, detail=str(f"Request error: {e}"))
 
 
+# Route to get the top anime from anilist
+@app.get("/top-anime")
+async def get_top_anime():
+    pass
+
+
 # route to get a specific anime by its id
+# NOTE: make the route protected with jwt check
 @app.get("/anime/{anime_id}")
 async def get_anime_by_id(anime_id: int):
     # set up the query to get the anime by its id
