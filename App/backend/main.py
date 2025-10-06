@@ -219,6 +219,50 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
         }
     }
     """
+
+    # get the 1st page, will swap to get the params from the frontend call
+    variables = {"page": 1, "perPage": 10}
+
+    # make the call to get the data
+    async with httpx.AsyncClient() as client:
+        try:
+            # try to connect get the data from ani-list
+            response = await client.post(
+                "https://graphql.anilist.co",
+                json={"query": query, "variables": variables},
+                headers={"Content-Type": "application/json"},
+            )
+
+            # test out the fetch
+            print(f"Test for the response for Top Anime:{response}")
+            # raise an error if status isn't successful
+            response.raise_for_status()
+
+            # package the data to send of if no error occurs
+            data = response.json()
+
+            # check if there is an error in the response I get back
+            if "error" in data:
+                # print to the console
+                print(f"Here is the error in the data:{data["error"]}")
+                # raise an error close the func
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"There was an error in the res we got back:{data["error"]}",
+                )
+
+        # check for status_code error
+        except httpx.HTTPStatusError() as e:
+            raise HTTPException(
+                status_code=500, detail=str(f"There was an error in the status code{e}")
+            )
+
+        # check if there was an error in Request
+        except httpx.RequestError() as e:
+            raise HTTPException(
+                status_code=404, detail=str(f"There was an error getting the data:{e}")
+            )
+
     pass
 
 
