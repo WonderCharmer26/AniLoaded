@@ -34,9 +34,7 @@ export const Navbar = () => {
             // TODO: might make the spacing between the links slightly wider
             <li key={items.id} className="px-3">
               <Link to={items.link}>
-                <p className="font-semibold font-[Inter] text-[0.75rem]">
-                  {items.label}
-                </p>
+                <p className="navbar-text">{items.label}</p>
               </Link>
             </li>
           ))}

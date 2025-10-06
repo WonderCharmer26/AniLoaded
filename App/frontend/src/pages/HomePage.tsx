@@ -8,7 +8,8 @@ import { getPopular, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
-
+// NOTE: gonna add the supabase user in here to account for when the user is logged in
+// NOTE: add in prefetch to get the data before the component loads for the carousel component
 export default function HomePage() {
   // test data
   // const testData = [
@@ -85,7 +86,7 @@ export default function HomePage() {
           <ShowcaseSection sectionName="POPULAR ANIME" cards={popularData} />
         </div>
       </section>
-      {/* TODO: Add pop up goes here */}
+      {/* TODO: Add pop up goes here fetch the image from supabase */}
       {/* third section for anime */}
       <section>
         <div>

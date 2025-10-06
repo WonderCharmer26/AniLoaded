@@ -33,6 +33,18 @@ h3 {
   @apply text-2xl font-bold;
 }
 
+/* style for hidding the scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* style for the webpage scrollbar */
+
+/* custom styles to use throughout the app */
+.navbar-text {
+  @apply font-["Inter"] font-bold text-[0.75rem];
+}
+
 /* will change later on */
 @layer components {
   .review-cards {

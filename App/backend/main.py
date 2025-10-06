@@ -193,8 +193,32 @@ async def get_trending_anime():
 
 
 # Route to get the top anime from anilist
-@app.get("/top-anime")
-async def get_top_anime():
+@app.get("/top-anime")  # get all the top anime (no parameters needed)
+async def get_top_anime():  # NOTE: may add in param from the frontend if needed
+    # this query is sorted in descending order
+    # set up the query string
+    query = """
+     query ($perPage: Int, $page: Int) {
+        Page(page: $page, perPage: $perPage) {
+            media(type: ANIME, sort: SCORE_DESC){
+                id 
+                title {
+                  romaji
+                  english
+                  native
+                }
+                episodes
+                coverImage {
+                  large
+                  medium
+                }
+                genres
+                averageScore
+                status(version: 2)
+            }
+        }
+    }
+    """
     pass
 
 
