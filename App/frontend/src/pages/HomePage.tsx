@@ -4,7 +4,7 @@
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
-import { getPopular, getTrending } from "../services/fetchAnimes";
+import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
@@ -39,6 +39,16 @@ export default function HomePage() {
     queryFn: getPopular,
   });
 
+  // TODO: make function to fetch the top anime to showcase in the carousel
+  const {
+    data: topAnime,
+    error: topAnimeError,
+    isLoading: topAnimeLoading,
+  } = useQuery<AniListMedia[], Error>({
+    queryKey: ["topAnime"],
+    queryFn: getTopAnime,
+  });
+
   // NOTE: move the loading and error handling into the component with the trending showcase
   if (trendingLoading) {
     return <h1>Loading...</h1>;
@@ -58,13 +68,16 @@ export default function HomePage() {
   // log the data to test what I get back
   console.log(trending); // check the trending data;
   console.log(popular); // check the popular data
+  console.log(topAnime); // check the top anime
 
   // if data then set it to data, else set it to an empty array
   const trendingData = trending ? trending : [];
   const popularData = popular ? popular : [];
+  const topAnimeData = topAnime ? topAnime : [];
 
   console.log(trendingData); // log the data to test
   console.log(popularData); // log the data to test
+  console.log("this is the top anime data:", topAnimeData); // log the data to test
 
   return (
     <div>
@@ -90,7 +103,7 @@ export default function HomePage() {
       {/* third section for anime */}
       <section>
         <div>
-          <ShowcaseSection sectionName="TOP RATED ANIME" cards={trendingData} />
+          <ShowcaseSection sectionName="TOP RATED ANIME" cards={topAnimeData} />
         </div>
       </section>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}

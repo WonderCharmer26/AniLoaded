@@ -234,7 +234,7 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             )
 
             # test out the fetch
-            print(f"Test for the response for Top Anime:{response}")
+            print(f"Test for the response for Top Anime:{response.content}")
             # raise an error if status isn't successful
             response.raise_for_status()
 
@@ -246,10 +246,10 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
                 # print to the console
                 print(f"Here is the error in the data:{data["error"]}")
                 # raise an error close the func
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"There was an error in the res we got back:{data["error"]}",
-                )
+                raise HTTPException(status_code=400, detail=data["error"])
+
+            # return the data to the frontend if the fetch was successful
+            return data
 
         # check for status_code error
         except httpx.HTTPStatusError() as e:
@@ -262,8 +262,6 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             raise HTTPException(
                 status_code=404, detail=str(f"There was an error getting the data:{e}")
             )
-
-    pass
 
 
 # route to get a specific anime by its id

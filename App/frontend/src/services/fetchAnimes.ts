@@ -29,11 +29,6 @@ export async function getPopular(): Promise<AniListMedia[]> {
 // function to get the Top Rated Animes from the backend
 export async function getTopAnime(): Promise<AniListMedia[]> {
   const res = await axios.get<ShowcaseResponse>(`${backendUrl}/top-anime`);
-
-  // handle if data is fetched successfully
-  if (!res) {
-    console.log(`There was an error getting top anime ${res}`);
-  }
   const media = res.data?.data.Page?.media ?? []; // return data if not return an empty array
   return media;
 }
