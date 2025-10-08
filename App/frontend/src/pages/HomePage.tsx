@@ -11,35 +11,32 @@ import { AniListMedia } from "../schemas/animeSchemas";
 // NOTE: gonna add the supabase user in here to account for when the user is logged in
 // NOTE: add in prefetch to get the data before the component loads for the carousel component
 export default function HomePage() {
-  // test data
-  // const testData = [
-  //   {
-  //     imgUrl: "placeholder",
-  //     animeTitle: "Anime Title",
-  //   },
-  // ];
+  // NOTE: get the data from the homePageFetcher and pass it in to the data so that it's there when prefetched
 
   // function for making a request to get trending anime
   const {
-    data: trending,
+    data: trendingAnime,
     error: trendingError,
     isLoading: trendingLoading,
   } = useQuery<AniListMedia[], Error>({
-    queryKey: ["trending"],
+    queryKey: ["trendingAnime"],
     queryFn: getTrending,
+    // use initial data to get the prefetched data to use
   });
 
   // function for making a request to get the most popular anime
   const {
-    data: popular,
+    data: popularAnime,
     error: popularError,
     isLoading: popularLoading,
   } = useQuery<AniListMedia[], Error>({
-    queryKey: ["popular"],
+    queryKey: ["popularAnime"],
     queryFn: getPopular,
+    // use initial data to get the prefetched data to use
   });
 
   // TODO: make function to fetch the top anime to showcase in the carousel
+  //TODO: handle the error and loading state
   const {
     data: topAnime,
     error: topAnimeError,
@@ -47,6 +44,7 @@ export default function HomePage() {
   } = useQuery<AniListMedia[], Error>({
     queryKey: ["topAnime"],
     queryFn: getTopAnime,
+    // use initial data to get the prefetched data to use
   });
 
   // NOTE: move the loading and error handling into the component with the trending showcase
@@ -66,13 +64,13 @@ export default function HomePage() {
   }
 
   // log the data to test what I get back
-  console.log(trending); // check the trending data;
-  console.log(popular); // check the popular data
+  console.log(trendingAnime); // check the trending data;
+  console.log(popularAnime); // check the popular data
   console.log(topAnime); // check the top anime
 
   // if data then set it to data, else set it to an empty array
-  const trendingData = trending ? trending : [];
-  const popularData = popular ? popular : [];
+  const trendingData = trendingAnime ? trendingAnime : [];
+  const popularData = popularAnime ? popularAnime : [];
   const topAnimeData = topAnime ? topAnime : [];
 
   console.log(trendingData); // log the data to test
