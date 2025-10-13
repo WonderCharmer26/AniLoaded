@@ -5,14 +5,14 @@ import { getCarouselPhotos } from "./getMainPagePhotos";
 import { queryClient } from "./queryClient";
 
 // make the function exportable if needed
-export const carouselLoader = async () => {
-  // prefetch the data
+export const carouselPrefetch = async () => {
+  // prefetch the data with the premade queryClient
   await queryClient.prefetchQuery({
     queryKey: ["slider"],
     queryFn: getCarouselPhotos,
   });
 
-  // return an obj to the component
+  // return an obj to use in the carousel component
   return {
     dehydratedState: dehydrate(queryClient), // pass in the cache from the queryClient to send off
   };

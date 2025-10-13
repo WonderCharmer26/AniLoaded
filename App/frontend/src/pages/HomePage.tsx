@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { useLoaderData } from "react-router-dom"; // use data from react router loader
-import { hydrate } from "@tanstack/react-query";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
 // NOTE: gonna add the supabase user in here to account for when the user is logged in
@@ -15,9 +14,9 @@ import { hydrate } from "@tanstack/react-query";
 export default function HomePage() {
   // NOTE: get the data from the homePageFetcher and pass it in to the data so that it's there when prefetched
   const loaderData = useLoaderData() as {
-    trendingAnime: any;
-    popularAnime: any;
-    topAnime: any;
+    trendingAnime: AniListMedia[];
+    popularAnime: AniListMedia[];
+    topAnime: AniListMedia[];
   };
 
   // const { dehydratedState } = useLoaderData() as { dehydratedState: unknown };

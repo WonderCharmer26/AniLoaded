@@ -30,9 +30,8 @@ const router = createBrowserRouter([
         // Main Page
         index: true,
         element: <HomePage />,
+        // NOTE: homePageFetcher get the raw calrousel data and also returns the anime queries for the showcase sections on the page
         loader: homePageFetcher(queryClient),
-        // TODO: add in a loader to help with loading the anime on the page
-        // use the animeFetching functions to get the data for the carousel and the cards
       },
       {
         // Profile page

@@ -2,6 +2,7 @@
 
 import { QueryClient } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "./fetchAnimes";
+import { getCarouselPhotos } from "./getMainPagePhotos";
 
 // TODO: make sure that this function is type safe to make use of it easier
 
@@ -15,11 +16,20 @@ export const homePageFetcher = (queryClient: QueryClient) => async () => {
     { queryKey: ["topAnime"], queryFN: getTopAnime },
   ];
 
+  // prefetch the data to make sure the carousel component is ready with the images when the page loads (doesn't return any data)
+  await queryClient.prefetchQuery({
+    queryKey: ["slider"],
+    queryFn: getCarouselPhotos,
+  });
+
   // get all the data in the arr of obj and fetch the data one by one
   const data = await Promise.all(
-    // returns an array of the fetched data
+    // returns an array of the Promises from the fetching
     queries.map((query) => {
-      queryClient.ensureQueryData(query);
+      queryClient.ensureQueryData({
+        queryKey: query.queryKey,
+        queryFn: query.queryFN,
+      });
     }),
   );
 
@@ -28,5 +38,7 @@ export const homePageFetcher = (queryClient: QueryClient) => async () => {
     trendingAnime: data[0],
     popularAnime: data[1],
     topAnime: data[2],
+    // NOTE: no data is needed to return for the prefetch data for the carousel
+    // carouselData, // return the raw carousel data to be used on the home page
   };
 };
