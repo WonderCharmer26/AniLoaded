@@ -23,7 +23,7 @@ export const Card: React.FC<AniListMedia> = ({
         src={coverImage.large}
         className="w-full h-72 object-cover border-4 border-black rounded-2xl"
       />
-      <div className="h-12 text-center overflow-hidden cursor-pointer">
+      <div className="font-[Inter] h-12 text-center overflow-hidden cursor-pointer">
         {/* make sure that the titles are only showed up to a certain amount */}
         {title.english ? title.english.split(" ").slice(0, 6).join(" ") : ""}
       </div>
