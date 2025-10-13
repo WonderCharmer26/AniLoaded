@@ -13,9 +13,13 @@ import AnimeInfoPage from "./pages/AnimeInfoPage";
 // Layout Components
 import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
+import { homePageFetcher } from "./services/homePageLoader";
+import { QueryClient } from "@tanstack/react-query";
+
+// queryClient to get pass the query into the functions that need to get the data for the loader
+const queryClient = new QueryClient();
 
 // Fetching functions to get data for the HomePage
-
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -26,6 +30,7 @@ const router = createBrowserRouter([
         // Main Page
         index: true,
         element: <HomePage />,
+        loader: homePageFetcher(queryClient),
         // TODO: add in a loader to help with loading the anime on the page
         // use the animeFetching functions to get the data for the carousel and the cards
       },
