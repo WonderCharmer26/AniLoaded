@@ -7,6 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { useLoaderData } from "react-router-dom"; // use data from react router loader
+import { use } from "react";
+import { adSchemaI } from "../schemas/adSchema";
+import { getPosterAd } from "../services/getMainPagePhotos";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
 // NOTE: gonna add the supabase user in here to account for when the user is logged in
@@ -89,7 +92,6 @@ export default function HomePage() {
 
   console.log(trendingData); // log the data to test
   console.log(popularData); // log the data to test
-  console.log("this is the top anime data:", topAnimeData); // log the data to test
 
   return (
     <div>
@@ -119,7 +121,9 @@ export default function HomePage() {
         </div>
       </section>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}
-      {/* TODO: place the banner of dandadan poster after that the user can click on */}
+      <section>
+        {/* TODO: place the banner of dandadan poster after that the user can click on */}
+      </section>
       {/* TODO: show the different categories of animes from the backend with same card component */}
     </div>
   );
