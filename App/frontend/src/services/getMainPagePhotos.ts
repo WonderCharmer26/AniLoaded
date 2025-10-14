@@ -9,6 +9,7 @@ import { adSchemaI } from "../schemas/adSchema";
 // get the .env variables to use in the functions
 const bucket = import.meta.env.VITE_SUPABASE_BUCKET!;
 const folder = import.meta.env.VITE_SUPABASE_FOLDER!;
+const folder2 = import.meta.env.VITE_SUPABASE_FOLDER2!;
 
 // slider data fetching function
 export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
@@ -54,21 +55,19 @@ export const getPosterAd = async (): Promise<adSchemaI[]> => {
     // collumns to select
     .select("id, storage_path, title")
     // order the images that are gotten back
-    .order("id", { ascending: true });
+    .order("id");
 
   // check if there is an error on the fetching to account for null cases
   if (posterAdError) {
-    console.log(posterAdError);
     console.log("there was an error getting the data for the posterAdData");
     return [];
   }
 
   // check to see if the data gotten back is null to account for null cases
-  if (!posterAdData) {
-    console.log(posterAdData + []);
-    console.log("there was no posterAdData to find when searching supabase");
-    return [];
-  }
+  // if (!posterAdData) {
+  //   console.log("there was no posterAdData to find when searching supabase");
+  //   return [];
+  // }
 
   // log to see if the url is correct
   console.log(posterAdData.map((row) => row.storage_path));
@@ -77,7 +76,7 @@ export const getPosterAd = async (): Promise<adSchemaI[]> => {
     // get the data using the path from the database to get the data from the folder
     const { data: adData } = supabase.storage
       .from(bucket)
-      .getPublicUrl(`${folder}/${row.storage_path}`);
+      .getPublicUrl(`${folder2}/${row.storage_path}`);
 
     // return an object with the data to use in the image element
     return {

@@ -2,7 +2,7 @@
 
 import { QueryClient } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "./fetchAnimes";
-import { getCarouselPhotos } from "./getMainPagePhotos";
+import { getCarouselPhotos, getPosterAd } from "./getMainPagePhotos";
 
 // TODO: make sure that this function is type safe to make use of it easier
 
@@ -21,6 +21,9 @@ export const homePageFetcher = (queryClient: QueryClient) => async () => {
     queryKey: ["slider"],
     queryFn: getCarouselPhotos,
   });
+
+  // prefetch the data for the ads for the home page
+  await queryClient.prefetchQuery({ queryKey: ["ads"], queryFn: getPosterAd });
 
   // get all the data in the arr of obj and fetch the data one by one
   const data = await Promise.all(

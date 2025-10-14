@@ -1,5 +1,4 @@
-// TODO: Add in the pop up add to the page
-// TODO: Finalize the sections for the anime that will be displayed
+// TODO: have skeleton loader to load the elements onto the page when the data is loading
 // import { Card } from "../components/Card";
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
@@ -7,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { useLoaderData } from "react-router-dom"; // use data from react router loader
-import { use } from "react";
 import { adSchemaI } from "../schemas/adSchema";
 import { getPosterAd } from "../services/getMainPagePhotos";
 
@@ -64,6 +62,14 @@ export default function HomePage() {
     initialData: loaderData.topAnime,
   });
 
+  // useQuery to get the data from supabase
+  const {
+    data: adData,
+    error: adError,
+    isFetched: adFetched,
+    isLoading: adLoading,
+  } = useQuery<adSchemaI[]>({ queryKey: ["ads"], queryFn: getPosterAd });
+
   // NOTE: move the loading and error handling into the component with the trending showcase
   if (trendingLoading) {
     return <h1>Loading...</h1>;
@@ -89,6 +95,7 @@ export default function HomePage() {
   const trendingData = trendingAnime ? trendingAnime : [];
   const popularData = popularAnime ? popularAnime : [];
   const topAnimeData = topAnime ? topAnime : [];
+  // const adFetchedData = adData ? adData : [];
 
   console.log(trendingData); // log the data to test
   console.log(popularData); // log the data to test
@@ -120,9 +127,22 @@ export default function HomePage() {
           <ShowcaseSection sectionName="TOP RATED ANIME" cards={topAnimeData} />
         </div>
       </section>
-      {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}
       <section>
-        {/* TODO: place the banner of dandadan poster after that the user can click on */}
+        {/* TODO: might turn into a component that loads the ads into it */}
+        {/* TODO: make sure that this links to the sign up page */}
+        {adFetched &&
+          adData &&
+          adData.length > 0 &&
+          adData.map((ads) => (
+            <div className="h-full w-full ">
+              <img
+                key={ads.id}
+                alt={ads.title}
+                src={ads.url}
+                className="h-full w-full cursor-pointer"
+              />
+            </div>
+          ))}
       </section>
       {/* TODO: show the different categories of animes from the backend with same card component */}
     </div>
