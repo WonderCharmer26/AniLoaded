@@ -22,6 +22,7 @@ export default function HomePage() {
   // const { dehydratedState } = useLoaderData() as { dehydratedState: unknown };
 
   // function for making a request to get trending anime
+  // NOTE: might add a stale time to the fetches ( might be needed at all (small improvement))
   const {
     data: trendingAnime,
     error: trendingError,
@@ -34,6 +35,7 @@ export default function HomePage() {
   });
 
   // function for making a request to get the most popular anime
+  // NOTE: might add a stale time to the fetches ( might be needed at all (small improvement))
   const {
     data: popularAnime,
     error: popularError,
@@ -47,6 +49,7 @@ export default function HomePage() {
 
   // TODO: make function to fetch the top anime to showcase in the carousel
   //TODO: handle the error and loading state
+  // NOTE: might add a stale time to the fetches ( might be needed at all (small improvement))
   const {
     data: topAnime,
     error: topAnimeError,
@@ -116,7 +119,6 @@ export default function HomePage() {
         </div>
       </section>
       {/* TODO: make a carousel of cards to show the users top 5 animes, component might be made already */}
-      {/* TODO: make a carousel of cards to show the users top trending anime from the backend (popular shows from the API) */}
       {/* TODO: place the banner of dandadan poster after that the user can click on */}
       {/* TODO: show the different categories of animes from the backend with same card component */}
     </div>

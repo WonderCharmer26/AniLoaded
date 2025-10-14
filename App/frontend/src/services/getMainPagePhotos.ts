@@ -43,4 +43,9 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
   });
 };
 
+// function to get the data for the ad for non members
+export const getPosterAd = async () => {
+  // get the bucket and folder data from the .env
+};
+
 // function to get the anime images from api
