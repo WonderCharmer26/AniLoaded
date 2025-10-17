@@ -33,6 +33,7 @@ const router = createBrowserRouter([
         // NOTE: homePageFetcher get the raw calrousel data and also returns the anime queries for the showcase sections on the page
         loader: homePageFetcher(queryClient),
       },
+      // TODO: need to add routing for the other pages home, discuss, list, show, communities, genres
       {
         // Profile page
         path: "profile",
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
         // info about the anime (might route into it's parent route)
         path: "anime/:id",
         element: <AnimeInfoPage />,
+        // TODO: add in a loader function to preload the information for the anime page
       },
     ],
   },
