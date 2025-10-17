@@ -111,7 +111,6 @@ export default function HomePage() {
       <section>
         <div>
           <ShowcaseSection sectionName="TRENDING ANIME" cards={trendingData} />
-          {/* TODO: map through the data and display the cards when database is connected */}
         </div>
       </section>
       {/* popular section for anime */}
@@ -120,8 +119,6 @@ export default function HomePage() {
           <ShowcaseSection sectionName="POPULAR ANIME" cards={popularData} />
         </div>
       </section>
-      {/* TODO: Add pop up goes here fetch the image from supabase */}
-      {/* third section for anime */}
       <section>
         <div>
           <ShowcaseSection sectionName="TOP RATED ANIME" cards={topAnimeData} />
