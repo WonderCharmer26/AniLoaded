@@ -1,4 +1,6 @@
 // Slider Card for the Hompage Component
+// TODO: remember to make a query to the anime that is linked in the anime carousel using the anime page
+
 // TODO: add in sync loader to show as the images load
 
 // import { Link } from "react-router-dom"; // used for the routing links to the different anime popular anime pages

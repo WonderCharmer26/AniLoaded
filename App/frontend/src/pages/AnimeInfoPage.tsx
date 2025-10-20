@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"; // used to get the anime to make s
 export default function AnimeInfoPage() {
   const { id } = useParams(); // id will be used to fetch the data from the backend api route
 
-  // TODO: create function to fetch the anime data needed from the python backend
+  // TODO: create useQuert to handle queries for the anime data needed from the python backend
 
   return (
     <div>

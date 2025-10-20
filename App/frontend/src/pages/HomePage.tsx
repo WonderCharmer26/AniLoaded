@@ -1,11 +1,12 @@
 // TODO: have skeleton loader to load the elements onto the page when the data is loading
+// TODO: remember to make a query to the anime that is linked in the anime carousel using the anime page
 // import { Card } from "../components/Card";
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
-import { useLoaderData } from "react-router-dom"; // use data from react router loader
+import { Link, useLoaderData } from "react-router-dom"; // use data from react router loader
 import { adSchemaI } from "../schemas/adSchema";
 import { getPosterAd } from "../services/getMainPagePhotos";
 
@@ -131,14 +132,16 @@ export default function HomePage() {
           adData &&
           adData.length > 0 &&
           adData.map((ads) => (
-            <div className="h-full w-full ">
-              <img
-                key={ads.id}
-                alt={ads.title}
-                src={ads.url}
-                className="h-full w-full cursor-pointer"
-              />
-            </div>
+            <Link to={"auth/signup"}>
+              <div className="h-full w-full ">
+                <img
+                  key={ads.id}
+                  alt={ads.title}
+                  src={ads.url}
+                  className="h-full w-full cursor-pointer"
+                />
+              </div>
+            </Link>
           ))}
       </section>
       {/* TODO: show the different categories of animes from the backend with same card component */}

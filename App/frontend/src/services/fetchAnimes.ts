@@ -33,6 +33,10 @@ export async function getTopAnime(): Promise<AniListMedia[]> {
   return media;
 }
 
+// make a function to get the info for the anime pages
+// make a schema for the anime to put into the promise
+export async function getAnimeInfo() {}
+
 // function to get the users own top anime from supabase
 export function usersTopAnime() {}
 
