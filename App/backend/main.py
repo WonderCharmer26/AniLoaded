@@ -264,11 +264,14 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             )
 
 
-# route to get a specific anime by its id
-# NOTE: make the route protected with jwt check
+# NOTE: Route to get specific anime info to pass in into the anime pages
 @app.get("/anime/{anime_id}")
-async def get_anime_by_id(anime_id: int):
-    # set up the query to get the anime by its id
+async def get_anime_by_id(
+    anime_id: int,
+):  # pass in the anime_id from the req as a param
+    """
+    This function returns neccisary info for the anime page
+    """
     query = """
     query ($id: Int) {
       Media(id: $id, type: ANIME) {
@@ -305,10 +308,10 @@ async def get_anime_by_id(anime_id: int):
                 json={"query": query, "variables": variables},
                 headers={"Content-Type": "application/json"},
             )
-            response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
+            response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx) if one happens
             data = response.json()
 
-            # return the data
+            # return the data needed for the anime pages
             return data
 
         # More specific error handling

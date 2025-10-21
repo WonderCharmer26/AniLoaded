@@ -2,7 +2,11 @@
 
 // imports needed
 import axios from "axios";
-import { AniListMedia, ShowcaseResponse } from "../schemas/animeSchemas"; // types for AniList response
+import {
+  AniListMedia,
+  AnimeInfoPageResponse,
+  ShowcaseResponse,
+} from "../schemas/animeSchemas"; // types for AniList response
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
@@ -34,8 +38,14 @@ export async function getTopAnime(): Promise<AniListMedia[]> {
 }
 
 // make a function to get the info for the anime pages
-// make a schema for the anime to put into the promise
-export async function getAnimeInfo() {}
+// anime_id: given from frontend to get the anime info for the anime page
+export async function getAnimeInfo(anime_id: Number): Promise<AniListMedia> {
+  const res = await axios.get<AnimeInfoPageResponse>(
+    `${backendUrl}/anime/${anime_id}`,
+  );
+  const animeInfo = res.data.data.Media ?? [];
+  return animeInfo;
+}
 
 // function to get the users own top anime from supabase
 export function usersTopAnime() {}
