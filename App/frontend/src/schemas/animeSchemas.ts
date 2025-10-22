@@ -12,6 +12,7 @@ export interface AniListImage {
   large?: string;
   medium?: string;
   small?: string;
+  extraLarge?: string;
 }
 
 // schema for the GraphQL querry
@@ -26,6 +27,9 @@ export interface AniListMedia {
   averageScore?: number | null;
   status?: // predefined strings that we'll get back for the status of the show
   "FINISHED" | "RELEASING" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS" | null;
+  studios?: {
+    nodes: Studio[];
+  }; // optional to get the studio data
 }
 
 // Structure for the data that we'll get back from GraphQL call
@@ -41,6 +45,20 @@ export interface AnimeInfoPageResponse {
   data: {
     Media: AniListMedia;
   };
+}
+
+// all the studio interfaces needed to make an interface for the studio
+export interface Studio {
+  id: number;
+  name: string;
+}
+
+export interface StudioEdge {
+  node: Studio;
+}
+
+export interface StudioConnection {
+  edges: StudioConnection[];
 }
 
 // Helper to choose a display title with fallback (english -> romaji -> native)

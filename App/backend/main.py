@@ -293,6 +293,14 @@ async def get_anime_by_id(
         averageScore
         genres
         description(asHtml: false)
+        studios (isMain: true) {
+            edges {
+                nodes {
+                    id 
+                    name
+                }
+            }
+        }
       }
     }
     """

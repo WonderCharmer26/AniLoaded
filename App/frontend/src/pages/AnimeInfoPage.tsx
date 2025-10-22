@@ -1,3 +1,4 @@
+// TODO: make sure that the banner from the backend is able to get close to the figma design
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom"; // used to get the anime to make sure its routed to the right page
 import { getAnimeInfo } from "../services/fetchAnimes";
@@ -22,12 +23,25 @@ export default function AnimeInfoPage() {
     return <p>there was an error</p>;
   }
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div>
-      {isFetched && data ? <h1>{data.title.english}</h1> : <p>no title</p>}
-      {/* NOTE: anime id will be taken out after page is complete */}
+      {/* if the data is fetched correctly display the information for the page */}
       <p>Anime ID: {anime_id}</p>
-      <img src={data?.bannerImage} />
+      {isFetched && data && (
+        <div className="">
+          <div className="">
+            <h1>{data.title.english}</h1>
+            <h2>Genre: {data.genres?.join(", ")}</h2>
+            <p>Studio: {data.studios?.edges}</p>
+          </div>
+          <img src={data?.bannerImage} className="" />
+        </div>
+      )}
+
       <p className="text-white">{}</p>
     </div>
   );
