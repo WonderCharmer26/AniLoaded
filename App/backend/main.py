@@ -294,12 +294,10 @@ async def get_anime_by_id(
         genres
         description(asHtml: false)
         studios (isMain: true) {
-            edges {
-                nodes {
-                    id 
-                    name
+            nodes {
+                id 
+                name
                 }
-            }
         }
       }
     }

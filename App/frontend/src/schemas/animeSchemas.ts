@@ -28,7 +28,7 @@ export interface AniListMedia {
   status?: // predefined strings that we'll get back for the status of the show
   "FINISHED" | "RELEASING" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS" | null;
   studios?: {
-    nodes: Studio[];
+    nodes: Studio[] | undefined;
   }; // optional to get the studio data
 }
 
