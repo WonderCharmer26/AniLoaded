@@ -23,13 +23,14 @@ export interface AniListMedia {
   coverImage: AniListImage;
   bannerImage?: string; // might make a req for a banner depending on the fetch
   genres?: string[]; // will get back an array of different genres
-  description?: string; // description of the plot of the anime
+  description?: string | null; // description of the plot of the anime
   averageScore?: number | null;
   status?: // predefined strings that we'll get back for the status of the show
   "FINISHED" | "RELEASING" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS" | null;
   studios?: {
-    nodes: Studio[] | undefined;
+    nodes: Studio[];
   }; // optional to get the studio data
+  character?: Character[];
 }
 
 // Structure for the data that we'll get back from GraphQL call
@@ -59,6 +60,22 @@ export interface StudioEdge {
 
 export interface StudioConnection {
   edges: StudioConnection[];
+}
+
+// character interface for getting all the character info
+export interface VoiceActor {
+  name: string | null;
+  image: string | null;
+  language: string | null;
+}
+
+// Character info
+export interface Character {
+  id: number;
+  name: string;
+  image: string;
+  role: string;
+  voiceActor?: VoiceActor | null;
 }
 
 // Helper to choose a display title with fallback (english -> romaji -> native)

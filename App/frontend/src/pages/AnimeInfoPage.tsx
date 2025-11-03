@@ -27,6 +27,7 @@ export default function AnimeInfoPage() {
     return <p>Loading...</p>;
   }
 
+  // TODO: Figure out why the data. is giving errors
   return (
     <div>
       {/* if the data is fetched correctly display the information for the page */}
@@ -34,16 +35,16 @@ export default function AnimeInfoPage() {
       {/* NOTE: THIS IS THE BANNER SECTION */}
       {isFetched && data && data.bannerImage && (
         <div className="relative">
-          <div className="absolute z-[1] bottom-7 left-7 w-full flex flex-row ">
-            <div className=" flex justify-center items-center rounded-4xl border-[7px] border-[#3CB4FF] font-bold text-lg h-14 w-14 mr-2">
+          <div className="absolute z-[1] bottom-5 -left-6 w-full flex flex-row scale-90 ">
+            <div className=" flex justify-center items-center rounded-4xl border-[6px] border-[#3CB4FF] font-bold text-2xl h-14 w-14 mr-2">
               {data.averageScore}
             </div>
             <div className="flex flex-col items-start">
-              <h1>{data.title.english}</h1>
+              <h1 className="">{data.title.english?.toUpperCase()}</h1>
               <h2>Genre: {data.genres?.join(", ")}</h2>
               <p>
                 Studio:{" "}
-                {data?.studios?.nodes?.length > 0
+                {data.studios && data?.studios?.nodes?.length > 0
                   ? data?.studios?.nodes[0].name
                   : "unknown"}
               </p>
@@ -58,8 +59,8 @@ export default function AnimeInfoPage() {
               </div>
             </div>
           </div>
-          <div className="brightness-50 bg-blue-400 flex justify-center h-[540px] w-full">
-            <img src={data?.bannerImage} className="object-fill" />
+          <div className="brightness-50 bg-blue-400 flex justify-center h-[540px]">
+            <img src={data?.bannerImage} className="object-cover" />
           </div>
         </div>
       )}
@@ -71,8 +72,8 @@ export default function AnimeInfoPage() {
           <div className="w-full flex items-start">
             <h2 className="text-2xl font-bold text-[#246C99]">PLOT</h2>
           </div>
-          <div className="h-[250px] w-[600px] mt-2 overflow-scroll">
-            {isFetched && data && data.description?.length > 0 ? (
+          <div className="h-[250px] w-[600px] mt-2 no-scrollbar overflow-scroll">
+            {isFetched && data?.description && data.description?.length > 0 ? (
               <div className="flex text-start">{data.description}</div>
             ) : (
               "there is no description"
@@ -86,6 +87,19 @@ export default function AnimeInfoPage() {
               <h2 className="text-2xl font-bold text-[#246C99]">CHARACTERS</h2>
             </div>
             {/* NOTE: This is where the characters and voice actors will be displayed */}
+            <div>
+              {isFetched && data?.character && data.character.length > 0 ? (
+                <div>
+                  {data.character.map((char) => (
+                    <div>
+                      <p>{char.name}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>There are no characters</div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ interface CardCarouselI {
   cards: AniListMedia[];
 }
 
+// TODO: Add in a hover effect that displays the information like the show genre and episode count to user
+
 // this component will be used to display cards for the different categories of anime cards
 export const CardCarousel: React.FC<CardCarouselI> = ({
   cards,

@@ -299,8 +299,34 @@ async def get_anime_by_id(
                 name
                 }
         }
+        characters(sort: [ROLE, RELEVANCE, ID], perPage: 10) {
+         edges {
+            role
+            node {
+                id
+            name {
+                full
+                native
+            }
+            image {
+                large
+            }
+        }
+        voiceActors(language: JAPANESE) {
+          id
+          name {
+            full
+            native
+          }
+          image {
+            large
+          }
+          languageV2
+        }
       }
     }
+  }
+}
     """
 
     # variables that will be used to get the anime by its id
