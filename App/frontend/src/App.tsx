@@ -15,6 +15,8 @@ import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
 import { homePageFetcher } from "./services/homePageLoader";
 import { QueryClient } from "@tanstack/react-query";
+import { Feather } from "lucide-react";
+import { featuredAnimeLoader } from "./services/featuredAnimeLoader";
 
 // queryClient to get pass the query into the functions that need to get the data for the loader
 const queryClient = new QueryClient();
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
         // info about the anime (might route into it's parent route)
         path: "anime/:id",
         element: <AnimeInfoPage />,
+        loader: async () => {
+          await featuredAnimeLoader(queryClient);
+        },
+
         // TODO: add in a loader function to preload the information for the anime page
       },
     ],

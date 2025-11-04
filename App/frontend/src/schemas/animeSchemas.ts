@@ -2,15 +2,16 @@
 
 // title schema for the information for the title
 export interface AniListTitle {
-  romaji: string | null;
+  romaji?: string | null;
   english?: string | null;
   native?: string | null;
 }
 
+// name objects returned for characters/voice actors
 export interface AniListName {
-  full: string | null;
+  full?: string | null;
   native?: string | null;
-  romanji: string | null;
+  romaji?: string | null;
 }
 
 // schema for the images that we get back
@@ -65,27 +66,27 @@ export interface StudioEdge {
 }
 
 export interface StudioConnection {
-  edges: StudioConnection[];
+  edges: StudioEdge[];
 }
 
-// character interface for getting all the character info
+// GraphQL character voice actor information
 export interface VoiceActor {
+  id: number;
   name: AniListName;
-  image: string | null;
-  language: string | null;
+  image?: AniListImage | null;
+  languageV2?: string | null;
 }
 
 export interface Character {
   id: number;
   name: AniListName;
-  image: AniListImage;
+  image?: AniListImage;
 }
 
-// Character info
 export interface CharacterEdge {
-  role: string;
+  role?: string | null;
   node: Character;
-  voiceActors: VoiceActor[];
+  voiceActors?: VoiceActor[];
 }
 
 export interface CharacterConnection {

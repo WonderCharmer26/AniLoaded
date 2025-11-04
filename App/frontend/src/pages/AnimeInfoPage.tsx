@@ -1,8 +1,9 @@
 // TODO: make sure that the banner from the backend is able to get close to the figma design
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom"; // used to get the anime to make sure its routed to the right page
-import { getAnimeInfo } from "../services/fetchAnimes";
+import { getAnimeInfo, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
+import { ShowcaseSection } from "../components/ShowcaseSection";
 
 export default function AnimeInfoPage() {
   const { id } = useParams(); // id will be used to fetch the data from the backend api route
@@ -15,6 +16,16 @@ export default function AnimeInfoPage() {
       queryFn: () => getAnimeInfo(anime_id),
     },
   );
+
+  // make a query to get the trending anime
+  const {
+    data: trendingAnime,
+    isLoading: trendingLoading,
+    isError: trendingError,
+  } = useQuery<AniListMedia[], Error>({
+    queryKey: ["trendingAnime"],
+    queryFn: getTrending,
+  });
 
   // console log to test the request
   console.log(data);
@@ -31,7 +42,7 @@ export default function AnimeInfoPage() {
   return (
     <div>
       {/* if the data is fetched correctly display the information for the page */}
-      <p>Anime ID: {anime_id}</p>
+      {/* <p>Anime ID: {anime_id}</p> */}
       {/* NOTE: THIS IS THE BANNER SECTION */}
       {isFetched && data && data.bannerImage && (
         <div className="relative">
@@ -81,41 +92,63 @@ export default function AnimeInfoPage() {
           </div>
         </div>
         {/* NOTE: This is the characters section */}
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full ">
           <div className="">
             <div>
               <h2 className="text-2xl font-bold text-[#246C99]">CHARACTERS</h2>
             </div>
             {/* NOTE: This is where the characters and voice actors will be displayed */}
-            <div className="flex justify-center items-center">
-              {isFetched && data?.characters?.edges ? (
-                <div className="flex flex-col items-center h-[300px] w-xl overflow-scroll no-scrollbar">
-                  {data.characters.edges.map((edges) => (
-                    <ul className="">
+            <div>
+              {isFetched && data?.characters?.edges?.length ? (
+                <ul className="mt-4 flex items-center max-h-[450px] max-w-full flex-col gap-3 overflow-y-auto no-scrollbar">
+                  {data.characters.edges.map((edge) => {
+                    // variable names to house incase the names of th characters don't render properly
+                    const characterName =
+                      edge.node.name?.full ??
+                      edge.node.name?.romanji ??
+                      edge.node.name?.native ??
+                      "Unknown";
+                    const imageSrc =
+                      edge.node.image?.large ?? edge.node.image?.medium ?? "";
+                    const primaryVoiceActor = edge.voiceActors?.[0];
+                    const voiceActorName = primaryVoiceActor
+                      ? (primaryVoiceActor.name?.full ??
+                        primaryVoiceActor.name?.romanji ??
+                        primaryVoiceActor.name?.native ??
+                        "Unknown")
+                      : "N/A";
+
+                    return (
                       <li
-                        className="flex flex-row object-cover bg-amber-300 mt-2 h-20 w-xl rounded-lg"
-                        key={edges.node.id}
+                        key={edge.node.id}
+                        className="flex items-center w-xl gap-4 rounded-xl bg-[#1A2227] p-3"
                       >
-                        <div className="w-18">
+                        {imageSrc ? (
                           <img
-                            className="object-fill"
-                            src={edges.node.image.large}
+                            src={imageSrc}
+                            alt={characterName}
+                            className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
                           />
-                        </div>
-                        <div className="flex justify-center items-center flex-col">
-                          {/* Name of the characters of the anime */}
-                          {edges.node.name.full ?? edges.node.name.native}
-                          {/* Role of the character */}
-                          <span>{edges.role.toLocaleLowerCase()}</span>
-                          {/* voiceActors name */}
-                          {edges.voiceActors
-                            .map((va) => va.name.full)
-                            .join(" ,")}
+                        ) : (
+                          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-[#26242A] text-lg font-semibold">
+                            {characterName.charAt(0)}
+                          </div>
+                        )}
+                        <div className="flex flex-1 flex-col items-center gap-1 text-center">
+                          <span className="text-lg font-semibold">
+                            {characterName}
+                          </span>
+                          <span className="text-sm uppercase tracking-wide text-[#246C99]">
+                            {/* {edge.role ?? "—"} */}
+                          </span>
+                          <span className="text-sm text-gray-300">
+                            {voiceActorName}
+                          </span>
                         </div>
                       </li>
-                    </ul>
-                  ))}
-                </div>
+                    );
+                  })}
+                </ul>
               ) : (
                 <div>There are no characters</div>
               )}
@@ -127,6 +160,19 @@ export default function AnimeInfoPage() {
       <div className="mt-5">
         This is where the anime reviews for the anime will go
       </div>
+      {/* NOTE: This section will show the featured anime */}
+      <section>
+        <div>
+          {trendingAnime ? (
+            <ShowcaseSection
+              sectionName="Featured Anime"
+              cards={trendingAnime}
+            />
+          ) : (
+            "nothing to show"
+          )}
+        </div>
+      </section>
     </div>
   );
 }
