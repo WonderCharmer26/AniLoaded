@@ -87,13 +87,33 @@ export default function AnimeInfoPage() {
               <h2 className="text-2xl font-bold text-[#246C99]">CHARACTERS</h2>
             </div>
             {/* NOTE: This is where the characters and voice actors will be displayed */}
-            <div>
-              {isFetched && data?.character && data.character.length > 0 ? (
-                <div>
-                  {data.character.map((char) => (
-                    <div>
-                      <p>{char.name}</p>
-                    </div>
+            <div className="flex justify-center items-center">
+              {isFetched && data?.characters?.edges ? (
+                <div className="flex flex-col items-center h-[300px] w-xl overflow-scroll no-scrollbar">
+                  {data.characters.edges.map((edges) => (
+                    <ul className="">
+                      <li
+                        className="flex flex-row object-cover bg-amber-300 mt-2 h-20 w-xl rounded-lg"
+                        key={edges.node.id}
+                      >
+                        <div className="w-18">
+                          <img
+                            className="object-fill"
+                            src={edges.node.image.large}
+                          />
+                        </div>
+                        <div className="flex justify-center items-center flex-col">
+                          {/* Name of the characters of the anime */}
+                          {edges.node.name.full ?? edges.node.name.native}
+                          {/* Role of the character */}
+                          <span>{edges.role.toLocaleLowerCase()}</span>
+                          {/* voiceActors name */}
+                          {edges.voiceActors
+                            .map((va) => va.name.full)
+                            .join(" ,")}
+                        </div>
+                      </li>
+                    </ul>
                   ))}
                 </div>
               ) : (

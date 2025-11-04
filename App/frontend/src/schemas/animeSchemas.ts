@@ -7,6 +7,12 @@ export interface AniListTitle {
   native?: string | null;
 }
 
+export interface AniListName {
+  full: string | null;
+  native?: string | null;
+  romanji: string | null;
+}
+
 // schema for the images that we get back
 export interface AniListImage {
   large?: string;
@@ -30,7 +36,7 @@ export interface AniListMedia {
   studios?: {
     nodes: Studio[];
   }; // optional to get the studio data
-  character?: Character[];
+  characters?: CharacterConnection;
 }
 
 // Structure for the data that we'll get back from GraphQL call
@@ -64,18 +70,26 @@ export interface StudioConnection {
 
 // character interface for getting all the character info
 export interface VoiceActor {
-  name: string | null;
+  name: AniListName;
   image: string | null;
   language: string | null;
 }
 
-// Character info
 export interface Character {
   id: number;
-  name: string;
-  image: string;
+  name: AniListName;
+  image: AniListImage;
+}
+
+// Character info
+export interface CharacterEdge {
   role: string;
-  voiceActor?: VoiceActor | null;
+  node: Character;
+  voiceActors: VoiceActor[];
+}
+
+export interface CharacterConnection {
+  edges: CharacterEdge[];
 }
 
 // Helper to choose a display title with fallback (english -> romaji -> native)
