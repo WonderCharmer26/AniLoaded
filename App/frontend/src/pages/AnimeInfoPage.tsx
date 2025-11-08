@@ -70,8 +70,11 @@ export default function AnimeInfoPage() {
               </div>
             </div>
           </div>
-          <div className="brightness-50 bg-blue-400 flex justify-center h-[540px]">
-            <img src={data?.bannerImage} className="object-cover" />
+          <div className="brightness-50 bg-blue-400 flex justify-center h-[540px] w-full">
+            <img
+              src={data?.bannerImage}
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       )}
@@ -105,7 +108,7 @@ export default function AnimeInfoPage() {
                     // variable names to house incase the names of th characters don't render properly
                     const characterName =
                       edge.node.name?.full ??
-                      edge.node.name?.romanji ??
+                      edge.node.name?.romaji ??
                       edge.node.name?.native ??
                       "Unknown";
                     const imageSrc =
@@ -113,7 +116,7 @@ export default function AnimeInfoPage() {
                     const primaryVoiceActor = edge.voiceActors?.[0];
                     const voiceActorName = primaryVoiceActor
                       ? (primaryVoiceActor.name?.full ??
-                        primaryVoiceActor.name?.romanji ??
+                        primaryVoiceActor.name?.romaji ??
                         primaryVoiceActor.name?.native ??
                         "Unknown")
                       : "N/A";

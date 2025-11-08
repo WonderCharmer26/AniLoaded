@@ -14,12 +14,10 @@ import AnimeInfoPage from "./pages/AnimeInfoPage";
 import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
 import { homePageFetcher } from "./services/homePageLoader";
-import { QueryClient } from "@tanstack/react-query";
-import { Feather } from "lucide-react";
+// import { Feather } from "lucide-react";
 import { featuredAnimeLoader } from "./services/featuredAnimeLoader";
 
-// queryClient to get pass the query into the functions that need to get the data for the loader
-const queryClient = new QueryClient();
+import { queryClient } from "./services/queryClient";
 
 // Fetching functions to get data for the HomePage
 // Create router configuration with layouts
