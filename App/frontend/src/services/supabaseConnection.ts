@@ -19,9 +19,5 @@ if (!supabaseKey) {
   throw new Error("Missing supabaseKey variable");
 }
 
-// see env variables
-console.log("supabaseUrl", supabaseUrl);
-console.log("supabaseKey", supabaseKey);
-
 // export the supabase client to be used in other files if needed
 export const supabase = createClient(supabaseUrl, supabaseKey);

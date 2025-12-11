@@ -8,13 +8,15 @@ import React from "react";
 // this is a component for the showcase section on the homepage
 interface ShowcaseSectionI {
   sectionName: string;
-  cards: AniListMedia[]; // might need to make this an array of card components
+  cards?: AniListMedia[]; // might need to make this an array of card components
 }
 
 export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
   sectionName,
   cards,
 }) => {
+  const resolvedCards = Array.isArray(cards) ? cards : [];
+
   return (
     <>
       {" "}
@@ -27,7 +29,7 @@ export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
       </div>
       <div className="flex flex-row overflow-hidden items-center justify-center">
         {/* NOTE: add in the CardCarousel component here to combine components */}
-        <CardCarousel cards={cards} />
+        <CardCarousel cards={resolvedCards} />
       </div>
     </>
   );

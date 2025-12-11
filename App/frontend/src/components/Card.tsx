@@ -15,7 +15,8 @@ export const Card: React.FC<AniListMedia> = ({
   // TODO: add "id" to help link the anime name in the param to get the data for the anime page
 }: AniListMedia) => {
   return (
-    <Link to={`anime/${id}`}>
+    // NOTE:  Changed the route an absolute route so it always takes to the anime info page through the whole application
+    <Link to={`/anime/${id}`}>
       <div className="w-42 flex-col cursor-pointer relative rounded-2xl">
         <img
           alt={title.english ? title.english : ""}

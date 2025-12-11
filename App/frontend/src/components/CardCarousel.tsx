@@ -4,7 +4,7 @@ import { Card } from "./Card";
 import { AniListMedia } from "../schemas/animeSchemas";
 
 interface CardCarouselI {
-  cards: AniListMedia[];
+  cards?: AniListMedia[];
 }
 
 // TODO: Add in a hover effect that displays the information like the show genre and episode count to user
@@ -13,11 +13,20 @@ interface CardCarouselI {
 export const CardCarousel: React.FC<CardCarouselI> = ({
   cards,
 }: CardCarouselI) => {
+  // make a safe guard to make sure that the cards are arrays before rendering (extra saftey)
+  const safeCards = Array.isArray(cards) ? cards : [];
+
+  // if not an array log that the data wasn't rendered properly
+  // NOTE: Remove later
+  if (!Array.isArray(cards)) {
+    console.warn("CardCarousel expected an array, received", cards);
+  }
+
   return (
     <>
       <div className="flex h-fit flex-row items-center overflow-x-scroll no-scrollbar space-x-4 ">
-        {cards.map((card) => (
-          <div className="mr-4">
+        {safeCards.map((card) => (
+          <div key={card.id} className="mr-4">
             <Card key={card.id} {...card} />
           </div>
         ))}

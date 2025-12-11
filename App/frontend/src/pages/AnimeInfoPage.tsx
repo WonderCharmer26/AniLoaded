@@ -5,6 +5,7 @@ import { getAnimeInfo, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 
+// TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
   const { id } = useParams(); // id will be used to fetch the data from the backend api route
   const anime_id = Number(id);
@@ -18,6 +19,7 @@ export default function AnimeInfoPage() {
   );
 
   // make a query to get the trending anime
+  // WARNING: make error states and loading states
   const {
     data: trendingAnime,
     isLoading: trendingLoading,
@@ -26,6 +28,8 @@ export default function AnimeInfoPage() {
     queryKey: ["trendingAnime"],
     queryFn: getTrending,
   });
+
+  const featuredAnime = Array.isArray(trendingAnime) ? trendingAnime : [];
 
   // console log to test the request
   console.log(data);
@@ -42,12 +46,11 @@ export default function AnimeInfoPage() {
   return (
     <div>
       {/* if the data is fetched correctly display the information for the page */}
-      {/* <p>Anime ID: {anime_id}</p> */}
       {/* NOTE: THIS IS THE BANNER SECTION */}
       {isFetched && data && data.bannerImage && (
-        <div className="relative">
-          <div className="absolute z-[1] bottom-5 -left-6 w-full flex flex-row scale-90 ">
-            <div className=" flex justify-center items-center rounded-4xl border-[6px] border-[#3CB4FF] font-bold text-2xl h-14 w-14 mr-2">
+        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen">
+          <div className="absolute z-[1] bottom-5 left-1/4 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-4xl border-[6px] border-[#3CB4FF] text-2xl font-bold mr-2">
               {data.averageScore}
             </div>
             <div className="flex flex-col items-start">
@@ -70,7 +73,9 @@ export default function AnimeInfoPage() {
               </div>
             </div>
           </div>
-          <div className="brightness-50 bg-blue-400 flex justify-center h-[540px] w-full">
+          {/* NOTE: This is where the height of the banner can be adjusted */}
+          <div className="brightness-50 bg-blue-400 h-[720px] w-full">
+            {/* NOTE:  Make the whole banner span across the whole screen*/}
             <img
               src={data?.bannerImage}
               className="h-full w-full object-cover"
@@ -95,6 +100,7 @@ export default function AnimeInfoPage() {
           </div>
         </div>
         {/* NOTE: This is the characters section */}
+        {/* NOTE: Might animate the character section*/}
         <div className="flex flex-col w-full ">
           <div className="">
             <div>
@@ -166,10 +172,10 @@ export default function AnimeInfoPage() {
       {/* NOTE: This section will show the featured anime */}
       <section>
         <div>
-          {trendingAnime ? (
+          {featuredAnime.length ? (
             <ShowcaseSection
               sectionName="Featured Anime"
-              cards={trendingAnime}
+              cards={featuredAnime}
             />
           ) : (
             "nothing to show"

@@ -15,8 +15,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
 import { homePageFetcher } from "./services/homePageLoader";
 // import { Feather } from "lucide-react";
-import { featuredAnimeLoader } from "./services/featuredAnimeLoader";
-
+import { featuredAnimePrefetcher } from "./services/animePrefetchers";
 import { queryClient } from "./services/queryClient";
 
 // Fetching functions to get data for the HomePage
@@ -45,7 +44,7 @@ const router = createBrowserRouter([
         path: "anime/:id",
         element: <AnimeInfoPage />,
         loader: async () => {
-          await featuredAnimeLoader(queryClient);
+          await featuredAnimePrefetcher(queryClient);
         },
 
         // TODO: add in a loader function to preload the information for the anime page
