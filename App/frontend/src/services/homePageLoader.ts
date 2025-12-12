@@ -4,7 +4,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { getPopular, getTopAnime, getTrending } from "./fetchAnimes";
 import { getCarouselPhotos, getPosterAd } from "./getMainPagePhotos";
 
-// TODO: make sure that this function is type safe to make use of it easier
+// WARNING: LOOK INTO WHY THE TRENDING ANIME SECTION SOMETIMES DOESN'T LOAD
 
 // async function to fetch all the query's from the ani-list
 export const homePageFetcher = (queryClient: QueryClient) => async () => {
@@ -28,13 +28,12 @@ export const homePageFetcher = (queryClient: QueryClient) => async () => {
 
   // get all the data in the arr of obj and fetch the data one by one
   const data = await Promise.all(
-    // returns an array of the Promises from the fetching
-    queries.map((query) => {
+    queries.map(({ queryKey, queryFN }) =>
       queryClient.ensureQueryData({
-        queryKey: query.queryKey,
-        queryFn: query.queryFN,
-      });
-    }),
+        queryKey,
+        queryFn: queryFN,
+      }),
+    ),
   );
 
   // NOTE: data needs to be returned in the same order to the loader function in react router

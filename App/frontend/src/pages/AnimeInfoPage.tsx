@@ -91,7 +91,7 @@ export default function AnimeInfoPage() {
           <div className="w-full flex items-start">
             <h2 className="text-2xl font-bold text-[#246C99]">PLOT</h2>
           </div>
-          <div className="h-[250px] text-l  w-[600px] mt-2 no-scrollbar overflow-scroll">
+          <div className="h-[250px] text-l  w-[700px] mt-2 no-scrollbar overflow-scroll">
             {isFetched && data?.description && data.description?.length > 0 ? (
               <div className="flex text-start">{data.description}</div>
             ) : (
@@ -101,7 +101,7 @@ export default function AnimeInfoPage() {
         </div>
         {/* NOTE: This is the characters section */}
         {/* NOTE: Might animate the character section*/}
-        <div className="flex flex-col w-full ">
+        <div className="flex flex-col items-end w-full ">
           <div className="">
             <div>
               <h2 className="text-2xl font-bold text-[#246C99]">CHARACTERS</h2>
@@ -109,7 +109,7 @@ export default function AnimeInfoPage() {
             {/* NOTE: This is where the characters and voice actors will be displayed */}
             <div>
               {isFetched && data?.characters?.edges?.length ? (
-                <ul className="mt-4 flex items-center max-h-[450px] max-w-full flex-col gap-3 overflow-y-auto no-scrollbar">
+                <ul className="mt-4 flex items-center max-h-[470px] max-w-full flex-col gap-3 overflow-y-auto no-scrollbar">
                   {data.characters.edges.map((edge) => {
                     // variable names to house incase the names of th characters don't render properly
                     const characterName =
@@ -130,16 +130,16 @@ export default function AnimeInfoPage() {
                     return (
                       <li
                         key={edge.node.id}
-                        className="flex items-center w-xl gap-4 rounded-xl bg-[#1A2227] p-3"
+                        className="flex items-center relative w-md gap-4 rounded-xl bg-[#1A2227] p-3.5"
                       >
                         {imageSrc ? (
                           <img
                             src={imageSrc}
                             alt={characterName}
-                            className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
+                            className="h-21 w-25 absolute left-0 flex-shrink-0 rounded-l-xl object-cover"
                           />
                         ) : (
-                          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-[#26242A] text-lg font-semibold">
+                          <div className="flex h-20 w-20 flex-shrink-0 absolute left-0  items-center justify-center rounded-l-xl bg-[#26242A] text-lg font-semibold">
                             {characterName.charAt(0)}
                           </div>
                         )}

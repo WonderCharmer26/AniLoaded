@@ -26,6 +26,7 @@ export const getCarouselPhotos = async (): Promise<CarouselI[]> => {
   }
 
   // log to see if the url is correct
+  // NOTE: REMOVE FOR PROD
   console.log(carouselImgInfo.map((row) => row.storage_path));
 
   // generate urls with the full folder path
