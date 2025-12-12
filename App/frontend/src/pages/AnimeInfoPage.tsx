@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"; // used to get the anime to make s
 import { getAnimeInfo, getTrending } from "../services/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { ShowcaseSection } from "../components/ShowcaseSection";
+import { ReviewList } from "../components/ReviewList";
 
 // TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
@@ -13,7 +14,7 @@ export default function AnimeInfoPage() {
   // TODO: create useQuery to handle queries for the anime data needed from the python backend
   const { data, isFetched, isLoading, isError } = useQuery<AniListMedia, Error>(
     {
-      queryKey: ["animeInfo", anime_id],
+      queryKey: ["animeInfo", anime_id], // cache the anime data so if the same page doesn't have to be refetched
       queryFn: () => getAnimeInfo(anime_id),
     },
   );
@@ -165,10 +166,6 @@ export default function AnimeInfoPage() {
           </div>
         </div>
       </div>
-      {/* NOTE: This is where the review section will be */}
-      <div className="mt-5">
-        This is where the anime reviews for the anime will go
-      </div>
       {/* NOTE: This section will show the featured anime */}
       <section>
         <div>
@@ -181,6 +178,9 @@ export default function AnimeInfoPage() {
             "nothing to show"
           )}
         </div>
+      </section>
+      <section>
+        <ReviewList />
       </section>
     </div>
   );

@@ -9,6 +9,7 @@ import { AniListMedia } from "../schemas/animeSchemas";
 import { Link, useLoaderData } from "react-router-dom"; // use data from react router loader
 import { adSchemaI } from "../schemas/adSchema";
 import { getPosterAd } from "../services/getMainPagePhotos";
+import { ReviewList } from "../components/ReviewList";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */
 // NOTE: gonna add the supabase user in here to account for when the user is logged in
@@ -143,6 +144,9 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
+      </section>
+      <section>
+        <ReviewList />
       </section>
       {/* TODO: show the different categories of animes from the backend with same card component */}
     </div>
