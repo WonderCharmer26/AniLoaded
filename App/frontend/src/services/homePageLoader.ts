@@ -16,6 +16,7 @@ export const homePageFetcher = (queryClient: QueryClient) => async () => {
     { queryKey: ["topAnime"], queryFN: getTopAnime },
   ];
 
+  // NOTE: might need to tweak the function to get all the anime in the carousel
   // prefetch the data to make sure the carousel component is ready with the images when the page loads (doesn't return any data)
   await queryClient.prefetchQuery({
     queryKey: ["slider"],

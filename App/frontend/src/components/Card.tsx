@@ -17,13 +17,15 @@ export const Card: React.FC<AniListMedia> = ({
   return (
     // NOTE:  Changed the route an absolute route so it always takes to the anime info page through the whole application
     <Link to={`/anime/${id}`}>
-      <div className="w-42 flex-col cursor-pointer relative rounded-2xl">
+      {/* NOTE: This changes the width of the cards */}
+      <div className="w-60 flex-col cursor-pointer relative rounded-2xl">
         <img
           alt={title.english ? title.english : ""}
           src={coverImage.large}
-          className="w-full h-72 object-cover border-4 border-black rounded-2xl"
+          // NOTE: this changes the height of the cards
+          className="w-full h-105 object-cover border-2 border-black rounded-2xl"
         />
-        <div className="font-[Inter] font-semibold text-[13px] h-12 text-center overflow-hidden cursor-pointer">
+        <div className="font-[Inter] mt-2 font-semibold text-[13px] h-12 text-center overflow-hidden cursor-pointer">
           {/* make sure that the titles are only showed up to a certain amount */}
           {title.english ? title.english.split(" ").slice(0, 6).join(" ") : ""}
         </div>

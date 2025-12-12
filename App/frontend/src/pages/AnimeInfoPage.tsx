@@ -91,7 +91,7 @@ export default function AnimeInfoPage() {
           <div className="w-full flex items-start">
             <h2 className="text-2xl font-bold text-[#246C99]">PLOT</h2>
           </div>
-          <div className="h-[250px] w-[600px] mt-2 no-scrollbar overflow-scroll">
+          <div className="h-[250px] text-l  w-[600px] mt-2 no-scrollbar overflow-scroll">
             {isFetched && data?.description && data.description?.length > 0 ? (
               <div className="flex text-start">{data.description}</div>
             ) : (
