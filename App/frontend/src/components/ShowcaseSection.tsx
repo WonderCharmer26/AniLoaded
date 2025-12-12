@@ -22,12 +22,12 @@ export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
       {" "}
       <div className="flex flex-row items-center mt-5 mb-2">
         <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
-        <div className="flex flex-row items-center ">
-          <h2 className="text-white font-bold w-[150px]">{sectionName}</h2>
+        <div className="flex text-xl flex-row items-center ">
+          <h2 className="text-white font-bold w-[200px]">{sectionName}</h2>
         </div>
         <hr className="bg-white opacity-20 w-full h-[0.3px]"></hr>
       </div>
-      <div className="flex flex-row overflow-hidden items-center justify-center">
+      <div className="flex flex-row overflow-hidden no-scrollbar items-center justify-center">
         {/* NOTE: add in the CardCarousel component here to combine components */}
         <CardCarousel cards={resolvedCards} />
       </div>
