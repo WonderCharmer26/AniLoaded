@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { Menu } from "lucide-react";
+import AniLoadedLogo from "../assets/images/Ani-Loaded Logo.svg";
 
 export const Navbar = () => {
   interface NavbarLinksI {
@@ -12,11 +13,10 @@ export const Navbar = () => {
 
   const navbarLinks: NavbarLinksI[] = [
     { id: 1, label: "HOME", link: "/" },
-    { id: 2, label: "DISCUSS", link: "/discuss" },
-    { id: 3, label: "LIST", link: "/lists" },
-    { id: 4, label: "SHOW", link: "/shows" },
-    { id: 5, label: "COMMUNITIES", link: "/communities" },
-    { id: 6, label: "GENRES", link: "/genres" },
+    { id: 2, label: "DISCUSSION", link: "/discussion" },
+    { id: 3, label: "LISTS", link: "/lists" },
+    { id: 4, label: "ANIME", link: "/anime" },
+    { id: 5, label: "RECOMMENDATION", link: "/recommendations" },
   ];
 
   return (
@@ -24,8 +24,8 @@ export const Navbar = () => {
     <nav className="flex pt-5 sticky top-0 w-full h-[2.875rem] items-center justify-between text-white">
       {" "}
       {/* TODO: replace with the real logo of the application */}
-      <div>
-        <div>LOGO</div>
+      <div className="h-25 w-25">
+        <img src={AniLoadedLogo} alt="Site Logo" />
       </div>
       {/* navlink section */}
       <div className="flex items-center flex-row">

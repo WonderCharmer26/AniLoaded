@@ -1,3 +1,4 @@
+// TODO: Edit the styling and the orientation for the title and subtitle
 import React from "react";
 import { ReviewCard } from "./ReviewCard";
 
@@ -48,7 +49,7 @@ export const ReviewList: React.FC = () => {
     <section className="mt-10 flex flex-col gap-5">
       <div>
         <h2 className="text-2xl font-bold text-[#246C99]">Fan Reviews</h2>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm mb-3 text-gray-400">
           See what other viewers are saying about their favorite series.
         </p>
       </div>

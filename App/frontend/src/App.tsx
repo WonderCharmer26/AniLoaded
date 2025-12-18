@@ -9,16 +9,25 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import AnimeInfoPage from "./pages/AnimeInfoPage";
+import DiscussionPage from "./pages/DiscussionPage";
+import ListsPage from "./pages/ListsPage";
+import AnimeCategoriesPage from "./pages/AnimeCategoriesPage";
+import RecommendationsPage from "./pages/RecommendationsPage";
 
 // Layout Components
 import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
 import { homePageFetcher } from "./services/homePageLoader";
 // import { Feather } from "lucide-react";
-import { featuredAnimePrefetcher } from "./services/animePrefetchers";
+import { animeInfoPrefetcher } from "./services/animeInfoPrefetcher";
 import { queryClient } from "./services/queryClient";
+import { discussionPageLoader } from "./services/discussionService";
+import { listsPageLoader } from "./services/userListsService";
+import { animeCategoriesLoader } from "./services/animeCategoriesService";
+import { recommendationsPageLoader } from "./services/recommendationService";
 
 // Fetching functions to get data for the HomePage
+const demoUserId = "demo-user";
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -32,7 +41,34 @@ const router = createBrowserRouter([
         // NOTE: homePageFetcher get the raw calrousel data and also returns the anime queries for the showcase sections on the page
         loader: homePageFetcher(queryClient),
       },
-      // TODO: need to add routing for the other pages home, discuss, list, show, communities, genres
+      {
+        // Discussion Page
+        // TODO: Replace with the actual data fetching functions
+        path: "discussion",
+        element: <DiscussionPage />,
+        loader: discussionPageLoader(queryClient),
+      },
+      {
+        // Lists Page
+        // TODO: Replace with the actual data fetching functions
+        path: "lists",
+        element: <ListsPage />,
+        loader: listsPageLoader(queryClient, demoUserId),
+      },
+      {
+        // Anime Page: Shows all the different Anime to choose from
+        // TODO: Replace with the actual data fetching functions
+        path: "anime",
+        element: <AnimeCategoriesPage />,
+        loader: animeCategoriesLoader(queryClient),
+      },
+      {
+        // Recommendation Page: Shows anime suggestion to the user for them to help pick an anime to watch
+        // TODO: Replace with the actual data fetching functions
+        path: "recommendations",
+        element: <RecommendationsPage />,
+        loader: recommendationsPageLoader(queryClient, demoUserId),
+      },
       {
         // Profile page
         path: "profile",
@@ -43,9 +79,9 @@ const router = createBrowserRouter([
         // info about the anime (might route into it's parent route)
         path: "anime/:id",
         element: <AnimeInfoPage />,
-        loader: async () => {
-          await featuredAnimePrefetcher(queryClient);
-        },
+        // loader to help with prefetching for the anime info page before it loads
+        // NOTE: cache is stored in tanstack query's cache
+        loader: animeInfoPrefetcher(queryClient),
 
         // TODO: add in a loader function to preload the information for the anime page
       },

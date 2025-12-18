@@ -146,6 +146,7 @@ export default function HomePage() {
           ))}
       </section>
       <section>
+        {/* TODO: Make this section show some suggestion cards instead */}
         <ReviewList />
       </section>
       {/* TODO: show the different categories of animes from the backend with same card component */}

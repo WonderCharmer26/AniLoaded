@@ -172,9 +172,9 @@ async def get_trending_anime():
             data = response.json()
 
             # handle errors in QL data fetched
-            if "error" in data:
-                print(f"GraphQL error: {data['error']}")
-                raise HTTPException(status_code=400, detail=data["error"])
+            if "errors" in data:
+                print(f"GraphQL error: {data['errors']}")
+                raise HTTPException(status_code=400, detail=data["errors"])
 
             # return the data
             return data
@@ -243,23 +243,23 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             data = response.json()
 
             # check if there is an error in the response I get back
-            if "error" in data:
+            if "errors" in data:
                 # print to the console
-                print(f"Here is the error in the data:{data["error"]}")
+                print(f"Here is the error in the data:{data['errors']}")
                 # raise an error close the func
-                raise HTTPException(status_code=400, detail=data["error"])
+                raise HTTPException(status_code=400, detail=data["errors"])
 
             # return the data to the frontend if the fetch was successful
             return data
 
         # check for status_code error
-        except httpx.HTTPStatusError() as e:
+        except httpx.HTTPStatusError as e:
             raise HTTPException(
-                status_code=500, detail=str(f"There was an error in the status code{e}")
+                status_code=500, detail=str(f"There was an error in the status code {e}")
             )
 
         # check if there was an error in Request
-        except httpx.RequestError() as e:
+        except httpx.RequestError as e:
             raise HTTPException(
                 status_code=404, detail=str(f"There was an error getting the data:{e}")
             )

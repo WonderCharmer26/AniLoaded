@@ -47,7 +47,7 @@ h3 {
 
 /* custom styles to use throughout the app */
 .navbar-text {
-  @apply font-["Inter"] font-bold text-[0.75rem];
+  @apply font-["Inter"] font-bold text-[0.80rem];
 }
 
 /* will change later on */

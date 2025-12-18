@@ -55,7 +55,7 @@ export default function AnimeInfoPage() {
               {data.averageScore}
             </div>
             <div className="flex flex-col items-start">
-              <h1 className="">{data.title.english?.toUpperCase()}</h1>
+              <h1 className="text-left">{data.title.english?.toUpperCase()}</h1>
               <h2>Genre: {data.genres?.join(", ")}</h2>
               <p>
                 Studio:{" "}
@@ -167,7 +167,7 @@ export default function AnimeInfoPage() {
         </div>
       </div>
       {/* NOTE: This section will show the featured anime */}
-      <section>
+      <section className="mt-7">
         <div>
           {featuredAnime.length ? (
             <ShowcaseSection
