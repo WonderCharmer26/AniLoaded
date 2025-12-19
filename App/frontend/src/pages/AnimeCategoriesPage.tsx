@@ -1,3 +1,4 @@
+// this page is for the user to search the for the animes that they are interested in
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -8,14 +9,15 @@ import {
   getAvailableGenres,
   getSeasons,
 } from "../services/api/animeCategoriesService";
+import { CategoryFilters } from "../components/CategoryFilters";
 
 // default genre for when the user loads into the page
-const DEFAULT_GENRE = "Action";
+const DEFAULT_GENRE = "Action"; // route in the backend will get the param to pass in
 
 export default function AnimeCategoriesPage() {
-  const [params, setParams] = useSearchParams({ genre: DEFAULT_GENRE });
-  const selectedGenre = params.get("genre") ?? DEFAULT_GENRE;
-  const selectedSeason = params.get("season") ?? "";
+  const [params, setParams] = useSearchParams({ genre: DEFAULT_GENRE }); // start the search param as the default param to look for
+  const selectedGenre = params.get("genre") ?? DEFAULT_GENRE; // get the search param from the param that get passed into the url for the genre
+  const selectedSeason = params.get("season") ?? ""; // get the search params that get passed into the url for the season
 
   // gets the genre from the backend route
   const { data: genres = [] } = useQuery<string[]>({
@@ -44,11 +46,12 @@ export default function AnimeCategoriesPage() {
     setParams(next);
   };
 
+  // only change if the seasons change
   const seasonFilters = useMemo(() => seasons, [seasons]);
 
   return (
     <div className="px-6 py-10 space-y-10">
-      <section className="space-y-4">
+      <section className="flex flex-col items-center space-y-4">
         <p className="text-sm tracking-[0.3em] text-emerald-300">DISCOVER</p>
         <h1 className="text-4xl font-bold text-white">Browse by vibe</h1>
         <p className="max-w-3xl text-slate-300">
@@ -78,65 +81,7 @@ export default function AnimeCategoriesPage() {
   );
 }
 
-function CategoryFilters({
-  genres,
-  seasons,
-  selectedGenre,
-  selectedSeason,
-  onSelectGenre,
-  onSelectSeason,
-}: {
-  genres: string[];
-  seasons: string[];
-  selectedGenre: string;
-  selectedSeason: string;
-  onSelectGenre: (value: string) => void;
-  onSelectSeason: (value: string) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-4 rounded-2xl border border-slate-800 bg-slate-900/40 p-4">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
-          Genres
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {genres.map((genre) => (
-            <button
-              key={genre}
-              onClick={() => onSelectGenre(genre)}
-              className={`rounded-full px-4 py-1 text-sm font-semibold ${selectedGenre === genre ? "bg-emerald-500 text-white" : "bg-slate-800/80 text-slate-300"}`}
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
-          Season
-        </span>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => onSelectSeason("")}
-            className={`rounded-full px-4 py-1 text-sm font-semibold ${selectedSeason ? "bg-slate-800/80 text-slate-300" : "bg-emerald-500 text-white"}`}
-          >
-            All
-          </button>
-          {seasons.map((season) => (
-            <button
-              key={season}
-              onClick={() => onSelectSeason(season)}
-              className={`rounded-full px-4 py-1 text-sm font-semibold ${selectedSeason === season ? "bg-emerald-500 text-white" : "bg-slate-800/80 text-slate-300"}`}
-            >
-              {season}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
+// TODO: replace with actual anime card component
 function AnimeCard({ anime }: { anime: AniListMedia }) {
   return (
     <article className="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-950/40 p-4">
