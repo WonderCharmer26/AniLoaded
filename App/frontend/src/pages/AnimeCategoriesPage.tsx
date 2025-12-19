@@ -9,6 +9,7 @@ import {
   getSeasons,
 } from "../services/api/animeCategoriesService";
 
+// default genre for when the user loads into the page
 const DEFAULT_GENRE = "Action";
 
 export default function AnimeCategoriesPage() {
@@ -16,6 +17,7 @@ export default function AnimeCategoriesPage() {
   const selectedGenre = params.get("genre") ?? DEFAULT_GENRE;
   const selectedSeason = params.get("season") ?? "";
 
+  // gets the genre from the backend route
   const { data: genres = [] } = useQuery<string[]>({
     queryKey: ["availableGenres"],
     queryFn: getAvailableGenres,
@@ -28,7 +30,8 @@ export default function AnimeCategoriesPage() {
 
   const { data: anime = [], isLoading } = useQuery<AniListMedia[]>({
     queryKey: ["animeCategory", selectedGenre, selectedSeason],
-    queryFn: () => getAnimeByCategory({ genre: selectedGenre, season: selectedSeason }),
+    queryFn: () =>
+      getAnimeByCategory({ genre: selectedGenre, season: selectedSeason }),
   });
 
   const handleFilterChange = (type: "genre" | "season", value: string) => {

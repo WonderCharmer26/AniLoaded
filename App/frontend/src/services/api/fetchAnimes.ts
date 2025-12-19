@@ -70,4 +70,4 @@ export async function getAnimeInfo(anime_id: number): Promise<AniListMedia> {
 // function to get the users own top anime from supabase
 export function usersTopAnime() {}
 
-// other anime functions if needed to be added
+// function to get the specific anime from users search input
