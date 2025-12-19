@@ -51,27 +51,30 @@ export default function AnimeCategoriesPage() {
 
   return (
     <div className="px-6 py-10 space-y-10">
+      {/* NOTE: might align the title and subtitle in the same row */}
       <section className="flex flex-col items-center space-y-4">
-        <p className="text-sm tracking-[0.3em] text-emerald-300">DISCOVER</p>
-        <h1 className="text-4xl font-bold text-white">Browse by vibe</h1>
+        <h1 className="text-4xl font-bold uppercase text-white">Action</h1>
         <p className="max-w-3xl text-slate-300">
-          Use genre and season filters to jump into curated groupings. When the
-          backend is ready these filters will sync to real AniList-powered data
-          and respect query params for shareable deep links.
+          Action is anime that you may like to watch. (will change with when the
+          genre changes)
         </p>
       </section>
 
-      <CategoryFilters
-        genres={genres}
-        seasons={seasonFilters}
-        selectedGenre={selectedGenre}
-        selectedSeason={selectedSeason}
-        onSelectGenre={(value) => handleFilterChange("genre", value)}
-        onSelectSeason={(value) => handleFilterChange("season", value)}
-      />
+      <section className="flex justify-end items-center gap-2">
+        <CategoryFilters
+          genres={genres}
+          seasons={seasonFilters}
+          selectedGenre={selectedGenre}
+          selectedSeason={selectedSeason}
+          onSelectGenre={(value) => handleFilterChange("genre", value)}
+          onSelectSeason={(value) => handleFilterChange("season", value)}
+        />
+        <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div>
+      </section>
 
-      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-20">
         {isLoading ? (
+          // NOTE: add in a loading skeleton for the anime cards
           <p className="text-slate-400">Loading anime…</p>
         ) : (
           anime.map((item) => <AnimeCard key={item.id} anime={item} />)
