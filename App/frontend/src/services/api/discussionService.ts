@@ -1,6 +1,5 @@
 // TODO: Make functions that get real discussion from the database
-import type { QueryClient } from "@tanstack/react-query";
-import type { DiscussionThread, DiscussionTopic } from "../schemas/discussion";
+import type { DiscussionThread, DiscussionTopic } from "../../schemas/discussion";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -60,18 +59,3 @@ export async function getTrendingTopics(): Promise<DiscussionTopic[]> {
   return mockTopics;
 }
 
-export function discussionPageLoader(queryClient: QueryClient) {
-  return async () => {
-    await Promise.all([
-      queryClient.ensureQueryData({
-        queryKey: ["discussionThreads"],
-        queryFn: getDiscussionThreads,
-      }),
-      queryClient.ensureQueryData({
-        queryKey: ["discussionTopics"],
-        queryFn: getTrendingTopics,
-      }),
-    ]);
-    return null;
-  };
-}

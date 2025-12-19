@@ -1,7 +1,6 @@
 // TODO: Work on recommendation functionality
-import type { QueryClient } from "@tanstack/react-query";
-import type { AniListMedia } from "../schemas/animeSchemas";
-import type { RecommendationBucket } from "../schemas/recommendations";
+import type { AniListMedia } from "../../schemas/animeSchemas";
+import type { RecommendationBucket } from "../../schemas/recommendations";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -70,21 +69,3 @@ export async function getFallbackRecommendations(): Promise<AniListMedia[]> {
   return globalFallback;
 }
 
-export function recommendationsPageLoader(
-  queryClient: QueryClient,
-  userId: string,
-) {
-  return async () => {
-    await Promise.all([
-      queryClient.ensureQueryData({
-        queryKey: ["personalizedRecommendations", userId],
-        queryFn: () => getPersonalizedRecommendations(userId),
-      }),
-      queryClient.ensureQueryData({
-        queryKey: ["globalRecommendations"],
-        queryFn: getFallbackRecommendations,
-      }),
-    ]);
-    return null;
-  };
-}

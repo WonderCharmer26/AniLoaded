@@ -7,7 +7,7 @@ import type {
 import {
   getDiscussionThreads,
   getTrendingTopics,
-} from "../services/discussionService";
+} from "../services/api/discussionService";
 
 export default function DiscussionPage() {
   const {

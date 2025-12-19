@@ -4,11 +4,11 @@
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
-import { getPopular, getTopAnime, getTrending } from "../services/fetchAnimes";
+import { getPopular, getTopAnime, getTrending } from "../services/api/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { Link, useLoaderData } from "react-router-dom"; // use data from react router loader
 import { adSchemaI } from "../schemas/adSchema";
-import { getPosterAd } from "../services/getMainPagePhotos";
+import { getPosterAd } from "../services/supabase/getMainPagePhotos";
 import { ReviewList } from "../components/ReviewList";
 
 /*NOTE: might make the seperation bigger for ShowcaseSection, teak mt-6 higher */

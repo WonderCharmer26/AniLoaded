@@ -1,6 +1,5 @@
 // TODO: make functions get real data from the database later on
-import type { QueryClient } from "@tanstack/react-query";
-import type { AniListMedia } from "../schemas/animeSchemas";
+import type { AniListMedia } from "../../schemas/animeSchemas";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -73,18 +72,3 @@ export async function getSeasons(): Promise<string[]> {
   return seasonOptions;
 }
 
-export function animeCategoriesLoader(queryClient: QueryClient) {
-  return async () => {
-    await Promise.all([
-      queryClient.ensureQueryData({
-        queryKey: ["animeCategory", "Action"],
-        queryFn: () => getAnimeByCategory({ genre: "Action" }),
-      }),
-      queryClient.ensureQueryData({
-        queryKey: ["availableGenres"],
-        queryFn: getAvailableGenres,
-      }),
-    ]);
-    return null;
-  };
-}

@@ -2,8 +2,8 @@
 
 // imports
 import { supabase } from "./supabaseConnection";
-import { CarouselI } from "../schemas/CarouselSchema";
-import { adSchemaI } from "../schemas/adSchema";
+import { CarouselI } from "../../schemas/CarouselSchema";
+import { adSchemaI } from "../../schemas/adSchema";
 // import { CarouselTitlesI } from "../schemas/CarouselSchema";
 
 // get the .env variables to use in the functions

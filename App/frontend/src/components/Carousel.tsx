@@ -5,7 +5,7 @@
 
 // import { Link } from "react-router-dom"; // used for the routing links to the different anime popular anime pages
 import { useQuery } from "@tanstack/react-query";
-import { getCarouselPhotos } from "../services/getMainPagePhotos";
+import { getCarouselPhotos } from "../services/supabase/getMainPagePhotos";
 import { ClockLoader } from "react-spinners";
 import { CarouselI } from "../schemas/CarouselSchema";
 import { useState } from "react";

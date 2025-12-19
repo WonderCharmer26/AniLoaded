@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
-import { getAnimeInfo, getTrending } from "./fetchAnimes";
+import { getAnimeInfo, getTrending } from "../api/fetchAnimes";
 
 export const animeInfoPrefetcher =
   (queryClient: QueryClient) =>

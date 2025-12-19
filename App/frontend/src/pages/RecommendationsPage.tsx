@@ -5,7 +5,7 @@ import type { RecommendationBucket } from "../schemas/recommendations";
 import {
   getFallbackRecommendations,
   getPersonalizedRecommendations,
-} from "../services/recommendationService";
+} from "../services/api/recommendationService";
 
 const DEMO_USER_ID = "demo-user";
 

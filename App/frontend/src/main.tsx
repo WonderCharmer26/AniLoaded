@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import "./index.css";
 import App from "./App";
-import { queryClient } from "./services/queryClient";
+import { queryClient } from "./services/clients/queryClient";
 
 // Get root element with null check
 const rootElement = document.getElementById("root");

@@ -7,7 +7,7 @@ import {
   getAnimeByCategory,
   getAvailableGenres,
   getSeasons,
-} from "../services/animeCategoriesService";
+} from "../services/api/animeCategoriesService";
 
 const DEFAULT_GENRE = "Action";
 

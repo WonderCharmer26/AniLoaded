@@ -1,8 +1,8 @@
 // this file contains the function to pass into the react router loader
 
 import { QueryClient } from "@tanstack/react-query";
-import { getPopular, getTopAnime, getTrending } from "./fetchAnimes";
-import { getCarouselPhotos, getPosterAd } from "./getMainPagePhotos";
+import { getPopular, getTopAnime, getTrending } from "../api/fetchAnimes";
+import { getCarouselPhotos, getPosterAd } from "../supabase/getMainPagePhotos";
 
 // WARNING: LOOK INTO WHY THE TRENDING ANIME SECTION SOMETIMES DOESN'T LOAD
 

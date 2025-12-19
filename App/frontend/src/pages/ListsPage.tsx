@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getDisplayTitle } from "../schemas/animeSchemas";
 import type { UserAnimeList } from "../schemas/userLists";
-import { getUserTopLists } from "../services/userListsService";
+import { getUserTopLists } from "../services/api/userListsService";
 
 const DEMO_USER_ID = "demo-user";
 

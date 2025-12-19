@@ -255,7 +255,8 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
         # check for status_code error
         except httpx.HTTPStatusError as e:
             raise HTTPException(
-                status_code=500, detail=str(f"There was an error in the status code {e}")
+                status_code=500,
+                detail=str(f"There was an error in the status code {e}"),
             )
 
         # check if there was an error in Request
@@ -263,6 +264,9 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             raise HTTPException(
                 status_code=404, detail=str(f"There was an error getting the data:{e}")
             )
+
+
+# TODO: MAKE A ROUTE TO GET ANIME THAT MATCHES A SPECIFIC NAME
 
 
 # NOTE: Route to get specific anime info to pass in into the anime pages

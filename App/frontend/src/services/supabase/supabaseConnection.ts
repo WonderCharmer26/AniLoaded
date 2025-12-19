@@ -1,5 +1,4 @@
 // connection to the supabase data base is handled in here
-
 /// <reference types="vite/client" />
 
 // imports

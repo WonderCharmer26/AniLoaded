@@ -1,7 +1,6 @@
 // TODO: Ensure that real data is later fetched from the backend
-import type { QueryClient } from "@tanstack/react-query";
-import type { AniListMedia } from "../schemas/animeSchemas";
-import type { UserAnimeList } from "../schemas/userLists";
+import type { AniListMedia } from "../../schemas/animeSchemas";
+import type { UserAnimeList } from "../../schemas/userLists";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -83,12 +82,3 @@ export async function createListPlaceholder(
   await delay(100);
 }
 
-export function listsPageLoader(queryClient: QueryClient, userId: string) {
-  return async () => {
-    await queryClient.ensureQueryData({
-      queryKey: ["userTopLists", userId],
-      queryFn: () => getUserTopLists(userId),
-    });
-    return null;
-  };
-}

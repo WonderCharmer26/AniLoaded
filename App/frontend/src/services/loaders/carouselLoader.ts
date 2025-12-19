@@ -1,8 +1,8 @@
 // function to pre load the carousel images onto the carousel component
 
 import { dehydrate } from "@tanstack/react-query";
-import { getCarouselPhotos } from "./getMainPagePhotos";
-import { queryClient } from "./queryClient";
+import { getCarouselPhotos } from "../supabase/getMainPagePhotos";
+import { queryClient } from "../clients/queryClient";
 
 // make the function exportable if needed
 export const carouselPrefetch = async () => {

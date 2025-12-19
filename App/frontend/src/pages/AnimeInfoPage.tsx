@@ -1,15 +1,23 @@
 // TODO: make sure that the banner from the backend is able to get close to the figma design
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom"; // used to get the anime to make sure its routed to the right page
-import { getAnimeInfo, getTrending } from "../services/fetchAnimes";
+import { getAnimeInfo, getTrending } from "../services/api/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { ReviewList } from "../components/ReviewList";
+import { AnimeBanner } from "../components/AnimeBanner";
+import { AnimeBannerSkeleton } from "../components/skeleton/AnimeBannerSkeleton";
+import { useEffect } from "react";
 
 // TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
   const { id } = useParams(); // id will be used to fetch the data from the backend api route
   const anime_id = Number(id);
+
+  // function to make sure that the user is navigated to the top of the page
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [anime_id]);
 
   // TODO: create useQuery to handle queries for the anime data needed from the python backend
   const { data, isFetched, isLoading, isError } = useQuery<AniListMedia, Error>(
@@ -21,11 +29,7 @@ export default function AnimeInfoPage() {
 
   // make a query to get the trending anime
   // WARNING: make error states and loading states
-  const {
-    data: trendingAnime,
-    isLoading: trendingLoading,
-    isError: trendingError,
-  } = useQuery<AniListMedia[], Error>({
+  const { data: trendingAnime } = useQuery<AniListMedia[], Error>({
     queryKey: ["trendingAnime"],
     queryFn: getTrending,
   });
@@ -40,50 +44,14 @@ export default function AnimeInfoPage() {
   }
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <AnimeBannerSkeleton />;
   }
 
   // TODO: Figure out why the data. is giving errors
   return (
     <div>
       {/* if the data is fetched correctly display the information for the page */}
-      {/* NOTE: THIS IS THE BANNER SECTION */}
-      {isFetched && data && data.bannerImage && (
-        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen">
-          <div className="absolute z-[1] bottom-5 left-1/4 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
-            <div className="flex h-14 w-14 items-center justify-center rounded-4xl border-[6px] border-[#3CB4FF] text-2xl font-bold mr-2">
-              {data.averageScore}
-            </div>
-            <div className="flex flex-col items-start">
-              <h1 className="text-left">{data.title.english?.toUpperCase()}</h1>
-              <h2>Genre: {data.genres?.join(", ")}</h2>
-              <p>
-                Studio:{" "}
-                {data.studios && data?.studios?.nodes?.length > 0
-                  ? data?.studios?.nodes[0].name
-                  : "unknown"}
-              </p>
-              {/* buttons that need functionality */}
-              <div className="flex flex-row gap-2 mt-1">
-                <button className="bg-[#26242A] text-[.85rem] h-9 w-28 rounded-lg">
-                  ADD TO LIST
-                </button>
-                <button className="bg-[#246C99] text-[.85rem] h-9 w-[140px] rounded-lg">
-                  ADD TO TIER LIST
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* NOTE: This is where the height of the banner can be adjusted */}
-          <div className="brightness-50 bg-blue-400 h-[720px] w-full">
-            {/* NOTE:  Make the whole banner span across the whole screen*/}
-            <img
-              src={data?.bannerImage}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        </div>
-      )}
+      {isFetched && data && <AnimeBanner anime={data} />}
       {/* TODO: make a style for if there is no bannerImage */}
       {/* NOTE: THIS IS THE MIDDLE SECTION */}
       <div className="mt-10 flex flex-row gap-4">

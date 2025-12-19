@@ -17,14 +17,14 @@ import RecommendationsPage from "./pages/RecommendationsPage";
 // Layout Components
 import AuthLayout from "./layouts/AuthLayout";
 import RootLayout from "./layouts/RootLayout";
-import { homePageFetcher } from "./services/homePageLoader";
+import { homePageFetcher } from "./services/loaders/homePageLoader";
 // import { Feather } from "lucide-react";
-import { animeInfoPrefetcher } from "./services/animeInfoPrefetcher";
-import { queryClient } from "./services/queryClient";
-import { discussionPageLoader } from "./services/discussionService";
-import { listsPageLoader } from "./services/userListsService";
-import { animeCategoriesLoader } from "./services/animeCategoriesService";
-import { recommendationsPageLoader } from "./services/recommendationService";
+import { animeInfoPrefetcher } from "./services/loaders/animeInfoPrefetcher";
+import { queryClient } from "./services/clients/queryClient";
+import { discussionPageLoader } from "./services/loaders/discussionPageLoader";
+import { listsPageLoader } from "./services/loaders/listsPageLoader";
+import { animeCategoriesLoader } from "./services/loaders/animeCategoriesLoader";
+import { recommendationsPageLoader } from "./services/loaders/recommendationsPageLoader";
 
 // Fetching functions to get data for the HomePage
 const demoUserId = "demo-user";
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
         element: <AnimeInfoPage />,
         // loader to help with prefetching for the anime info page before it loads
         // NOTE: cache is stored in tanstack query's cache
-        loader: animeInfoPrefetcher(queryClient),
+        loader: animeInfoPrefetcher(queryClient), // all the needed parts for this page are prefetched
 
         // TODO: add in a loader function to preload the information for the anime page
       },

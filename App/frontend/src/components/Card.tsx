@@ -12,6 +12,8 @@ export const Card: React.FC<AniListMedia> = ({
   title,
   coverImage,
   id,
+
+  // might make a function to move the user to the top of the anime info page when loaded
   // TODO: add "id" to help link the anime name in the param to get the data for the anime page
 }: AniListMedia) => {
   return (
