@@ -50,6 +50,12 @@ h3 {
   @apply font-["Inter"] font-bold text-[0.80rem];
 }
 
+.review-cards {
+  font-weight: 200;
+  text-align: left;
+  font-size: 1rem;
+}
+
 /* will change later on */
 @layer components {
   .review-cards {

@@ -11,19 +11,19 @@ import { useEffect } from "react";
 
 // TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
-  const { id } = useParams(); // id will be used to fetch the data from the backend api route
+  const { id } = useParams();
   const anime_id = Number(id);
+  const isValidAnimeId = Number.isInteger(anime_id) && anime_id > 0;
 
-  // function to make sure that the user is navigated to the top of the page
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [anime_id]);
 
-  // TODO: create useQuery to handle queries for the anime data needed from the python backend
   const { data, isFetched, isLoading, isError } = useQuery<AniListMedia, Error>(
     {
-      queryKey: ["animeInfo", anime_id], // cache the anime data so if the same page doesn't have to be refetched
+      queryKey: ["animeInfo", anime_id],
       queryFn: () => getAnimeInfo(anime_id),
+      enabled: isValidAnimeId,
     },
   );
 
@@ -36,8 +36,9 @@ export default function AnimeInfoPage() {
 
   const featuredAnime = Array.isArray(trendingAnime) ? trendingAnime : [];
 
-  // console log to test the request
-  console.log(data);
+  if (!isValidAnimeId) {
+    return <p>Invalid anime ID</p>;
+  }
 
   if (isError) {
     return <p>there was an error</p>;
@@ -135,7 +136,7 @@ export default function AnimeInfoPage() {
         </div>
       </div>
       {/* NOTE: This section will show the featured anime */}
-      <section className="mt-7">
+      <section className="mt-14">
         <div>
           {featuredAnime.length ? (
             <ShowcaseSection

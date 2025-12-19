@@ -10,16 +10,16 @@ import {
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
-const backendUrl = import.meta.env.VITE_BACKEND_URL; //
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-// check if the env variable is brought over properly
-if (import.meta.env.DEV && backendUrl) {
-  console.debug("fetching the backendUrl was a success", backendUrl);
-} else {
-  console.debug(`There was an error getting the backendUrl: ${backendUrl}`);
-  throw Error(
-    "There was an error getting the backendUrl url from the env file",
+if (!backendUrl) {
+  throw new Error(
+    "VITE_BACKEND_URL is missing. Please add it to the env file.",
   );
+}
+
+if (import.meta.env.DEV) {
+  console.debug("Using backend URL", backendUrl);
 }
 
 // function to fetch the top animes (top anime from the anime API)
@@ -46,17 +46,25 @@ export async function getTopAnime(): Promise<AniListMedia[]> {
 
 // Function to get all data for the anime info page
 // anime_id: given from frontend to get the anime info for the anime page
+// NOTE: MIGHT MAKE CHANGES TO THE ERROR HANDLING IN THE CATCH TO HELP WITH AXIOS WITH ERRORS
 export async function getAnimeInfo(anime_id: number): Promise<AniListMedia> {
-  // check the anime_id to see if valid
-  if (Number.isFinite(anime_id)) {
-    throw new Error("There was an error with the Anime ID that was sent.");
+  if (!Number.isInteger(anime_id) || anime_id <= 0) {
+    throw new Error("Invalid anime id. The id must be a positive integer.");
   }
 
-  const res = await axios.get<AnimeInfoPageResponse>(
-    `${backendUrl}/anime/${anime_id}`,
-  );
-  const animeInfo = res.data.data.Media ?? [];
-  return animeInfo;
+  try {
+    const res = await axios.get<AnimeInfoPageResponse>(
+      `${backendUrl}/anime/${anime_id}`,
+    );
+    const animeInfo = res.data.data?.Media;
+    if (!animeInfo) {
+      throw new Error(`Anime ${anime_id} not found`);
+    }
+    return animeInfo;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Failed to fetch anime ${anime_id}: ${message}`);
+  }
 }
 
 // function to get the users own top anime from supabase

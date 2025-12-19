@@ -8,9 +8,7 @@ export const animeInfoPrefetcher =
     // get the animeId from the params passed in
     const animeId = Number(params?.id);
 
-    // check that the animeId is a number and not anything else
-    if (!Number.isFinite(animeId)) {
-      // throw an error
+    if (!Number.isInteger(animeId) || animeId <= 0) {
       throw new Response("Invalid anime id", { status: 400 });
     }
 
