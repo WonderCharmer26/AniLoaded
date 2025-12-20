@@ -33,12 +33,29 @@ def root():
     return {"test_message": "This is a test message to show the backend is working"}
 
 
+# route to get genres from AniList
+@app.get("anime/genres")
+async def get_genres():
+    """
+    NOTE: This route fetches all the genres from the anilist and sends it to the frontend
+    """
+    pass
+
+
+@app.get("/anime/seasons")
+async def get_seasons():
+    """
+    NOTE: This route gets all the seasons from the anilist api and sends it to the frontend
+    """
+    pass
+
+
 # route to get the popular anime from Ani-list
-@app.get("/popular")
-async def get_popular_anime():
+@app.get("/anime/popular")
+async def get_anime_popular():
     """
     NOTE: This fetch gets the popular anime from Ani-list so that I can return the
-    anime to the frontend Carousel Component
+    anime to the frontend Carousel Component via /anime/popular
     """
 
     # query that being sent
@@ -116,11 +133,12 @@ async def get_popular_anime():
 
 
 # route to get the trending anime from Ani-list
-@app.get("/trending")
-async def get_trending_anime():
+@app.get("/anime/trending")
+async def get_anime_trending():
     """
     NOTE: May adjust for amount for rendering on trending anime page
     and manually tweak the amount rendered in frontend component like CardCarousel
+    via /anime/trending
     """
     # set up the query to get the trending anime
     query = """
@@ -194,8 +212,8 @@ async def get_trending_anime():
 
 
 # Route to get the top anime from anilist
-@app.get("/top-anime")  # get all the top anime (no parameters needed)
-async def get_top_anime():  # NOTE: may add in param from the frontend if needed
+@app.get("/anime/top")  # get all the top anime (no parameters needed)
+async def get_anime_top():  # NOTE: may add in param from the frontend if needed
     # this query is sorted in descending order
     # set up the query string
     query = """
@@ -235,7 +253,7 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             )
 
             # test out the fetch
-            print(f"Test for the response for Top Anime:{response.content}")
+            print(f"Test for the response for /anime/top:{response.content}")
             # raise an error if status isn't successful
             response.raise_for_status()
 

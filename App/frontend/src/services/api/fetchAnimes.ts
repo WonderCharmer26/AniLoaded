@@ -22,9 +22,9 @@ if (import.meta.env.DEV) {
   console.debug("Using backend URL", backendUrl);
 }
 
-// function to fetch the top animes (top anime from the anime API)
+// function to fetch the trending animes from the anime API
 export async function getTrending(): Promise<AniListMedia[]> {
-  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/trending`);
+  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/anime/trending`);
   const media = res.data?.data?.Page?.media ?? [];
   return media;
 }
@@ -32,14 +32,14 @@ export async function getTrending(): Promise<AniListMedia[]> {
 // function to get the popular anime from backend api
 // NOTE: the promise that I get back is the AniListMedia that I define in the schema
 export async function getPopular(): Promise<AniListMedia[]> {
-  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/popular`);
+  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/anime/popular`);
   const media = res.data?.data.Page?.media ?? []; // send empty array if no data found
   return media;
 }
 
 // function to get the Top Rated Animes from the backend
 export async function getTopAnime(): Promise<AniListMedia[]> {
-  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/top-anime`);
+  const res = await axios.get<ShowcaseResponse>(`${backendUrl}/anime/top`);
   const media = res.data?.data.Page?.media ?? []; // return data if not return an empty array
   return media;
 }
