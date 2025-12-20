@@ -1,7 +1,7 @@
 // helps with tracking the open and close states of the dropdown components
 import { useState } from "react";
 
-// interdace
+// interface
 type CategoryFiltersProps = {
   genres: string[];
   seasons: string[];
@@ -24,29 +24,33 @@ export function CategoryFilters({
 
   // controls the openstate of the sections listed below
   const [openSection, setOpenSection] = useState<"genres" | "seasons" | null>(
+    // none of the sections should be open by default
     null,
   );
 
   // handles selecting the different genres
   const handleGenreSelect = (genre: string) => {
+    // pass in the genre
     onSelectGenre(genre);
     setIsOpen(false);
     setOpenSection(null);
   };
 
-  // handles selecting the different seasons
+  // handles selecting the different seasons and then reset the selections
   const handleSeasonSelect = (season: string) => {
     onSelectSeason(season);
     setIsOpen(false);
     setOpenSection(null);
   };
 
-  // contols which section is selected
+  // toggles the genre or seasons and then makes that section open up
   const toggleSection = (section: "genres" | "seasons") => {
-    setOpenSection(openSection === section ? null : section);
+    // set the openSection to the section if there is either genres and seasons
+    setOpenSection(openSection === section ? null : section); // return null if there are no sections open
   };
 
   return (
+    // WARNING: MIGHT WORK ON THE DESIGN OF THESE BUTTONS LATER ON TO MAKE SURE THAT THE UI LOOKS BETTER
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -55,7 +59,7 @@ export function CategoryFilters({
         FILTER <span>▼</span>
       </button>
       {isOpen && (
-        <div className="absolute top-full -mt-1.5 right-1/14 transform -translate-x-1/2 w-96 max-w-md rounded-lg bg-black p-4 shadow-lg z-50">
+        <div className="absolute top-full -mt-1.5 left-1/2 transform -translate-x-1/8 w-96 max-w-md rounded-lg bg-black p-4 shadow-lg z-50">
           <div className="space-y-4">
             {/* Genres Section */}
             <div>

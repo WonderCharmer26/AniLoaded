@@ -16,6 +16,8 @@ const DEFAULT_GENRE = "Action"; // route in the backend will get the param to pa
 
 export default function AnimeCategoriesPage() {
   const [params, setParams] = useSearchParams({ genre: DEFAULT_GENRE }); // start the search param as the default param to look for
+
+  // handles getting the search params to send into the query functions
   const selectedGenre = params.get("genre") ?? DEFAULT_GENRE; // get the search param from the param that get passed into the url for the genre
   const selectedSeason = params.get("season") ?? ""; // get the search params that get passed into the url for the season
 
@@ -37,12 +39,16 @@ export default function AnimeCategoriesPage() {
   });
 
   const handleFilterChange = (type: "genre" | "season", value: string) => {
+    // get the current search params from the url
     const next = new URLSearchParams(params);
     if (!value) {
+      // if there is no value delete or clear the filter
       next.delete(type);
     } else {
+      // otherwise set the type and the value to be passed into the search params
       next.set(type, value);
     }
+    // update the search params to pass into the functions
     setParams(next);
   };
 

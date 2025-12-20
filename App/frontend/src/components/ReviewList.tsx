@@ -48,7 +48,9 @@ export const ReviewList: React.FC = () => {
   return (
     <section className="mt-10 mb-20 flex flex-col gap-5">
       <div className="flex flex-col items-start">
-        <h2 className="text-2xl font-bold text-[#246C99]">Fan Reviews</h2>
+        <h2 className="text-2xl font-bold uppercase text-[#246C99]">
+          Fan Reviews
+        </h2>
         <p className="text-sm mb-3 text-gray-400">
           See what other viewers are saying about their favorite series.
         </p>

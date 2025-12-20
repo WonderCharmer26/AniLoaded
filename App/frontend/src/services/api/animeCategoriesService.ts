@@ -3,6 +3,7 @@ import type { AniListMedia } from "../../schemas/animeSchemas";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// genreOptions to be sent to the backend
 const genreOptions = [
   "Action",
   "Drama",
@@ -12,8 +13,10 @@ const genreOptions = [
   "Fantasy",
 ];
 
+// seasonOptions to be sent to the backend
 const seasonOptions = ["WINTER", "SPRING", "SUMMER", "FALL"];
 
+// filler anime info
 const makeAnime = (
   id: number,
   title: string,
@@ -37,6 +40,7 @@ const makeAnime = (
   characters: { edges: [] },
 });
 
+// dummy data
 const mockAnimePool: AniListMedia[] = [
   makeAnime(100, "Haikyuu!!", ["Sports", "Drama"]),
   makeAnime(101, "Jujutsu Kaisen", ["Action", "Fantasy"]),
@@ -46,6 +50,7 @@ const mockAnimePool: AniListMedia[] = [
   makeAnime(105, "Skip and Loafer", ["Slice of Life"]),
 ];
 
+// interface for the filters
 interface CategoryFilters {
   genre?: string;
   season?: string;
@@ -64,11 +69,10 @@ export async function getAnimeByCategory(
 
 export async function getAvailableGenres(): Promise<string[]> {
   await delay(75);
-  return genreOptions;
+  return genreOptions; // returns genres from this file to the frontend, backend needs to
 }
 
 export async function getSeasons(): Promise<string[]> {
   await delay(75);
   return seasonOptions;
 }
-
