@@ -25,11 +25,11 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
           <h1 className="text-left">{anime.title.english?.toUpperCase()}</h1>
           <h2>Genre: {genreLabel}</h2>
           <p>Studio: {studioName}</p>
-          <div className="flex flex-row gap-2 mt-1">
-            <button className="bg-[#26242A] text-[.85rem] h-9 w-28 rounded-lg">
+          <div className="flex flex-row gap-2 mt-2">
+            <button className="flex items-center justify-center bg-[#26242A] text-sm h-11 p-3 rounded-lg">
               ADD TO LIST
             </button>
-            <button className="bg-[#246C99] text-[.85rem] h-9 w-[140px] rounded-lg">
+            <button className="flex items-center justify-center bg-[#246C99] text-sm p-3 h-11 rounded-lg">
               ADD TO TIER LIST
             </button>
           </div>

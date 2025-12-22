@@ -20,7 +20,7 @@ export const ShowcaseSection: React.FC<ShowcaseSectionI> = ({
   return (
     <>
       {" "}
-      <div className="flex flex-row items-center mt-5 mb-2">
+      <div className="flex flex-row items-center mt-7 mb-2">
         <hr className="bg-white opacity-20 w-full h-[2px]"></hr>
         <div className="flex text-xl flex-row items-center ">
           <h2 className="text-white font-bold w-[200px]">{sectionName}</h2>

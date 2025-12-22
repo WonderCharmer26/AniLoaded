@@ -9,6 +9,8 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from utilities.genreFunctions import get_cached_genre
+
 # from pydantic import BaseModel (might use, handling BaseModel in schema folder)
 
 # .env import variables will be added in later
@@ -36,18 +38,15 @@ def root():
 # route to get genres from AniList
 @app.get("anime/genres")
 async def get_genres():
+    # NOTE: make sure that the frontend schema is ready for recieving
     """
     NOTE: This route fetches all the genres from the anilist and sends it to the frontend
-    """
-    pass
+    """()
+    # return the genres to the frontend
+    return {"genres": await get_cached_genre()}
 
 
-@app.get("/anime/seasons")
-async def get_seasons():
-    """
-    NOTE: This route gets all the seasons from the anilist api and sends it to the frontend
-    """
-    pass
+# route to get the seasons from the backend (made seperate incase on updates over the other or failure happens)
 
 
 # route to get the popular anime from Ani-list
