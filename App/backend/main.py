@@ -5,11 +5,12 @@
 
 # imports
 import httpx  # for handling the requests on the backend to get data from the Ani-list api
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-from utilities.genreFunctions import get_cached_genre
+from schemas.category_requests import CategoryFilter
+from utilities.genreFunctions import ANILIST_URL, get_cached_genre
+from utilities.seasonFunctions import get_cached_seasons
 
 # from pydantic import BaseModel (might use, handling BaseModel in schema folder)
 
@@ -28,6 +29,9 @@ app.add_middleware(
     allow_headers=["*"],  # allow all headers
 )
 
+# anilist url to use in routes
+ANILIST_URL
+
 
 # test route to check the connection for the backend (removing later)
 @app.get("/")
@@ -36,17 +40,62 @@ def root():
 
 
 # route to get genres from AniList
-@app.get("anime/genres")
+@app.get("/anime/genres")
 async def get_genres():
-    # NOTE: make sure that the frontend schema is ready for recieving
-    """
-    NOTE: This route fetches all the genres from the anilist and sends it to the frontend
-    """()
-    # return the genres to the frontend
+    """Fetch all genres from AniList and return cached list."""
     return {"genres": await get_cached_genre()}
 
 
 # route to get the seasons from the backend (made seperate incase on updates over the other or failure happens)
+@app.get("/anime/seasons")
+async def get_seasons():
+    """Fetch all seasons from AniList and return cached list."""
+    return {"seasons": await get_cached_seasons()}
+
+
+# route to get the filtered anime options from AniList
+@app.get("/anime/categories")
+async def get_categories(filters: CategoryFilter = Depends()):
+    variables = dict[str] = {}
+    # check filters
+    if filters.genre:
+        variables["genre"] = filters.genre
+    if filters.season:
+        variables["season"] = filters.season
+
+    # query for anilist
+    query = """
+    (make the query using the fields that are needed)
+    """
+
+    # use pass in the variables and make the request
+    async with httpx.AsyncClient() as client:
+        try:
+            response = client.post(
+                ANILIST_URL,
+                json={"query": query, "variables": variables},
+                headers={"Content-Type": "application/json"},
+            )
+
+            # print the response to check
+            print(response)
+
+            # show the status if all goes good
+            response.raise_for_status()
+
+            # package the data to send back to the frontend
+            data = response.json()  # turn the data into json to send off
+
+            # handle the errors if anything pops up in the json request
+            if "errors" in data:
+                print(f"GraphQL error: {data['errors']}")
+                raise HTTPException(status_code=400, detail=data["errors"])
+
+            # return the data
+            return data
+
+        except httpx.HTTPStatusError as error:
+            raise HTTPException(status_code=404, detail=f"The error is: {error}")
 
 
 # route to get the popular anime from Ani-list

@@ -24,7 +24,7 @@ export default function AnimeCategoriesPage() {
   // gets the genre from the backend route
   const { data: genres = [] } = useQuery<string[]>({
     queryKey: ["availableGenres"],
-    queryFn: getAvailableGenres,
+    queryFn: () => getAvailableGenres(),
   });
 
   const { data: seasons = [] } = useQuery<string[]>({
@@ -75,7 +75,7 @@ export default function AnimeCategoriesPage() {
           onSelectGenre={(value) => handleFilterChange("genre", value)}
           onSelectSeason={(value) => handleFilterChange("season", value)}
         />
-        <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div>
+        {/* <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div> */}
       </section>
 
       <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-20">

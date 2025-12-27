@@ -5,7 +5,7 @@ import time  # might only import the methods that I need
 
 # Variables for the url and the timer for the cache
 ANILIST_URL = "https://graphql.anilist.co"
-GENRE_TIMER = 60 * 60 * 24  # 24 hour timer
+STALE_TIMER = 60 * 60 * 24  # 24 hour timer
 
 # variables for the cache
 _genre_cache: list[str] | None = None  # private
@@ -47,7 +47,7 @@ async def get_cached_genre() -> list[str]:
     cache_is_valid = (
         _genre_cache is not None
         and _genre_cache_fetched_at is not None
-        and (current_time - _genre_cache_fetched_at) < GENRE_TIMER
+        and (current_time - _genre_cache_fetched_at) < STALE_TIMER
     )
 
     # if the cache is valid then return the genre cache so that it can be updated
@@ -63,7 +63,7 @@ async def get_cached_genre() -> list[str]:
         cache_is_valid = (
             _genre_cache is not None
             and _genre_cache_fetched_at is not None
-            and (current_time - _genre_cache_fetched_at) < GENRE_TIMER
+            and (current_time - _genre_cache_fetched_at) < STALE_TIMER
         )
         # return if valid
         if cache_is_valid:

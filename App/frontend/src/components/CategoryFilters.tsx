@@ -59,7 +59,7 @@ export function CategoryFilters({
         FILTER <span>▼</span>
       </button>
       {isOpen && (
-        <div className="absolute top-full -mt-1.5 left-1/2 transform -translate-x-1/8 w-96 max-w-md rounded-lg bg-black p-4 shadow-lg z-50">
+        <div className="absolute top-full -mt-1.5 left-1/2 transform -translate-x-3/4 w-96 max-w-md rounded-lg bg-black p-4 shadow-lg z-50">
           <div className="space-y-4">
             {/* Genres Section */}
             <div>

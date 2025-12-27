@@ -10,7 +10,7 @@ import {
 // use Supabase client to connect to the database
 
 // import env variables to help make the fetch
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 if (!backendUrl) {
   throw new Error(

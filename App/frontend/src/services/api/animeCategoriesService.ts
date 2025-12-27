@@ -1,5 +1,9 @@
 // TODO: make functions get real data from the database later on
 import type { AniListMedia } from "../../schemas/animeSchemas";
+import axios from "axios";
+import { backendUrl } from "./fetchAnimes";
+import { GenreI } from "../../schemas/genres";
+import { SeasonsI } from "../../schemas/seasons";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -58,21 +62,26 @@ interface CategoryFilters {
 
 export async function getAnimeByCategory(
   filters: CategoryFilters,
-): Promise<AniListMedia[]> {
-  await delay(220);
+): Promise<AniListMedia[] | []> {
+  // get the genre to pass into the api call
   const { genre } = filters;
   if (!genre) {
-    return mockAnimePool;
+    // change after
+    return [];
   }
+  // make a call to the endpoint and add in the param to send to the backend
   return mockAnimePool.filter((anime) => anime.genres?.includes(genre));
 }
 
 export async function getAvailableGenres(): Promise<string[]> {
-  await delay(75);
-  return genreOptions; // returns genres from this file to the frontend, backend needs to
+  // make a request to the backend to get the data for the genres
+  const res = await axios.get<GenreI>(`${backendUrl}/anime/genres`);
+  // returns an array of strings for the UI
+  return res.data.genres;
 }
 
 export async function getSeasons(): Promise<string[]> {
-  await delay(75);
-  return seasonOptions;
+  const res = await axios.get<SeasonsI>(`${backendUrl}/anime/seasons`);
+  // return seasons
+  return res.data?.seasons;
 }
