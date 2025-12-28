@@ -57,15 +57,36 @@ async def get_seasons():
 @app.get("/anime/categories")
 async def get_categories(filters: CategoryFilter = Depends()):
     variables = dict[str] = {}
-    # check filters
+    # check if filters are sent as params in the request
     if filters.genre:
+        # store the variables in the dict
         variables["genre"] = filters.genre
     if filters.season:
+        # store the variables in the dict
         variables["season"] = filters.season
 
-    # query for anilist
+    # query for anilist (genre and season passed into the query)
     query = """
-    (make the query using the fields that are needed)
+    query($perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
+        Page(page: $page, perPage: $perPage) {
+            media(type: ANIME, genre_in: $genres, season: $season, sort: POPULARITY_DESC){
+                id
+                title {
+                romaji
+                english
+                native
+                }
+                episodes
+                coverImage {
+                large
+                medium
+                }
+                genres
+                averageScore
+                status(version: 2)
+            } 
+        }
+    }
     """
 
     # use pass in the variables and make the request
@@ -73,7 +94,10 @@ async def get_categories(filters: CategoryFilter = Depends()):
         try:
             response = client.post(
                 ANILIST_URL,
-                json={"query": query, "variables": variables},
+                json={
+                    "query": query,
+                    "variables": variables,
+                },  # json params to send off in the request
                 headers={"Content-Type": "application/json"},
             )
 
@@ -91,7 +115,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
                 print(f"GraphQL error: {data['errors']}")
                 raise HTTPException(status_code=400, detail=data["errors"])
 
-            # return the data
+            # otherwise return the data
             return data
 
         except httpx.HTTPStatusError as error:
