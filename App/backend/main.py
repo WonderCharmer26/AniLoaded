@@ -23,7 +23,9 @@ app = FastAPI()
 # add CORS middleware to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,  # this is the middleware
-    allow_origins=["*"],  # allow all origins (change to site url later on in prod)
+    allow_origins=[
+        "http://localhost:5173"
+    ],  # allow all origins (change to site url later on in prod)
     allow_credentials=True,  # allow credentials
     allow_methods=["*"],  # means allow all methods
     allow_headers=["*"],  # allow all headers
@@ -39,14 +41,16 @@ def root():
     return {"test_message": "This is a test message to show the backend is working"}
 
 
-# route to get genres from AniList
+# route to get genres from AniList (might update the params to get the genre and pass it in to fetch from the anilist)
 @app.get("/anime/genres")
 async def get_genres():
     """Fetch all genres from AniList and return cached list."""
     return {"genres": await get_cached_genre()}
 
 
-# route to get the seasons from the backend (made seperate incase on updates over the other or failure happens)
+# route to get the seasons from the backend (might update the params to get the genre and pass it in to fetch from the anilist)
+
+
 @app.get("/anime/seasons")
 async def get_seasons():
     """Fetch all seasons from AniList and return cached list."""
@@ -56,11 +60,14 @@ async def get_seasons():
 # route to get the filtered anime options from AniList
 @app.get("/anime/categories")
 async def get_categories(filters: CategoryFilter = Depends()):
-    variables = dict[str] = {}
+    # filter is set up in a seperate schema file
+
+    variables: dict[str] = {}  # initialize variables
+
     # check if filters are sent as params in the request
-    if filters.genre:
+    if filters.genres:
         # store the variables in the dict
-        variables["genre"] = filters.genre
+        variables["genres"] = filters.genres
     if filters.season:
         # store the variables in the dict
         variables["season"] = filters.season
@@ -82,6 +89,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
                 medium
                 }
                 genres
+                season
                 averageScore
                 status(version: 2)
             } 
@@ -92,11 +100,11 @@ async def get_categories(filters: CategoryFilter = Depends()):
     # use pass in the variables and make the request
     async with httpx.AsyncClient() as client:
         try:
-            response = client.post(
+            response = await client.post(
                 ANILIST_URL,
                 json={
                     "query": query,
-                    "variables": variables,
+                    "variables": variables,  # variables used if there are any
                 },  # json params to send off in the request
                 headers={"Content-Type": "application/json"},
             )

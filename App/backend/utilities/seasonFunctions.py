@@ -38,6 +38,7 @@ async def fetch_seasons() -> list[str]:
         )
         response.raise_for_status()  # check for error
         data = response.json()
+        print(data)
         media = (
             data.get("data", {}).get("Page", {}).get("media", [])
         )  # filter the data to return

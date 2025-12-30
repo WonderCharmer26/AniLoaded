@@ -1,5 +1,8 @@
 // TODO: make functions get real data from the database later on
-import type { AniListMedia } from "../../schemas/animeSchemas";
+import type {
+  AniListMedia,
+  ShowcaseResponse,
+} from "../../schemas/animeSchemas";
 import axios from "axios";
 import { backendUrl } from "./fetchAnimes";
 import { GenreI } from "../../schemas/genres";
@@ -54,27 +57,43 @@ const mockAnimePool: AniListMedia[] = [
   makeAnime(105, "Skip and Loafer", ["Slice of Life"]),
 ];
 
-// interface for the filters
+// interface for the filters (same as the backend)
 interface CategoryFilters {
-  genre?: string;
+  // might make also null as well
+  genres?: string[]; // takes in an array of genres to send off
   season?: string;
 }
 
+// function to get the anime by category
 export async function getAnimeByCategory(
   filters: CategoryFilters,
-): Promise<AniListMedia[] | []> {
-  // get the genre to pass into the api call
-  const { genre } = filters;
-  if (!genre) {
-    // change after
+): Promise<AniListMedia[]> {
+  try {
+    // might need to make params object that stores the value if the key exists
+    // get the genre or season to pass into the api call
+    if (filters.genres || filters.season) {
+      // defaults will be passed into the request
+      const res = await axios.get<ShowcaseResponse>(
+        // ShowcaseResponse to make sure that the raw data from the backend is structured properly to be mapped
+        `${backendUrl}/anime/categories`,
+        {
+          // send the genre and the seasons to the backend
+          params: filters,
+        },
+      );
+      // get the data and send it
+      return res.data.data.Page.media ?? [];
+    }
     return [];
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Failed to fetch category data: ${message}`);
   }
-  // make a call to the endpoint and add in the param to send to the backend
-  return mockAnimePool.filter((anime) => anime.genres?.includes(genre));
 }
 
 export async function getAvailableGenres(): Promise<string[]> {
   // make a request to the backend to get the data for the genres
+  // TODO: might make send params to as well to help with getting specific anime genres
   const res = await axios.get<GenreI>(`${backendUrl}/anime/genres`);
   // returns an array of strings for the UI
   return res.data.genres;
@@ -82,6 +101,7 @@ export async function getAvailableGenres(): Promise<string[]> {
 
 export async function getSeasons(): Promise<string[]> {
   const res = await axios.get<SeasonsI>(`${backendUrl}/anime/seasons`);
+  console.log(res.data.seasons);
   // return seasons
   return res.data?.seasons;
 }

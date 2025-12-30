@@ -27,7 +27,7 @@ export const CardCarousel: React.FC<CardCarouselI> = ({
       <div className="flex h-fit flex-row items-center overflow-x-scroll no-scrollbar space-x-5 ">
         {safeCards.map((card) => (
           <div key={card.id} className="flex justify-center">
-            <Card key={card.id} {...card} />
+            <Card key={card.id} anime={card} />
           </div>
         ))}
       </div>

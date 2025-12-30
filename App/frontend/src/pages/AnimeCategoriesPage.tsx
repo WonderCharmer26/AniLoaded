@@ -10,35 +10,42 @@ import {
   getSeasons,
 } from "../services/api/animeCategoriesService";
 import { CategoryFilters } from "../components/CategoryFilters";
+import { Card } from "../components/Card";
 
 // default genre for when the user loads into the page
-const DEFAULT_GENRE = "Action"; // route in the backend will get the param to pass in
+const DEFAULT_GENRE: string[] = ["Action"]; // route in the backend will get the param to pass in
+const DEFAULT_SEASON: string = "WINTER";
 
 export default function AnimeCategoriesPage() {
-  const [params, setParams] = useSearchParams({ genre: DEFAULT_GENRE }); // start the search param as the default param to look for
+  const [params, setParams] = useSearchParams({
+    genres: DEFAULT_GENRE,
+    season: DEFAULT_SEASON,
+  }); // start the search param as the default param to look for
 
   // handles getting the search params to send into the query functions
-  const selectedGenre = params.get("genre") ?? DEFAULT_GENRE; // get the search param from the param that get passed into the url for the genre
+  const selectedGenre = params.get("genres") ?? ""; // get the search param from the param that get passed into the url for the genre
   const selectedSeason = params.get("season") ?? ""; // get the search params that get passed into the url for the season
 
-  // gets the genre from the backend route
+  // displays the genres in the selector
   const { data: genres = [] } = useQuery<string[]>({
     queryKey: ["availableGenres"],
     queryFn: () => getAvailableGenres(),
   });
 
+  // displays the seasons in the selector
   const { data: seasons = [] } = useQuery<string[]>({
     queryKey: ["availableSeasons"],
-    queryFn: getSeasons,
+    queryFn: () => getSeasons(),
   });
 
+  // function to get the specific anime
   const { data: anime = [], isLoading } = useQuery<AniListMedia[]>({
     queryKey: ["animeCategory", selectedGenre, selectedSeason],
     queryFn: () =>
-      getAnimeByCategory({ genre: selectedGenre, season: selectedSeason }),
+      getAnimeByCategory({ genres: selectedGenre, season: selectedSeason }),
   });
 
-  const handleFilterChange = (type: "genre" | "season", value: string) => {
+  const handleFilterChange = (type: "genres" | "season", value: string) => {
     // get the current search params from the url
     const next = new URLSearchParams(params);
     if (!value) {
@@ -72,18 +79,18 @@ export default function AnimeCategoriesPage() {
           seasons={seasonFilters}
           selectedGenre={selectedGenre}
           selectedSeason={selectedSeason}
-          onSelectGenre={(value) => handleFilterChange("genre", value)}
+          onSelectGenre={(value) => handleFilterChange("genres", value)}
           onSelectSeason={(value) => handleFilterChange("season", value)}
         />
         {/* <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div> */}
       </section>
 
-      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-20">
+      <section className="grid gap-0 sm:grid-cols-2 lg:grid-cols-4 mb-20">
         {isLoading ? (
           // NOTE: add in a loading skeleton for the anime cards
           <p className="text-slate-400">Loading anime…</p>
         ) : (
-          anime.map((item) => <AnimeCard key={item.id} anime={item} />)
+          anime.map((item) => <Card key={item.id} anime={item} />)
         )}
       </section>
     </div>

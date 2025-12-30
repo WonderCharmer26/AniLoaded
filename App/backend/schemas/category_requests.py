@@ -8,5 +8,5 @@ from pydantic import BaseModel
 
 # schema for category filtering
 class CategoryFilter(BaseModel):
-    genre: Optional[str] = None
+    genres: Optional[str] = None  # takes in an array of genres
     season: Optional[str] = None
