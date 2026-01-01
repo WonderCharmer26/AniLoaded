@@ -59,7 +59,7 @@ export default function AnimeInfoPage() {
         {/* NOTE: This is the plot section */}
         <div className="flex flex-col w-[600px]">
           <div className="w-full flex items-start">
-            <h2 className="text-2xl font-extrabold text-[#246C99]">PLOT</h2>
+            <h2 className="section-titles">PLOT</h2>
           </div>
           <div className="h-[250px] text-l  w-[700px] mt-2 no-scrollbar overflow-scroll">
             {isFetched && data?.description && data.description?.length > 0 ? (
@@ -74,9 +74,7 @@ export default function AnimeInfoPage() {
         <div className="flex flex-col items-end w-full ">
           <div className="">
             <div>
-              <h2 className="text-2xl font-extrabold text-[#246C99]">
-                CHARACTERS
-              </h2>
+              <h2 className="section-titles">CHARACTERS</h2>
             </div>
             {/* NOTE: This is where the characters and voice actors will be displayed */}
             <div>

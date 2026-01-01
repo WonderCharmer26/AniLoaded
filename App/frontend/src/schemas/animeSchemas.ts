@@ -55,6 +55,14 @@ export interface ShowcaseResponse {
   };
 }
 
+// make a schema for the anime that will be paginated on certain pages
+export interface AnimePaginationResponse {
+  data: {
+    // TODO: Fillout the rest
+    Page: {};
+  };
+}
+
 export interface AnimeInfoPageResponse {
   data: {
     Media: AniListMedia;

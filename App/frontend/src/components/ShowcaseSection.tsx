@@ -2,7 +2,6 @@
 // imports
 import { AniListMedia } from "../schemas/animeSchemas";
 import { CardCarousel } from "./CardCarousel";
-// import { Card } from "./Card";
 import React from "react";
 
 // this is a component for the showcase section on the homepage

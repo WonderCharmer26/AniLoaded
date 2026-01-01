@@ -10,7 +10,7 @@ import {
   getSeasons,
 } from "../services/api/animeCategoriesService";
 import { CategoryFilters } from "../components/CategoryFilters";
-import { Card } from "../components/Card";
+import { AnimeCard } from "../components/AnimeCard";
 
 // default genre for when the user loads into the page
 const DEFAULT_GENRE: string[] = ["Action"]; // route in the backend will get the param to pass in
@@ -42,7 +42,7 @@ export default function AnimeCategoriesPage() {
   const { data: anime = [], isLoading } = useQuery<AniListMedia[]>({
     queryKey: ["animeCategory", selectedGenre, selectedSeason],
     queryFn: () =>
-      getAnimeByCategory({ genres: selectedGenre, season: selectedSeason }),
+      getAnimeByCategory({ genres: selectedGenre, season: selectedSeason }), // NOTE: make sure that the genre variable is better formed
   });
 
   const handleFilterChange = (type: "genres" | "season", value: string) => {
@@ -90,33 +90,9 @@ export default function AnimeCategoriesPage() {
           // NOTE: add in a loading skeleton for the anime cards
           <p className="text-slate-400">Loading anime…</p>
         ) : (
-          anime.map((item) => <Card key={item.id} anime={item} />)
+          anime.map((item) => <AnimeCard key={item.id} anime={item} />)
         )}
       </section>
     </div>
-  );
-}
-
-// TODO: replace with actual anime card component
-function AnimeCard({ anime }: { anime: AniListMedia }) {
-  return (
-    <article className="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-950/40 p-4">
-      <img
-        src={anime.coverImage.large}
-        alt={getDisplayTitle(anime.title)}
-        className="h-64 w-full rounded-xl object-cover"
-      />
-      <div>
-        <h3 className="text-xl font-semibold text-white">
-          {getDisplayTitle(anime.title)}
-        </h3>
-        <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
-          {(anime.genres ?? []).slice(0, 3).join(" • ")}
-        </p>
-      </div>
-      <button className="text-left text-sm font-semibold text-emerald-300">
-        View details →
-      </button>
-    </article>
   );
 }

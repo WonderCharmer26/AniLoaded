@@ -48,9 +48,7 @@ export const ReviewList: React.FC = () => {
   return (
     <section className="mt-10 mb-20 flex flex-col gap-5">
       <div className="flex flex-col items-start">
-        <h2 className="text-2xl font-extrabold uppercase text-[#246C99]">
-          Fan Reviews
-        </h2>
+        <h2 className="section-titles">Fan Reviews</h2>
       </div>
       <div className="flex w-full gap-4 overflow-x-auto no-scrollbar pb-4 justify-evenly">
         {mockReviews.map((review) => (

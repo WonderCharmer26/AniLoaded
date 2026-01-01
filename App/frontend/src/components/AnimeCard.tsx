@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 // TODO: make add a link to navigate to the page with anime
 
 // showcases anime images and the title
-export const Card = ({
+export const AnimeCard = ({
   anime,
   // might make a function to move the user to the top of the anime info page when loaded
   // TODO: add "id" to help link the anime name in the param to get the data for the anime page
