@@ -14,11 +14,13 @@ import {
 } from "../services/api/animeCategoriesService";
 import { CategoryFilters } from "../components/CategoryFilters";
 import { AnimeCard } from "../components/AnimeCard";
+import { AnimeCardSkeleton } from "../components/skeleton/AnimeCardSkeleton";
 
 // default genre for when the user loads into the page
 const DEFAULT_GENRE: string[] = ["Action"]; // route in the backend will get the param to pass in
 const DEFAULT_SEASON: string = "WINTER";
 const DEFAULT_PAGE: number = 1;
+const DEFAULT_PER_PAGE: number = 20;
 
 export default function AnimeCategoriesPage() {
   // state to update the currentPage for the anime
@@ -46,16 +48,17 @@ export default function AnimeCategoriesPage() {
   });
 
   // function to get the specific anime
-  const { data: animeData, isLoading } = useQuery<AnimePaginationResponse>({
-    queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
-    queryFn: () =>
-      getAnimeByCategory({
-        genres: selectedGenre,
-        season: selectedSeason,
-        page: page,
-        perPage: 20,
-      }), // NOTE: make sure that the genre variable is better formed
-  });
+  const { data: animeData, isLoading, isFetching } =
+    useQuery<AnimePaginationResponse>({
+      queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
+      queryFn: () =>
+        getAnimeByCategory({
+          genres: selectedGenre,
+          season: selectedSeason,
+          page: page,
+          perPage: DEFAULT_PER_PAGE,
+        }), // NOTE: make sure that the genre variable is better formed
+    });
 
   // package media data so that it can be sent used to render the anime card data
   const anime = animeData?.data.Page.media ?? [];
@@ -74,9 +77,12 @@ export default function AnimeCategoriesPage() {
     }
     // update the search params to pass into the functions
     setParams(next);
+    // reset pagination when filters change
+    setCurrentPage(DEFAULT_PAGE);
   };
 
-  // function to handle changing the page when clicked
+  const canGoPrev = page > 1;
+  const canGoNext = pageInfo?.hasNextPage ?? false;
 
   // only change if the seasons change
   const seasonFilters = useMemo(() => seasons, [seasons]);
@@ -104,13 +110,32 @@ export default function AnimeCategoriesPage() {
         {/* <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div> */}
       </section>
 
-      <section className="grid gap-0 sm:grid-cols-2 lg:grid-cols-4 mb-20">
-        {isLoading ? (
-          // NOTE: add in a loading skeleton for the anime cards
-          <p className="text-slate-400">Loading anime…</p>
-        ) : (
-          anime.map((item) => <AnimeCard key={item.id} anime={item} />)
-        )}
+      <section className="grid gap-0 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        {isLoading || (isFetching && anime.length === 0)
+          ? Array.from({ length: DEFAULT_PER_PAGE }).map((_, index) => (
+              <AnimeCardSkeleton key={`anime-card-skeleton-${index}`} />
+            ))
+          : anime.map((item) => <AnimeCard key={item.id} anime={item} />)}
+      </section>
+
+      <section className="flex items-center justify-center gap-4">
+        <button
+          className="px-4 py-2 rounded bg-slate-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+          disabled={!canGoPrev}
+        >
+          Previous
+        </button>
+        <span className="text-slate-200 text-sm">
+          Page {pageInfo?.currentPage ?? page}
+        </span>
+        <button
+          className="px-4 py-2 rounded bg-slate-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={!canGoNext}
+        >
+          Next
+        </button>
       </section>
     </div>
   );

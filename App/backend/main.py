@@ -73,7 +73,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
         variables["season"] = filters.season
     # account for the pages params if there are any
     if filters.page:
-        variables["pages"] = filters.page
+        variables["page"] = filters.page
     # NOTE: Might not use the perPage section, might harwire in the backend
     if filters.perPage:
         variables["perPage"] = filters.perPage
