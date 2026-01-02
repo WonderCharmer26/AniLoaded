@@ -62,12 +62,12 @@ async def get_seasons():
 async def get_categories(filters: CategoryFilter = Depends()):
     # filter is set up in a seperate schema file
 
-    variables: dict[str] = {}  # initialize variables
+    variables: dict[str] = {}  # initialize variables to store the parameters
 
     # check if filters are sent as params in the request
     if filters.genres:
         # store the variables in the dict
-        variables["genres"] = filters.genres
+        variables["genres"] = [filters.genres]  # package as an array
     if filters.season:
         # store the variables in the dict
         variables["season"] = filters.season

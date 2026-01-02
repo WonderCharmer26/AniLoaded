@@ -48,17 +48,20 @@ export default function AnimeCategoriesPage() {
   });
 
   // function to get the specific anime
-  const { data: animeData, isLoading, isFetching } =
-    useQuery<AnimePaginationResponse>({
-      queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
-      queryFn: () =>
-        getAnimeByCategory({
-          genres: selectedGenre,
-          season: selectedSeason,
-          page: page,
-          perPage: DEFAULT_PER_PAGE,
-        }), // NOTE: make sure that the genre variable is better formed
-    });
+  const {
+    data: animeData,
+    isLoading,
+    isFetching,
+  } = useQuery<AnimePaginationResponse>({
+    queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
+    queryFn: () =>
+      getAnimeByCategory({
+        genres: selectedGenre, // TODO: MAKE EDIT SO THAT THE GENRE IS SENT AS A STRING
+        season: selectedSeason,
+        page: page,
+        perPage: DEFAULT_PER_PAGE,
+      }), // NOTE: make sure that the genre variable is better formed
+  });
 
   // package media data so that it can be sent used to render the anime card data
   const anime = animeData?.data.Page.media ?? [];

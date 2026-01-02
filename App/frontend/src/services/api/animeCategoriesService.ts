@@ -61,7 +61,7 @@ const mockAnimePool: AniListMedia[] = [
 // interface for the filters (same as the backend)
 interface CategoryFilters {
   // might make also null as well
-  genres?: string[]; // takes in an array of genres to send off
+  genres?: string; // takes in an array of genres to send off
   season?: string;
   page?: number;
   perPage?: number;
@@ -72,35 +72,24 @@ export async function getAnimeByCategory(
   filters: CategoryFilters,
 ): Promise<AnimePaginationResponse> {
   try {
-    // might need to make params object that stores the value if the key exists
-    // get the genre or season to pass into the api call
-    if (filters.genres || filters.season || filters.page || filters.perPage) {
-      // defaults will be passed into the request
-      const res = await axios.get<AnimePaginationResponse>(
-        // ShowcaseResponse to make sure that the raw data from the backend is structured properly to be mapped
-        `${backendUrl}/anime/categories`,
-        {
-          // send the genre and the seasons to the backend
-          params: filters,
+    const res = await axios.get<AnimePaginationResponse>(
+      `${backendUrl}/anime/categories`,
+      {
+        params: {
+          ...filters,
+          page: filters.page ?? 1,
+          perPage: filters.perPage ?? 20,
         },
-      );
+      },
+    );
 
-      // check for the page data
-      const page = res.data.data.Page;
+    const page = res.data?.data?.Page;
 
-      if (!page) {
-        throw new Error("error getting the page data from the category fetch");
-      }
-      // return the full data with the page and the media information
-      return {
-        data: {
-          Page: {
-            pageInfo: page.pageInfo,
-            media: page.media,
-          },
-        },
-      };
+    if (!page) {
+      throw new Error("No page data found in the category fetch response");
     }
+
+    return res.data;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Failed to fetch category data: ${message}`);
