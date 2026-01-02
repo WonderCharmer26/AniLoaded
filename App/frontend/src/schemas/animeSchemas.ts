@@ -46,6 +46,12 @@ export interface AniListMedia {
   characters?: CharacterConnection;
 }
 
+export interface PagesSchema {
+  currentPage?: number;
+  hasNextPage?: boolean;
+  perPage?: number;
+}
+
 // Structure for the data that we'll get back from GraphQL call
 export interface ShowcaseResponse {
   data: {
@@ -59,7 +65,10 @@ export interface ShowcaseResponse {
 export interface AnimePaginationResponse {
   data: {
     // TODO: Fillout the rest
-    Page: {};
+    Page: {
+      pageInfo: PagesSchema;
+      media: AniListMedia[];
+    };
   };
 }
 

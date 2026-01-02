@@ -57,3 +57,41 @@ class AniListMedia(BaseModel):
 
     class Config:
         extra = "ignore"
+
+
+class AniListPageInfo(BaseModel):
+    currentPage: Optional[int] = None
+    hasNextPage: Optional[bool] = None
+    perPage: Optional[int] = None
+
+    class Config:
+        extra = "ignore"
+
+
+class AniListPage(BaseModel):
+    pageinfo: Optional[AniListPageInfo] = None
+
+    class Config:
+        extra = "ignore"
+
+
+class PagesSchema(BaseModel):
+    Page: Optional[AniListPage] = None
+
+    class Config:
+        extra = "ignore"
+
+
+class AnimePaginationData(BaseModel):
+    Page: Optional[PagesSchema] = None
+    media: Optional[list[AniListMedia]] = None
+
+    class Config:
+        extra = "ignore"
+
+
+class AnimePaginationResponse(BaseModel):
+    data: Optional[AnimePaginationData] = None
+
+    class Config:
+        extra = "ignore"

@@ -1,9 +1,12 @@
 // this page is for the user to search the for the animes that they are interested in
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getDisplayTitle } from "../schemas/animeSchemas";
-import type { AniListMedia } from "../schemas/animeSchemas";
+import type {
+  AniListMedia,
+  AnimePaginationResponse,
+} from "../schemas/animeSchemas";
 import {
   getAnimeByCategory,
   getAvailableGenres,
@@ -15,8 +18,12 @@ import { AnimeCard } from "../components/AnimeCard";
 // default genre for when the user loads into the page
 const DEFAULT_GENRE: string[] = ["Action"]; // route in the backend will get the param to pass in
 const DEFAULT_SEASON: string = "WINTER";
+const DEFAULT_PAGE: number = 1;
 
 export default function AnimeCategoriesPage() {
+  // state to update the currentPage for the anime
+  const [page, setCurrentPage] = useState<number>(DEFAULT_PAGE);
+
   const [params, setParams] = useSearchParams({
     genres: DEFAULT_GENRE,
     season: DEFAULT_SEASON,
@@ -39,11 +46,21 @@ export default function AnimeCategoriesPage() {
   });
 
   // function to get the specific anime
-  const { data: anime = [], isLoading } = useQuery<AniListMedia[]>({
-    queryKey: ["animeCategory", selectedGenre, selectedSeason],
+  const { data: animeData, isLoading } = useQuery<AnimePaginationResponse>({
+    queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
     queryFn: () =>
-      getAnimeByCategory({ genres: selectedGenre, season: selectedSeason }), // NOTE: make sure that the genre variable is better formed
+      getAnimeByCategory({
+        genres: selectedGenre,
+        season: selectedSeason,
+        page: page,
+        perPage: 20,
+      }), // NOTE: make sure that the genre variable is better formed
   });
+
+  // package media data so that it can be sent used to render the anime card data
+  const anime = animeData?.data.Page.media ?? [];
+  // package the pageInfo data to use for pagination
+  const pageInfo = animeData?.data.Page.pageInfo;
 
   const handleFilterChange = (type: "genres" | "season", value: string) => {
     // get the current search params from the url
@@ -58,6 +75,8 @@ export default function AnimeCategoriesPage() {
     // update the search params to pass into the functions
     setParams(next);
   };
+
+  // function to handle changing the page when clicked
 
   // only change if the seasons change
   const seasonFilters = useMemo(() => seasons, [seasons]);

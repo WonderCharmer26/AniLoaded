@@ -1,6 +1,7 @@
 // TODO: make functions get real data from the database later on
 import type {
   AniListMedia,
+  AnimePaginationResponse,
   ShowcaseResponse,
 } from "../../schemas/animeSchemas";
 import axios from "axios";
@@ -62,18 +63,20 @@ interface CategoryFilters {
   // might make also null as well
   genres?: string[]; // takes in an array of genres to send off
   season?: string;
+  page?: number;
+  perPage?: number;
 }
 
 // function to get the anime by category
 export async function getAnimeByCategory(
   filters: CategoryFilters,
-): Promise<AniListMedia[]> {
+): Promise<AnimePaginationResponse> {
   try {
     // might need to make params object that stores the value if the key exists
     // get the genre or season to pass into the api call
-    if (filters.genres || filters.season) {
+    if (filters.genres || filters.season || filters.page || filters.perPage) {
       // defaults will be passed into the request
-      const res = await axios.get<ShowcaseResponse>(
+      const res = await axios.get<AnimePaginationResponse>(
         // ShowcaseResponse to make sure that the raw data from the backend is structured properly to be mapped
         `${backendUrl}/anime/categories`,
         {
@@ -81,10 +84,23 @@ export async function getAnimeByCategory(
           params: filters,
         },
       );
-      // get the data and send it
-      return res.data.data.Page.media ?? [];
+
+      // check for the page data
+      const page = res.data.data.Page;
+
+      if (!page) {
+        throw new Error("error getting the page data from the category fetch");
+      }
+      // return the full data with the page and the media information
+      return {
+        data: {
+          Page: {
+            pageInfo: page.pageInfo,
+            media: page.media,
+          },
+        },
+      };
     }
-    return [];
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Failed to fetch category data: ${message}`);

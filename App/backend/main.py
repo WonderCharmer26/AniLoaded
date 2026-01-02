@@ -71,12 +71,23 @@ async def get_categories(filters: CategoryFilter = Depends()):
     if filters.season:
         # store the variables in the dict
         variables["season"] = filters.season
+    # account for the pages params if there are any
+    if filters.page:
+        variables["pages"] = filters.page
+    # NOTE: Might not use the perPage section, might harwire in the backend
+    if filters.perPage:
+        variables["perPage"] = filters.perPage
 
     # query for anilist (genre and season passed into the query)
     # NOTE: ADD IN PAGINATION SO THAT THERE ARE ONLY A VIEW ANIME PER PAGE AND THE USER CAN SCOURE THROUGH THE REST
     query = """
     query($perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
         Page(page: $page, perPage: $perPage) {
+            pageInfo {
+                currentPage
+                hasNextPage
+                perPage
+            }
             media(type: ANIME, genre_in: $genres, season: $season, sort: POPULARITY_DESC){
                 id
                 title {
