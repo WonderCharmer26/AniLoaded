@@ -113,7 +113,7 @@ export default function AnimeCategoriesPage() {
         {/* <div className="bg-black py-2 px-4 uppercase rounded-lg">Other</div> */}
       </section>
 
-      <section className="grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-5 mb-10">
+      <section className="grid gap-x-15 gap-y-5 sm:grid-cols-2 lg:grid-cols-5 mb-10">
         {isLoading || (isFetching && anime.length === 0)
           ? Array.from({ length: DEFAULT_PER_PAGE }).map((_, index) => (
               <AnimeCardSkeleton key={`anime-card-skeleton-${index}`} />

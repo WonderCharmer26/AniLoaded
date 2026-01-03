@@ -8,6 +8,7 @@ import { ReviewList } from "../components/ReviewList";
 import { AnimeBanner } from "../components/AnimeBanner";
 import { AnimeBannerSkeleton } from "../components/skeleton/AnimeBannerSkeleton";
 import { useEffect } from "react";
+import { sanitizeHtml } from "../utilities/htmlUtils";
 
 // TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
@@ -61,9 +62,14 @@ export default function AnimeInfoPage() {
           <div className="w-full flex items-start">
             <h2 className="section-titles">PLOT</h2>
           </div>
-          <div className="h-[250px] text-l  w-[700px] mt-2 no-scrollbar overflow-scroll">
+          <div className="h-[250px] w-[700px] mt-2 no-scrollbar overflow-scroll">
             {isFetched && data?.description && data.description?.length > 0 ? (
-              <div className="flex text-start">{data.description}</div>
+              <div
+                className="flex text-start whitespace-pre-line"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(data.description),
+                }}
+              />
             ) : (
               "there is no description"
             )}
