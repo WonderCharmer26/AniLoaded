@@ -36,9 +36,13 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
           </div>
         </div>
       </div>
+
       <div className="brightness-50 bg-blue-400 h-[620px] w-full">
         <img src={anime.bannerImage} className="h-full w-full object-cover" />
       </div>
+
+      {/* STYLING FOR THE OVERLAY WITH THE BG COLOR FADDED TO TRANSPARENT  */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-[0] h-[35%] bg-gradient-to-t from-[#101114] to-transparent" />
     </div>
   );
 };
