@@ -65,7 +65,7 @@ export default function AnimeInfoPage() {
           <div className="h-[250px] w-[700px] mt-2 no-scrollbar overflow-scroll">
             {isFetched && data?.description && data.description?.length > 0 ? (
               <div
-                className="flex text-start whitespace-pre-line"
+                className="flex text-start flex-col whitespace-pre-line"
                 dangerouslySetInnerHTML={{
                   __html: sanitizeHtml(data.description),
                 }}

@@ -19,8 +19,8 @@ import { AnimeCardSkeleton } from "../components/skeleton/AnimeCardSkeleton";
 // default genre for when the user loads into the page
 const DEFAULT_GENRE: string[] = ["Action"]; // route in the backend will get the param to pass in
 const DEFAULT_SEASON: string = "WINTER";
-const DEFAULT_PAGE: number = 1;
-const DEFAULT_PER_PAGE: number = 20;
+export const DEFAULT_PAGE: number = 1;
+export const DEFAULT_PER_PAGE: number = 30;
 
 export default function AnimeCategoriesPage() {
   // state to update the currentPage for the anime

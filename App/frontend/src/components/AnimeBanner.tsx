@@ -1,4 +1,5 @@
 import { AniListMedia } from "../schemas/animeSchemas";
+import { Star } from "lucide-react";
 
 interface AnimeBannerProps {
   anime: AniListMedia;
@@ -18,7 +19,7 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
 
   return (
     <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen">
-      <div className="absolute z-[1] bottom-3 left-2/6 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
+      <div className="absolute z-[1] bottom-3 left-2/7 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
         <div className="flex h-14 w-14 items-center justify-center rounded-4xl border-[6px] border-[#3CB4FF] text-2xl font-bold mr-2">
           {anime.averageScore}
         </div>
@@ -26,13 +27,15 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
           <h1 className="text-left">{anime.title.english?.toUpperCase()}</h1>
           <h2>Genre: {genreLabel}</h2>
           <p>Studio: {studioName}</p>
-          <div className="flex flex-row gap-2 mt-2">
+          <div className="flex flex-row items-center gap-2 mt-2">
             <button className="flex items-center justify-center bg-[#26242A] text-sm h-11 p-3 rounded-lg">
               ADD TO LIST
             </button>
             <button className="flex items-center justify-center bg-[#246C99] text-sm p-3 h-11 rounded-lg">
               ADD TO TIER LIST
             </button>
+            {/* NOTE: CHANGE THE FILL COLOR TO THE BLUE IF THE USER FAVORITES THE ANIME AND ADDS IT TO THEIR LIST */}
+            <Star size={32} fill="white" />
           </div>
         </div>
       </div>

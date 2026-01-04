@@ -65,6 +65,12 @@ async def get_categories(filters: CategoryFilter = Depends()):
     variables: dict[str] = {}  # initialize variables to store the parameters
 
     # check if filters are sent as params in the request
+    if filters.search:
+        variables["search"] = filters.search
+
+    # set the sorting bases on if search is used
+    variables["sort"] = ["SEARCH_MATCH"] if filters.search else ["POPULARITY_DESC"]
+
     if filters.genres:
         # store the variables in the dict
         variables["genres"] = [filters.genres]  # package as an array
@@ -81,14 +87,14 @@ async def get_categories(filters: CategoryFilter = Depends()):
     # query for anilist (genre and season passed into the query)
     # NOTE: ADD IN PAGINATION SO THAT THERE ARE ONLY A VIEW ANIME PER PAGE AND THE USER CAN SCOURE THROUGH THE REST
     query = """
-    query($perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
+    query($search: String, $sort: [MediaSort] $perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
         Page(page: $page, perPage: $perPage) {
             pageInfo {
                 currentPage
                 hasNextPage
                 perPage
             }
-            media(type: ANIME, genre_in: $genres, season: $season, sort: POPULARITY_DESC){
+            media(search: $search, type: ANIME, genre_in: $genres, season: $season, sort: $sort){
                 id
                 title {
                 romaji

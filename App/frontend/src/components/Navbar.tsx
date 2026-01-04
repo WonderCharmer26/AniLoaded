@@ -34,7 +34,9 @@ export const Navbar = () => {
             // TODO: might make the spacing between the links slightly wider
             <li key={items.id} className="px-3">
               <Link to={items.link}>
-                <p className="navbar-text">{items.label}</p>
+                <p className="navbar-text hover:text-[#3CB4FF] transition-colors duration-300">
+                  {items.label}
+                </p>
               </Link>
             </li>
           ))}

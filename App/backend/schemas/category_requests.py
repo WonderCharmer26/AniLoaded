@@ -8,9 +8,11 @@ from pydantic import BaseModel
 
 # schema for category filtering
 class CategoryFilter(BaseModel):
+    search: Optional[str] = None  # affects the query to the backend route
     genres: Optional[str] = None  # takes in an array of genres
     season: Optional[str] = None
     page: Optional[int] = (
         None  # used in get the page from the buttoms bellow the results
     )
     perPage: Optional[int] = None  # To change the amount of anime that we get back
+    sort: Optional[str] = None

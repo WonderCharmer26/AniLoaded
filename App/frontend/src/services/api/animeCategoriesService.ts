@@ -8,6 +8,10 @@ import axios from "axios";
 import { backendUrl } from "./fetchAnimes";
 import { GenreI } from "../../schemas/genres";
 import { SeasonsI } from "../../schemas/seasons";
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PER_PAGE,
+} from "../../pages/AnimeCategoriesPage";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -61,6 +65,7 @@ const mockAnimePool: AniListMedia[] = [
 // interface for the filters (same as the backend)
 interface CategoryFilters {
   // might make also null as well
+  search?: string;
   genres?: string; // takes in an array of genres to send off
   season?: string;
   page?: number;
@@ -75,10 +80,11 @@ export async function getAnimeByCategory(
     const res = await axios.get<AnimePaginationResponse>(
       `${backendUrl}/anime/categories`,
       {
+        // search param affects the type of filtering on the backend route
         params: {
           ...filters,
-          page: filters.page ?? 1,
-          perPage: filters.perPage ?? 20,
+          page: filters.page ?? DEFAULT_PAGE,
+          perPage: filters.perPage ?? DEFAULT_PER_PAGE,
         },
       },
     );
