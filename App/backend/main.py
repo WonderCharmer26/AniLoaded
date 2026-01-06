@@ -87,7 +87,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
     # query for anilist (genre and season passed into the query)
     # NOTE: ADD IN PAGINATION SO THAT THERE ARE ONLY A VIEW ANIME PER PAGE AND THE USER CAN SCOURE THROUGH THE REST
     query = """
-    query($search: String, $sort: [MediaSort] $perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
+    query($search: String, $sort: [MediaSort], $perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
         Page(page: $page, perPage: $perPage) {
             pageInfo {
                 currentPage

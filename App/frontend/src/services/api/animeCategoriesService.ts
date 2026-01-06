@@ -65,7 +65,7 @@ const mockAnimePool: AniListMedia[] = [
 // interface for the filters (same as the backend)
 interface CategoryFilters {
   // might make also null as well
-  search?: string;
+  search?: string; // optional search parameter
   genres?: string; // takes in an array of genres to send off
   season?: string;
   page?: number;
@@ -89,6 +89,7 @@ export async function getAnimeByCategory(
       },
     );
 
+    // handle edge case to check if page data is sent back from the backend
     const page = res.data?.data?.Page;
 
     if (!page) {

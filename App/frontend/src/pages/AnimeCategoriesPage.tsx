@@ -1,5 +1,5 @@
 // this page is for the user to search the for the animes that they are interested in
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getDisplayTitle } from "../schemas/animeSchemas";
@@ -34,6 +34,7 @@ export default function AnimeCategoriesPage() {
   // handles getting the search params to send into the query functions
   const selectedGenre = params.get("genres") ?? ""; // get the search param from the param that get passed into the url for the genre
   const selectedSeason = params.get("season") ?? ""; // get the search params that get passed into the url for the season
+  const selectedSearch = params.get("search") ?? ""; // get the search term from the url so the filter can react to it
 
   // displays the genres in the selector
   const { data: genres = [] } = useQuery<string[]>({
@@ -53,14 +54,21 @@ export default function AnimeCategoriesPage() {
     isLoading,
     isFetching,
   } = useQuery<AnimePaginationResponse>({
-    queryKey: ["animeCategory", selectedGenre, selectedSeason, page],
+    queryKey: [
+      "animeCategory",
+      selectedGenre,
+      selectedSeason,
+      selectedSearch,
+      page,
+    ],
     queryFn: () =>
       getAnimeByCategory({
-        genres: selectedGenre, // TODO: MAKE EDIT SO THAT THE GENRE IS SENT AS A STRING
+        search: selectedSearch || undefined,
+        genres: selectedGenre,
         season: selectedSeason,
         page: page,
         perPage: DEFAULT_PER_PAGE,
-      }), // NOTE: make sure that the genre variable is better formed
+      }),
   });
 
   // package media data so that it can be sent used to render the anime card data
@@ -84,6 +92,10 @@ export default function AnimeCategoriesPage() {
     setCurrentPage(DEFAULT_PAGE);
   };
 
+  useEffect(() => {
+    setCurrentPage(DEFAULT_PAGE);
+  }, [selectedSearch]);
+
   const canGoPrev = page > 1;
   const canGoNext = pageInfo?.hasNextPage ?? false;
 
@@ -94,10 +106,12 @@ export default function AnimeCategoriesPage() {
     <div className="px-6 py-10 space-y-10">
       {/* NOTE: might align the title and subtitle in the same row */}
       <section className="flex flex-col items-center space-y-4">
-        <h1 className="text-4xl font-bold uppercase text-white">Action</h1>
+        <h1 className="text-4xl font-bold uppercase text-white">
+          {selectedGenre}
+        </h1>
         <p className="max-w-3xl text-slate-300">
-          Action is anime that you may like to watch. (will change with when the
-          genre changes)
+          {selectedGenre} is anime that you may like to watch. (will change with
+          when the genre changes)
         </p>
       </section>
 
