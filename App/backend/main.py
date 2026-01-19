@@ -475,3 +475,7 @@ async def get_anime_by_id(
             )
         except httpx.RequestError as e:
             raise HTTPException(status_code=500, detail=f"Request error: {e}")
+
+
+# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB
+# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO GET THE DISCUSSION FROM THE DB

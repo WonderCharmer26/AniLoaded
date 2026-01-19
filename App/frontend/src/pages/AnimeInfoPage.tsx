@@ -10,6 +10,8 @@ import { AnimeBannerSkeleton } from "../components/skeleton/AnimeBannerSkeleton"
 import { useEffect } from "react";
 import { sanitizeHtml } from "../utilities/htmlUtils";
 
+// TODO: USE ANILIST RECOMMENDATION EDGE TO HELP WITH GIVING RECOMMENDATIONS FOR EACH OF THE DIFFERENT ANIME ON THE INFO PAGE
+
 // TODO: Incorporate beautiful soup to make sure that the data gotten from the backend is packaged and rendered properly on the frontend
 export default function AnimeInfoPage() {
   const { id } = useParams();

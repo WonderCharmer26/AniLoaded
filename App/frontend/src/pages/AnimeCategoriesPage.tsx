@@ -26,6 +26,7 @@ export default function AnimeCategoriesPage() {
   // state to update the currentPage for the anime
   const [page, setCurrentPage] = useState<number>(DEFAULT_PAGE);
 
+  // get the params from the search url, and update them
   const [params, setParams] = useSearchParams({
     genres: DEFAULT_GENRE,
     season: DEFAULT_SEASON,
