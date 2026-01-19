@@ -5,9 +5,12 @@
 
 # imports
 import httpx  # for handling the requests on the backend to get data from the Ani-list api
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from schemas.category_requests import CategoryFilter
+from utilities.genreFunctions import ANILIST_URL, get_cached_genre
+from utilities.seasonFunctions import get_cached_seasons
 
 # from pydantic import BaseModel (might use, handling BaseModel in schema folder)
 
@@ -20,11 +23,16 @@ app = FastAPI()
 # add CORS middleware to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,  # this is the middleware
-    allow_origins=["*"],  # allow all origins (change to site url later on in prod)
+    allow_origins=[
+        "http://localhost:5173"
+    ],  # allow all origins (change to site url later on in prod)
     allow_credentials=True,  # allow credentials
     allow_methods=["*"],  # means allow all methods
     allow_headers=["*"],  # allow all headers
 )
+
+# anilist url to use in routes
+ANILIST_URL
 
 
 # test route to check the connection for the backend (removing later)
@@ -33,12 +41,119 @@ def root():
     return {"test_message": "This is a test message to show the backend is working"}
 
 
+# route to get genres from AniList (might update the params to get the genre and pass it in to fetch from the anilist)
+@app.get("/anime/genres")
+async def get_genres():
+    """Fetch all genres from AniList and return cached list."""
+    return {"genres": await get_cached_genre()}
+
+
+# route to get the seasons from the backend (might update the params to get the genre and pass it in to fetch from the anilist)
+
+
+@app.get("/anime/seasons")
+async def get_seasons():
+    """Fetch all seasons from AniList and return cached list."""
+    return {"seasons": await get_cached_seasons()}
+
+
+# route to get the filtered anime options from AniList
+@app.get("/anime/categories")
+async def get_categories(filters: CategoryFilter = Depends()):
+    # filter is set up in a seperate schema file
+
+    variables: dict[str] = {}  # initialize variables to store the parameters
+
+    # check if filters are sent as params in the request
+    if filters.search:
+        variables["search"] = filters.search
+
+    # set the sorting bases on if search is used
+    variables["sort"] = ["SEARCH_MATCH"] if filters.search else ["POPULARITY_DESC"]
+
+    if filters.genres:
+        # store the variables in the dict
+        variables["genres"] = [filters.genres]  # package as an array
+    if filters.season:
+        # store the variables in the dict
+        variables["season"] = filters.season
+    # account for the pages params if there are any
+    if filters.page:
+        variables["page"] = filters.page
+    # NOTE: Might not use the perPage section, might harwire in the backend
+    if filters.perPage:
+        variables["perPage"] = filters.perPage
+
+    # query for anilist (genre and season passed into the query)
+    # NOTE: ADD IN PAGINATION SO THAT THERE ARE ONLY A VIEW ANIME PER PAGE AND THE USER CAN SCOURE THROUGH THE REST
+    query = """
+    query($search: String, $sort: [MediaSort], $perPage: Int, $page: Int, $genres: [String], $season: MediaSeason) {
+        Page(page: $page, perPage: $perPage) {
+            pageInfo {
+                currentPage
+                hasNextPage
+                perPage
+            }
+            media(search: $search, type: ANIME, genre_in: $genres, season: $season, sort: $sort){
+                id
+                title {
+                romaji
+                english
+                native
+                }
+                episodes
+                coverImage {
+                large
+                medium
+                }
+                genres
+                season
+                averageScore
+                status(version: 2)
+            } 
+        }
+    }
+    """
+
+    # use pass in the variables and make the request
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(
+                ANILIST_URL,
+                json={
+                    "query": query,
+                    "variables": variables,  # variables used if there are any
+                },  # json params to send off in the request
+                headers={"Content-Type": "application/json"},
+            )
+
+            # print the response to check
+            print(response)
+
+            # show the status if all goes good
+            response.raise_for_status()
+
+            # package the data to send back to the frontend
+            data = response.json()  # turn the data into json to send off
+
+            # handle the errors if anything pops up in the json request
+            if "errors" in data:
+                print(f"GraphQL error: {data['errors']}")
+                raise HTTPException(status_code=400, detail=data["errors"])
+
+            # otherwise return the data
+            return data
+
+        except httpx.HTTPStatusError as error:
+            raise HTTPException(status_code=404, detail=f"The error is: {error}")
+
+
 # route to get the popular anime from Ani-list
-@app.get("/popular")
-async def get_popular_anime():
+@app.get("/anime/popular")
+async def get_anime_popular():
     """
     NOTE: This fetch gets the popular anime from Ani-list so that I can return the
-    anime to the frontend Carousel Component
+    anime to the frontend Carousel Component via /anime/popular
     """
 
     # query that being sent
@@ -116,11 +231,12 @@ async def get_popular_anime():
 
 
 # route to get the trending anime from Ani-list
-@app.get("/trending")
-async def get_trending_anime():
+@app.get("/anime/trending")
+async def get_anime_trending():
     """
     NOTE: May adjust for amount for rendering on trending anime page
     and manually tweak the amount rendered in frontend component like CardCarousel
+    via /anime/trending
     """
     # set up the query to get the trending anime
     query = """
@@ -194,8 +310,8 @@ async def get_trending_anime():
 
 
 # Route to get the top anime from anilist
-@app.get("/top-anime")  # get all the top anime (no parameters needed)
-async def get_top_anime():  # NOTE: may add in param from the frontend if needed
+@app.get("/anime/top")  # get all the top anime (no parameters needed)
+async def get_anime_top():  # NOTE: may add in param from the frontend if needed
     # this query is sorted in descending order
     # set up the query string
     query = """
@@ -235,7 +351,7 @@ async def get_top_anime():  # NOTE: may add in param from the frontend if needed
             )
 
             # test out the fetch
-            print(f"Test for the response for Top Anime:{response.content}")
+            print(f"Test for the response for /anime/top:{response.content}")
             # raise an error if status isn't successful
             response.raise_for_status()
 
@@ -359,3 +475,7 @@ async def get_anime_by_id(
             )
         except httpx.RequestError as e:
             raise HTTPException(status_code=500, detail=f"Request error: {e}")
+
+
+# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB
+# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO GET THE DISCUSSION FROM THE DB

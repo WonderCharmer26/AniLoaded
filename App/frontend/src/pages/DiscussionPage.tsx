@@ -1,27 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import type {
-  DiscussionThread,
-  DiscussionTopic,
-} from "../schemas/discussion";
+import type { DiscussionThread, DiscussionTopic } from "../schemas/discussion";
 import {
   getDiscussionThreads,
   getTrendingTopics,
 } from "../services/api/discussionService";
 
+// TODO: CONNECT THE TABLE, MAKE FUNCTIONS FOR FETCHING THE TABLES
+// TODO: MAKE FORM COMPONENT TO TAKE IN NEW DISCUSSION POSTS (MAKE MODAL)
+// TODO: MAKE DISCUSSION CARD THAT THE USER CAN CLICK TO TAKE THEM TO THE POST
 export default function DiscussionPage() {
-  const {
-    data: threads = [],
-    isLoading: threadsLoading,
-  } = useQuery<DiscussionThread[]>({
+  const { data: threads = [], isLoading: threadsLoading } = useQuery<
+    DiscussionThread[]
+  >({
     queryKey: ["discussionThreads"],
     queryFn: getDiscussionThreads,
   });
 
-  const {
-    data: trendingTopics = [],
-    isLoading: topicsLoading,
-  } = useQuery<DiscussionTopic[]>({
+  const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
+    DiscussionTopic[]
+  >({
     queryKey: ["discussionTopics"],
     queryFn: getTrendingTopics,
   });
@@ -40,7 +38,10 @@ export default function DiscussionPage() {
           <button className="rounded-full bg-sky-500 px-6 py-2 text-sm font-semibold text-white">
             New thread
           </button>
-          <Link to="/recommendations" className="text-sm font-semibold text-sky-300">
+          <Link
+            to="/recommendations"
+            className="text-sm font-semibold text-sky-300"
+          >
             Need inspo? Try recommendations →
           </Link>
         </div>
@@ -51,7 +52,9 @@ export default function DiscussionPage() {
           {threadsLoading ? (
             <div className="text-sm text-slate-400">Loading threads…</div>
           ) : (
-            threads.map((thread) => <ThreadCard key={thread.id} thread={thread} />)
+            threads.map((thread) => (
+              <ThreadCard key={thread.id} thread={thread} />
+            ))
           )}
         </div>
 
@@ -85,7 +88,9 @@ function ThreadCard({ thread }: { thread: DiscussionThread }) {
     <article className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-md shadow-black/30 transition hover:-translate-y-0.5">
       <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
         <span>{thread.author}</span>
-        <span>{thread.replies} replies · {thread.likes} likes</span>
+        <span>
+          {thread.replies} replies · {thread.likes} likes
+        </span>
       </div>
       <h3 className="mt-3 text-2xl font-semibold text-white">{thread.title}</h3>
       <p className="mt-2 text-slate-300">{thread.excerpt}</p>
