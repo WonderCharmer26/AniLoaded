@@ -9,7 +9,7 @@ export function animeCategoriesLoader(queryClient: QueryClient) {
     await Promise.all([
       queryClient.ensureQueryData({
         queryKey: ["animeCategory", "Action"],
-        queryFn: () => getAnimeByCategory({ genre: "Action" }),
+        queryFn: () => getAnimeByCategory({ genres: "Action" }),
       }),
       queryClient.ensureQueryData({
         queryKey: ["availableGenres"],

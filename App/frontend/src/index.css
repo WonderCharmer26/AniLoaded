@@ -50,6 +50,18 @@ h3 {
   @apply font-["Inter"] font-bold text-[0.80rem];
 }
 
+/* Styling for the section titles ( gradients added to help with the design for the text) */
+.section-titles {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(to top, #0d3853, #3cb4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
 .review-cards {
   font-weight: 200;
   text-align: left;

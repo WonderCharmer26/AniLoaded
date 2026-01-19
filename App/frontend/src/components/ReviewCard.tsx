@@ -18,7 +18,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({
   // likes,
 }) => {
   return (
-    <div className="flex h-full w-[410px] flex-col rounded-2xl bg-[#1A2227] p-5 py-7 text-white">
+    // NOTE: might change the design of this card to be better for the UI
+    <div className="flex h-full w-[410px] flex-col rounded-2xl bg-[#1A2227] px-8 py-9 text-white">
       <div className="flex flex-row items-start gap-3">
         <img
           src={avatarUrl}

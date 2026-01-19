@@ -1,10 +1,13 @@
 // TODO: have skeleton loader to load the elements onto the page when the data is loading
 // TODO: remember to make a query to the anime that is linked in the anime carousel using the anime page
-// import { Card } from "../components/Card";
 import { CarouselComponent } from "../components/Carousel";
 import { ShowcaseSection } from "../components/ShowcaseSection";
 import { useQuery } from "@tanstack/react-query";
-import { getPopular, getTopAnime, getTrending } from "../services/api/fetchAnimes";
+import {
+  getPopular,
+  getTopAnime,
+  getTrending,
+} from "../services/api/fetchAnimes";
 import { AniListMedia } from "../schemas/animeSchemas";
 import { Link, useLoaderData } from "react-router-dom"; // use data from react router loader
 import { adSchemaI } from "../schemas/adSchema";

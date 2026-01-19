@@ -21,7 +21,7 @@ export const Navbar = () => {
 
   return (
     // NOTE: Space between the navbar and the rest of the content changable by the mt-4
-    <nav className="flex pt-5 sticky top-0 w-full h-[2.875rem] items-center justify-between text-white">
+    <nav className="flex relative pt-5 z-50 top-0 w-full h-[2.875rem] items-center justify-between text-white">
       {" "}
       {/* TODO: replace with the real logo of the application */}
       <div className="h-25 w-25">
@@ -34,7 +34,9 @@ export const Navbar = () => {
             // TODO: might make the spacing between the links slightly wider
             <li key={items.id} className="px-3">
               <Link to={items.link}>
-                <p className="navbar-text">{items.label}</p>
+                <p className="navbar-text hover:text-[#3CB4FF] transition-colors duration-300">
+                  {items.label}
+                </p>
               </Link>
             </li>
           ))}

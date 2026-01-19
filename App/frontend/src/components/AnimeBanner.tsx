@@ -1,4 +1,5 @@
 import { AniListMedia } from "../schemas/animeSchemas";
+import { Star } from "lucide-react";
 
 interface AnimeBannerProps {
   anime: AniListMedia;
@@ -6,6 +7,7 @@ interface AnimeBannerProps {
 
 export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
   if (!anime.bannerImage) {
+    // NOTE: show replacement banner or show another style if there's no banner data
     return null;
   }
 
@@ -17,7 +19,7 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
 
   return (
     <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen">
-      <div className="absolute z-[1] bottom-5 left-1/4 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
+      <div className="absolute z-[1] bottom-3 left-2/7 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
         <div className="flex h-14 w-14 items-center justify-center rounded-4xl border-[6px] border-[#3CB4FF] text-2xl font-bold mr-2">
           {anime.averageScore}
         </div>
@@ -25,19 +27,25 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
           <h1 className="text-left">{anime.title.english?.toUpperCase()}</h1>
           <h2>Genre: {genreLabel}</h2>
           <p>Studio: {studioName}</p>
-          <div className="flex flex-row gap-2 mt-1">
-            <button className="bg-[#26242A] text-[.85rem] h-9 w-28 rounded-lg">
+          <div className="flex flex-row items-center gap-2 mt-2">
+            <button className="flex items-center justify-center bg-[#26242A] text-sm h-11 p-3 rounded-lg">
               ADD TO LIST
             </button>
-            <button className="bg-[#246C99] text-[.85rem] h-9 w-[140px] rounded-lg">
+            <button className="flex items-center justify-center bg-[#246C99] text-sm p-3 h-11 rounded-lg">
               ADD TO TIER LIST
             </button>
+            {/* NOTE: CHANGE THE FILL COLOR TO THE BLUE IF THE USER FAVORITES THE ANIME AND ADDS IT TO THEIR LIST */}
+            <Star size={32} fill="white" />
           </div>
         </div>
       </div>
-      <div className="brightness-50 bg-blue-400 h-[720px] w-full">
+
+      <div className="brightness-50 bg-blue-400 h-[620px] w-full">
         <img src={anime.bannerImage} className="h-full w-full object-cover" />
       </div>
+
+      {/* STYLING FOR THE OVERLAY WITH THE BG COLOR FADDED TO TRANSPARENT  */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-[0] h-[35%] bg-gradient-to-t from-[#101114] to-transparent" />
     </div>
   );
 };
