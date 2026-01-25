@@ -8,6 +8,8 @@ import httpx  # for handling the requests on the backend to get data from the An
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import supabase
+from database.supabase_client import supabase_client
 from schemas.category_requests import CategoryFilter
 from utilities.genreFunctions import ANILIST_URL, get_cached_genre
 from utilities.seasonFunctions import get_cached_seasons
@@ -477,5 +479,21 @@ async def get_anime_by_id(
             raise HTTPException(status_code=500, detail=f"Request error: {e}")
 
 
-# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB
 # TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO GET THE DISCUSSION FROM THE DB
+@app.get("/discussions")
+async def get_discussions():
+    """
+    This function returns all the discussions for the discussions page
+    """
+    try:
+        response = supabase_client.table("discussions").select("*").execute()
+
+        data = response.model_dump_json()
+
+        return data
+    # might change the error message for better logging
+    except Exception as e:
+        raise e
+
+
+# TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB

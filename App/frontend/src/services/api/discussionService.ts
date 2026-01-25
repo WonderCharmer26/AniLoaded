@@ -1,8 +1,14 @@
 // TODO: Make functions that get real discussion from the database
-import type { DiscussionThread, DiscussionTopic } from "../../schemas/discussion";
+import type {
+  DiscussionThread,
+  DiscussionTopic,
+} from "../../schemas/discussion";
+
+// TODO: Work on making the calls to the backend
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// dummy data (won't need soon)
 const mockThreads: DiscussionThread[] = [
   {
     id: "thread-1",
@@ -58,4 +64,3 @@ export async function getTrendingTopics(): Promise<DiscussionTopic[]> {
   await delay(150);
   return mockTopics;
 }
-

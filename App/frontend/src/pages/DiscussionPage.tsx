@@ -10,6 +10,7 @@ import {
 // TODO: MAKE FORM COMPONENT TO TAKE IN NEW DISCUSSION POSTS (MAKE MODAL)
 // TODO: MAKE DISCUSSION CARD THAT THE USER CAN CLICK TO TAKE THEM TO THE POST
 export default function DiscussionPage() {
+  // gets the discussions to display
   const { data: threads = [], isLoading: threadsLoading } = useQuery<
     DiscussionThread[]
   >({
@@ -17,6 +18,7 @@ export default function DiscussionPage() {
     queryFn: getDiscussionThreads,
   });
 
+  // gets the trending discussions
   const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
     DiscussionTopic[]
   >({
