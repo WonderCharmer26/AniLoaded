@@ -71,7 +71,20 @@ export const Navbar = () => {
             </Link>
           )}
         </div>
-        <Menu size={30} />
+        {user ? (
+          <div className="flex items-center space-x-2">
+            <span className="text-white text-sm">{user.user_metadata?.username || 'User'}</span>
+            <Link to="/profile">
+              <img
+                src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+                alt="User Avatar"
+                className="w-8 h-8 rounded-full object-cover border-2 border-gray-600 hover:border-gray-400 cursor-pointer"
+              />
+            </Link>
+          </div>
+        ) : (
+          <Menu size={30} />
+        )}
       </div>
     </nav>
   );
