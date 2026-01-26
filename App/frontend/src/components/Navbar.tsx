@@ -2,8 +2,20 @@ import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { Menu } from "lucide-react";
 import AniLoadedLogo from "../assets/images/Ani-Loaded Logo.svg";
+import { useState, useEffect } from "react";
+import { supabase } from "../services/supabase/supabaseConnection";
 
 export const Navbar = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
+
   interface NavbarLinksI {
     id: number;
     label: string;
@@ -45,11 +57,19 @@ export const Navbar = () => {
       {/* TODO: Add User Icon */}
       <div className="flex items-center">
         <div className="flex flex-row mr-2">
-          <Link to="auth/login">
-            <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
-              Sign In
-            </button>
-          </Link>
+          {user ? (
+            <Link to="/profile">
+              <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
+                Profile
+              </button>
+            </Link>
+          ) : (
+            <Link to="auth/login">
+              <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
+                Sign In
+              </button>
+            </Link>
+          )}
         </div>
         <Menu size={30} />
       </div>
