@@ -9,14 +9,26 @@ import {
 // TODO: CONNECT THE TABLE, MAKE FUNCTIONS FOR FETCHING THE TABLES
 // TODO: MAKE FORM COMPONENT TO TAKE IN NEW DISCUSSION POSTS (MAKE MODAL)
 // TODO: MAKE DISCUSSION CARD THAT THE USER CAN CLICK TO TAKE THEM TO THE POST
+// WARNING: MIGHT MAKE THE USER ABLE TO UPLOAD THEIR OWN THUMBNAIL FOR THE DISCUSSIONS
+// WARNING: USE DUMMY DATA TO HELP WITH GIVING THE DISCUSSIONS PAGE A FILLER THUMBNAIL, WILL ADD STORAGE BUCKETS TO HANDLE USER UPLOADS FOR IMAGES
+
+// get the discussions data
 export default function DiscussionPage() {
-  // gets the discussions to display
   const { data: threads = [], isLoading: threadsLoading } = useQuery<
     Discussions[]
   >({
     queryKey: ["discussions"],
     queryFn: () => getAllDiscussions(),
   });
+
+  // NOTE: Might not need this, might just use the ID's to link certain anime discussions under specific anime pages
+  // store all the anime_ids, make sure there are no duplicates
+  const animeIDs = Array.from(new Set(threads.map((d) => d.anime_id))).filter(
+    // remove cases where the ids are null or undefined
+    Boolean,
+  );
+
+  // function to get all the anime_id
 
   // gets the trending discussions
   // const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
