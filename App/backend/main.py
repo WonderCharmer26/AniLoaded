@@ -4,20 +4,24 @@
 # NOTE: fastapi in the requirements not installed globally
 
 # imports
+from logging import Logger
 import httpx  # for handling the requests on the backend to get data from the Ani-list api
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import supabase
-from database.supabase_client import supabase_client
 from schemas.category_requests import CategoryFilter
+from schemas.discussions import DiscussionsResponse
 from utilities.genreFunctions import ANILIST_URL, get_cached_genre
 from utilities.seasonFunctions import get_cached_seasons
+
+# from dotenv import load_dotenv
+from database.supabase_client import supabase
+
 
 # from pydantic import BaseModel (might use, handling BaseModel in schema folder)
 
 # .env import variables will be added in later
-# NOTE: gonna set up supabase database connection later on
+
 
 # create the app object
 app = FastAPI()
@@ -27,6 +31,7 @@ app.add_middleware(
     CORSMiddleware,  # this is the middleware
     allow_origins=[
         "http://localhost:5173"
+        # "*"
     ],  # allow all origins (change to site url later on in prod)
     allow_credentials=True,  # allow credentials
     allow_methods=["*"],  # means allow all methods
@@ -480,17 +485,22 @@ async def get_anime_by_id(
 
 
 # TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO GET THE DISCUSSION FROM THE DB
-@app.get("/discussions")
+@app.get("/discussions", response_model=DiscussionsResponse)
 async def get_discussions():
     """
     This function returns all the discussions for the discussions page
     """
     try:
-        response = supabase_client.table("discussions").select("*").execute()
+        # get all the discussions
+        response = supabase.table("discussions").select("*").execute()
 
-        data = response.model_dump_json()
+        # test
 
-        return data
+        # return data
+        return {
+            "data": response.data,
+            "total": len(response.data),
+        }  # add in total for pagination later on
     # might change the error message for better logging
     except Exception as e:
         raise e

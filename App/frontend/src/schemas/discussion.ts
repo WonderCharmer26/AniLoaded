@@ -1,26 +1,45 @@
 // Types describing anime discussion primitives used across the app
 
-export interface DiscussionThread {
+export interface Discussions {
   id: string;
+  anime_id: number;
+  category_id: string;
+  created_by: string;
   title: string;
-  excerpt: string;
-  author: string;
-  avatarUrl?: string;
-  tags: string[];
-  replies: number;
-  likes: number;
-  createdAt: string;
-  updatedAt: string;
+  body: string;
+  is_locked: boolean;
+  is_pinned: boolean;
+  is_spoiler: boolean;
+  episode_number: number;
+  created_at: string;
+  last_activity_at: string;
+  comment_count: number;
+  upvote_count: number;
+  season_number: number;
 }
 
-export interface DiscussionTopic {
+export interface DiscussionsComments {
   id: string;
-  label: string;
-  mentions: number;
+  discussion_id: string;
+  created_by: string;
+  parent_comment_id: string;
+  body: string;
+  is_spoiler: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface DiscussionPrompt {
+export interface DiscussionsCategories {
   id: string;
-  question: string;
-  description?: string;
+  slug: string;
+  name: string;
+  description: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface DiscussionsResponse {
+  data: Discussions[];
+  total?: number;
 }

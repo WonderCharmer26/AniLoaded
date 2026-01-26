@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import type { DiscussionThread, DiscussionTopic } from "../schemas/discussion";
+import type { Discussions } from "../schemas/discussion";
 import {
+  getAllDiscussions,
   getDiscussionThreads,
-  getTrendingTopics,
 } from "../services/api/discussionService";
 
 // TODO: CONNECT THE TABLE, MAKE FUNCTIONS FOR FETCHING THE TABLES
@@ -12,19 +12,18 @@ import {
 export default function DiscussionPage() {
   // gets the discussions to display
   const { data: threads = [], isLoading: threadsLoading } = useQuery<
-    DiscussionThread[]
+    Discussions[]
   >({
-    queryKey: ["discussionThreads"],
-    queryFn: getDiscussionThreads,
+    queryKey: ["discussions"],
+    queryFn: () => getAllDiscussions(),
   });
 
   // gets the trending discussions
-  const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
-    DiscussionTopic[]
-  >({
-    queryKey: ["discussionTopics"],
-    queryFn: getTrendingTopics,
-  });
+  // const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
+  //   DiscussionTopic[]
+  // >({
+  //   queryKey: ["discussionTopics"],
+  // });
 
   return (
     <div className="px-6 py-10 space-y-10">
@@ -59,53 +58,23 @@ export default function DiscussionPage() {
             ))
           )}
         </div>
-
-        <aside className="rounded-2xl border border-slate-700 bg-slate-900/40 p-6">
-          <h2 className="text-lg font-semibold text-white">Trending topics</h2>
-          <p className="text-sm text-slate-400">
-            Pulls seasonal keywords once analytics hooks are added.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            {topicsLoading ? (
-              <span className="text-sm text-slate-500">Loading tags…</span>
-            ) : (
-              trendingTopics.map((topic) => (
-                <span
-                  key={topic.id}
-                  className="rounded-full border border-slate-700 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-200"
-                >
-                  {topic.label} · {topic.mentions}
-                </span>
-              ))
-            )}
-          </div>
-        </aside>
       </section>
     </div>
   );
 }
 
-function ThreadCard({ thread }: { thread: DiscussionThread }) {
+function ThreadCard({ thread }: { thread: Discussions }) {
   return (
     <article className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-md shadow-black/30 transition hover:-translate-y-0.5">
       <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-        <span>{thread.author}</span>
+        <span>{thread.title}</span>
         <span>
-          {thread.replies} replies · {thread.likes} likes
+          {thread.comment_count} replies · {thread.season_number} likes
         </span>
       </div>
       <h3 className="mt-3 text-2xl font-semibold text-white">{thread.title}</h3>
-      <p className="mt-2 text-slate-300">{thread.excerpt}</p>
-      <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-slate-400">
-        {thread.tags.map((tag) => (
-          <span
-            key={`${thread.id}-${tag}`}
-            className="rounded-full bg-slate-800/80 px-3 py-1 tracking-wide"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      <p className="mt-2 text-slate-300">{thread.body}</p>
+      <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-slate-400"></div>
       <button className="mt-5 text-sm font-semibold text-sky-300">
         Jump in →
       </button>
