@@ -1,12 +1,14 @@
+from typing import List, Optional
 from pydantic import BaseModel
+from uuid import UUID
 
 
 # Discussions Model
 class Discussions(BaseModel):
-    id: int
+    id: UUID
     anime_id: int
-    category_id: int
-    created_by: int  # might make into a string depending on how supabase sets it up
+    category_id: UUID
+    created_by: UUID  # might make into a string depending on how supabase sets it up
     title: str
     body: str
     is_locked: bool
@@ -16,10 +18,33 @@ class Discussions(BaseModel):
     created_at: str
     last_activity_at: str
     comment_count: int
-    update_count: int
+    upvote_count: int
     season_number: int
 
 
 # Discussions Comments
+class DiscussionComments(BaseModel):
+    id: UUID
+    discussion_id: UUID
+    created_by: str
+    parent_comment_id: UUID
+    body: str
+    is_spoiler: bool
+    created_at: str
+    updated_at: str
+
 
 # Discussions Categories
+class DiscussionCategories(BaseModel):
+    id: UUID
+    slug: str
+    name: str
+    description: str
+    sort_order: int
+    is_active: bool
+    created_at: str
+
+
+class DiscussionsResponse(BaseModel):
+    data: list[Discussions]
+    total: Optional[int]

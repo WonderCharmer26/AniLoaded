@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import {
+  getAllDiscussions,
   getDiscussionThreads,
-  getTrendingTopics,
 } from "../api/discussionService";
 
 export function discussionPageLoader(queryClient: QueryClient) {
@@ -9,12 +9,12 @@ export function discussionPageLoader(queryClient: QueryClient) {
     await Promise.all([
       queryClient.ensureQueryData({
         queryKey: ["discussionThreads"],
-        queryFn: getDiscussionThreads,
+        queryFn: getAllDiscussions,
       }),
-      queryClient.ensureQueryData({
-        queryKey: ["discussionTopics"],
-        queryFn: getTrendingTopics,
-      }),
+      // queryClient.ensureQueryData({
+      //   queryKey: ["discussionTopics"],
+      //   queryFn: getTrendingTopics,
+      // }),
     ]);
     return null;
   };
