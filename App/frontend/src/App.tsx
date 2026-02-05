@@ -25,6 +25,9 @@ import { discussionPageLoader } from "./services/loaders/discussionPageLoader";
 import { listsPageLoader } from "./services/loaders/listsPageLoader";
 import { animeCategoriesLoader } from "./services/loaders/animeCategoriesLoader";
 import { recommendationsPageLoader } from "./services/loaders/recommendationsPageLoader";
+import DiscussionInfoPage from "./pages/DiscussionInfoPage";
+import { discussionInfoPrefetcher } from "./services/loaders/discussionInfoPrefetcher";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Fetching functions to get data for the HomePage
 const demoUserId = "demo-user";
@@ -47,6 +50,13 @@ const router = createBrowserRouter([
         path: "discussion",
         element: <DiscussionPage />,
         loader: discussionPageLoader(queryClient),
+      },
+      {
+        // Individual Discussion Info Page
+        path: "discussion/:id",
+        element: <DiscussionInfoPage />,
+        loader: discussionInfoPrefetcher(queryClient),
+        errorElement: <ErrorBoundary />,
       },
       {
         // Lists Page
