@@ -510,6 +510,8 @@ async def get_discussions():
 # Route for posting thumbnails for discussions
 @app.post("threads/{thread_id}/thumbnail")
 async def post_discussion_thumbnail(thumbnail: UploadFile):
+    # store the thumbnail in order to send off
+    # access the storage bucket
     pass
 
 
