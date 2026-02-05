@@ -14,6 +14,7 @@ import {
 
 // get the discussions data
 export default function DiscussionPage() {
+  // function to get all the discussions
   const { data: threads = [], isLoading: threadsLoading } = useQuery<
     Discussions[]
   >({
@@ -21,8 +22,7 @@ export default function DiscussionPage() {
     queryFn: () => getAllDiscussions(),
   });
 
-  // NOTE: Might not need this, might just use the ID's to link certain anime discussions under specific anime pages
-  // store all the anime_ids, make sure there are no duplicates
+  // make sure that there are no dupes or null animeIDs
   const animeIDs = Array.from(new Set(threads.map((d) => d.anime_id))).filter(
     // remove cases where the ids are null or undefined
     Boolean,
@@ -39,7 +39,7 @@ export default function DiscussionPage() {
 
   return (
     <div className="px-6 py-10 space-y-10">
-      <section className="space-y-3">
+      <section className="space-y-3 flex flex-col items-center">
         <p className="text-sm tracking-[0.3em] text-sky-400">COMMUNITY HUB</p>
         <h1 className="text-4xl font-bold text-white">Start a conversation</h1>
         <p className="max-w-3xl text-slate-300">
@@ -60,9 +60,11 @@ export default function DiscussionPage() {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-        <div className="space-y-4">
+      {/*TODO: Turn into card component*/}
+      <section className="flex justify-center">
+        <div className="w-full max-w-4xl space-y-4">
           {threadsLoading ? (
+            // This is for the loading state component, will change to other component UI later
             <div className="text-sm text-slate-400">Loading threads…</div>
           ) : (
             threads.map((thread) => (
@@ -75,7 +77,7 @@ export default function DiscussionPage() {
   );
 }
 
-function ThreadCard({ thread }: { thread: Discussions }) {
+export function ThreadCard({ thread }: { thread: Discussions }) {
   return (
     <article className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-md shadow-black/30 transition hover:-translate-y-0.5">
       <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">

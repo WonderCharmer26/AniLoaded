@@ -13,6 +13,7 @@ from schemas.category_requests import CategoryFilter
 from schemas.discussions import DiscussionsResponse
 from utilities.genreFunctions import ANILIST_URL, get_cached_genre
 from utilities.seasonFunctions import get_cached_seasons
+from fastapi import UploadFile
 
 # from dotenv import load_dotenv
 from database.supabase_client import supabase
@@ -504,6 +505,12 @@ async def get_discussions():
     # might change the error message for better logging
     except Exception as e:
         raise e
+
+
+# Route for posting thumbnails for discussions
+@app.post("threads/{thread_id}/thumbnail")
+async def post_discussion_thumbnail(thumbnail: UploadFile):
+    pass
 
 
 # TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB
