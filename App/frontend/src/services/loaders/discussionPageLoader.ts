@@ -4,6 +4,7 @@ import {
   getDiscussionThreads,
 } from "../api/discussionService";
 
+// preloader to help with discussion page data fetching
 export function discussionPageLoader(queryClient: QueryClient) {
   return async () => {
     await Promise.all([

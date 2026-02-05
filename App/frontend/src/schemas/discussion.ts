@@ -10,7 +10,7 @@ export interface Discussions {
   is_locked: boolean;
   is_pinned: boolean;
   is_spoiler: boolean;
-  thumbnailUrl?: string; // optional to incase the user wants pictures
+  thumbnail_url?: string; // optional to incase the user wants pictures
   episode_number: number;
   created_at: string;
   last_activity_at: string;

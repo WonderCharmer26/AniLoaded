@@ -11,6 +11,7 @@ class Discussions(BaseModel):
     created_by: UUID  # might make into a string depending on how supabase sets it up
     title: str
     body: str
+    thumbnail_url: Optional[str]
     is_locked: bool
     is_pinned: bool  # might not need
     is_spoiler: bool
