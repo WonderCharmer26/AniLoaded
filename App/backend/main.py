@@ -507,6 +507,72 @@ async def get_discussions():
         raise e
 
 
+# Route to get a specific discussion by ID
+@app.get("/discussions/{discussion_id}")
+async def get_discussion_by_id(discussion_id: str):
+    """
+    This function returns a specific discussion by its ID
+    """
+    try:
+        # Get the discussion by id from the database
+        response = (
+            supabase.table("discussions")
+            .select("*")
+            .eq("id", discussion_id)
+            .single()
+            .execute()
+        )
+        
+        # Check if discussion exists
+        if not response.data:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Discussion with id {discussion_id} not found"
+            )
+        
+        return response.data
+        
+    except Exception as e:
+        # Handle supabase errors
+        if hasattr(e, 'code') and e.code == 'PGRST116':
+            raise HTTPException(
+                status_code=404,
+                detail=f"Discussion with id {discussion_id} not found"
+            )
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error fetching discussion: {str(e)}"
+        )
+
+
+# Route to get comments for a specific discussion
+@app.get("/discussions/{discussion_id}/comments")
+async def get_discussion_comments(discussion_id: str):
+    """
+    This function returns all comments for a specific discussion
+    """
+    try:
+        # Get all comments for the discussion
+        response = (
+            supabase.table("discussions_comments")
+            .select("*")
+            .eq("discussion_id", discussion_id)
+            .order("created_at", desc=False)  # Oldest first
+            .execute()
+        )
+        
+        return {
+            "data": response.data,
+            "total": len(response.data)
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error fetching comments: {str(e)}"
+        )
+
+
 # Route for posting thumbnails for discussions
 @app.post("threads/{thread_id}/thumbnail")
 async def post_discussion_thumbnail(thumbnail: UploadFile):
