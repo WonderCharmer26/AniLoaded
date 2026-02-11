@@ -29,15 +29,6 @@ export default function DiscussionPage() {
     Boolean,
   );
 
-  // function to get all the anime_id
-
-  // gets the trending discussions
-  // const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery<
-  //   DiscussionTopic[]
-  // >({
-  //   queryKey: ["discussionTopics"],
-  // });
-
   return (
     <div className="px-6 py-10 space-y-10">
       <section className="space-y-3 flex flex-col items-center">
@@ -46,7 +37,14 @@ export default function DiscussionPage() {
           Share hot takes, react to seasonal news, or ask the community for
           recommendations.
         </p>
-        <div className="flex gap-4"></div>
+        <div className="flex items-center justify-end gap-2 w-full">
+          <Link
+            to={"/discussion/submit"}
+            className="py-3 font-bold px-3.5 rounded-xl bg-black"
+          >
+            New +
+          </Link>
+        </div>
       </section>
 
       <section className="flex justify-center items-center">

@@ -28,9 +28,10 @@ import { recommendationsPageLoader } from "./services/loaders/recommendationsPag
 import DiscussionInfoPage from "./pages/DiscussionInfoPage";
 import { discussionInfoPrefetcher } from "./services/loaders/discussionInfoPrefetcher";
 import ErrorBoundary from "./components/ErrorBoundary";
+import DiscussionSubmitPage from "./pages/DiscussionSubmitPage";
 
 // Fetching functions to get data for the HomePage
-const demoUserId = "demo-user";
+const demoUserId = "demo-user"; // TODO: plug in real user data, supabase useAuth might handle this for me
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -57,6 +58,12 @@ const router = createBrowserRouter([
         element: <DiscussionInfoPage />,
         loader: discussionInfoPrefetcher(queryClient),
         errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "discussion/submit",
+        element: <DiscussionSubmitPage />,
+        // add in loader
+        // might add in error
       },
       {
         // Lists Page

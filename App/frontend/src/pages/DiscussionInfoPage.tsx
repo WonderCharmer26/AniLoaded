@@ -7,28 +7,29 @@ import {
 import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function DiscussionInfoPage() {
+  // get the discussion id from the url
   const { id } = useParams<{ id: string }>();
 
   // Fetch discussion data (already prefetched by loader)
   const { data: discussion, isLoading: discussionLoading } = useQuery({
     queryKey: ["discussion", id],
     queryFn: () => getDiscussionById(id!),
-    enabled: !!id,
+    enabled: !!id, // only when id
   });
 
   // Fetch comments data (already prefetched by loader)
   const { data: comments = [], isLoading: commentsLoading } = useQuery({
     queryKey: ["discussionComments", id],
     queryFn: () => getDiscussionComments(id!),
-    enabled: !!id,
+    enabled: !!id, // only when id
   });
 
-  // Show loading state
+  // Show loading state (might adjust later on)
   if (discussionLoading) {
     return <LoadingSpinner />;
   }
 
-  // Handle missing discussion
+  // Handle missing discussion edge case
   if (!discussion) {
     return (
       <div className="px-6 py-10 text-center">
@@ -38,21 +39,12 @@ export default function DiscussionInfoPage() {
   }
 
   return (
+    // TODO: Tweak the UI later on
     <div className="px-6 py-10 space-y-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Discussion Header */}
         <div className="space-y-4">
           <h1 className="text-4xl font-bold text-white">{discussion.title}</h1>
-
-          <div className="flex gap-4 text-sm text-slate-400">
-            <span>{discussion.comment_count} replies</span>
-            <span>·</span>
-            <span>{discussion.upvote_count} upvotes</span>
-            <span>·</span>
-            <span>
-              Posted {new Date(discussion.created_at).toLocaleDateString()}
-            </span>
-          </div>
         </div>
 
         {/* Thumbnail */}
@@ -63,6 +55,16 @@ export default function DiscussionInfoPage() {
             className="w-full h-96 object-cover rounded-xl"
           />
         )}
+        {/*Discussion stats*/}
+        <div className="flex gap-4 text-sm text-slate-400">
+          <span>{discussion.comment_count} replies</span>
+          <span>·</span>
+          <span>{discussion.upvote_count} upvotes</span>
+          <span>·</span>
+          <span>
+            Posted {new Date(discussion.created_at).toLocaleDateString()}
+          </span>
+        </div>
 
         {/* Discussion Body */}
         <div className="text-slate-300">

@@ -11,6 +11,7 @@ export default function DiscussionCard({ thread }: { thread: Discussions }) {
           alt={thread.title}
         />
         <div className="flex flex-col items-start gap-1">
+          {/*Add in user logo*/}
           <h3 className="mt-3 text-md font-semibold text-white">
             {thread.title}
           </h3>
