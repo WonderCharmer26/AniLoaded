@@ -4,17 +4,6 @@ type DiscussionToggleSectionProps = {
   form: DiscussionFormApi;
 };
 
-type ToggleField = {
-  name: string;
-  state: {
-    value: boolean;
-    meta: {
-      errors?: string[];
-    };
-  };
-  handleChange: (value: boolean) => void;
-};
-
 const getToggleClasses = (isActive: boolean) =>
   `relative inline-flex h-6 w-11 items-center rounded-full transition ${
     isActive ? "bg-emerald-500" : "bg-slate-700"
@@ -32,7 +21,7 @@ export default function DiscussionToggleSection({
     <div className="grid gap-4 md:grid-cols-2">
       <form.Field
         name="is_spoiler"
-        children={(field: ToggleField) => (
+        children={(field) => (
           <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900 px-4 py-3">
             <div>
               <p className="text-sm font-semibold text-slate-200">Spoiler</p>
@@ -54,7 +43,7 @@ export default function DiscussionToggleSection({
       />
       <form.Field
         name="is_locked"
-        children={(field: ToggleField) => (
+        children={(field) => (
           <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900 px-4 py-3">
             <div>
               <p className="text-sm font-semibold text-slate-200">Locked</p>

@@ -1,42 +1,45 @@
 import DiscussionBodySection from "@/components/forms/DiscussionBodySection";
+import DiscussionThumbnailSection from "@/components/forms/DiscussionThumbnailSection";
 import DiscussionTitleSection from "@/components/forms/DiscussionTitleSection";
 import DiscussionToggleSection from "@/components/forms/DiscussionToggleSection";
 import {
   DiscussionSchema,
   DiscussionValues,
-} from "@/schemas/discussionFormSchema";
+} from "@/schemas/zod/discussionFormSchema";
+import { submitDiscussion } from "@/services/api/discussionService";
 import { useForm } from "@tanstack/react-form";
 
 export default function DiscussionSubmitPage() {
   // set up the default values for the form
-  const discussion: DiscussionValues = {
+  const defaultValues: DiscussionValues = {
     title: "",
     body: "",
+    thumbnail: null,
     is_spoiler: false,
     is_locked: false,
   };
 
-  // handle the form submit
-  const handleSubmit = (value: DiscussionValues) => {
-    // parse the form data we get back in order to validate with zod
-    const formData = DiscussionSchema.safeParse(value);
-
-    // handle when it doesn't succeed
-    if (!formData.success) {
-      console.log("Discussion submit validation errors", formData.error);
-      return;
-    }
-
-    // handle case where its successful
-    console.log("Discussion submit placeholder", formData.data);
-  };
-
-  // set up the form to be used
+  // set up the form with Zod validation wired into TanStack Form
   const form = useForm({
-    // discussion has the schemas set up
-    defaultValues: discussion as DiscussionValues,
-    // handle submition
-    onSubmit: ({ value }) => handleSubmit(value),
+    defaultValues,
+    // Zod schema validates all fields on change via Standard Schema support
+    validators: {
+      onChange: DiscussionSchema,
+    },
+    // onSubmit only fires when validation passes
+    onSubmit: async ({ value }) => {
+      try {
+        await submitDiscussion({
+          title: value.title,
+          body: value.body,
+          thumbnail: value.thumbnail,
+          is_spoiler: value.is_spoiler,
+          is_locked: value.is_locked,
+        });
+      } catch (error) {
+        console.error("Discussion submit failed", error);
+      }
+    },
   });
 
   return (
@@ -45,17 +48,18 @@ export default function DiscussionSubmitPage() {
         <h1 className="text-3xl font-bold text-white">New Discussion</h1>
         <form
           onSubmit={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            form.handleSubmit();
+            event.preventDefault(); // prevent form refresh on submit
+            event.stopPropagation(); // make sure that the individual child components are handled
+            form.handleSubmit(); // submit function
           }}
           className="space-y-6"
         >
           {/* Different sections of the form */}
-          <DiscussionTitleSection form={form as any} />
-          <DiscussionBodySection form={form as any} />
-          <DiscussionToggleSection form={form as any} />
-          {/*Submition button*/}
+          <DiscussionTitleSection form={form} />
+          <DiscussionBodySection form={form} />
+          <DiscussionThumbnailSection form={form} />
+          <DiscussionToggleSection form={form} />
+          {/* Submit button */}
           <div className="flex justify-end">
             <button
               type="submit"

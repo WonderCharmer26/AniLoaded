@@ -4,26 +4,14 @@ type DiscussionBodySectionProps = {
   form: DiscussionFormApi;
 };
 
-type TextField = {
-  name: string;
-  state: {
-    value: string;
-    meta: {
-      errors?: string[];
-    };
-  };
-  handleBlur: () => void;
-  handleChange: (value: string) => void;
-};
-
+// body section of the discussion form (reusable for the list section)
 export default function DiscussionBodySection({
   form,
 }: DiscussionBodySectionProps) {
   return (
-    // styling for the body part of the form
     <form.Field
       name="body"
-      children={(field: TextField) => (
+      children={(field) => (
         <div className="space-y-2">
           <label
             htmlFor={field.name}

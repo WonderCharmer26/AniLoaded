@@ -4,24 +4,28 @@
 # NOTE: fastapi in the requirements not installed globally
 
 # imports
+import os
+from dotenv import load_dotenv
 from logging import Logger
+import uuid
 import httpx  # for handling the requests on the backend to get data from the Ani-list api
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, File, Form, UploadFile
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schemas.category_requests import CategoryFilter
 from schemas.discussions import DiscussionsResponse
+from utilities.fileFunctions import ext_from_filename
 from utilities.genreFunctions import ANILIST_URL, get_cached_genre
 from utilities.seasonFunctions import get_cached_seasons
-from fastapi import UploadFile
 
 # from dotenv import load_dotenv
 from database.supabase_client import supabase
 
 
-# from pydantic import BaseModel (might use, handling BaseModel in schema folder)
+load_dotenv()
 
 # .env import variables will be added in later
+storage_key_discussion = os.getenv("STORAGE_KEY_DISCUSSION")
 
 
 # create the app object
@@ -522,26 +526,23 @@ async def get_discussion_by_id(discussion_id: str):
             .single()
             .execute()
         )
-        
+
         # Check if discussion exists
         if not response.data:
             raise HTTPException(
-                status_code=404, 
-                detail=f"Discussion with id {discussion_id} not found"
+                status_code=404, detail=f"Discussion with id {discussion_id} not found"
             )
-        
+
         return response.data
-        
+
     except Exception as e:
         # Handle supabase errors
-        if hasattr(e, 'code') and e.code == 'PGRST116':
+        if hasattr(e, "code") and e.code == "PGRST116":
             raise HTTPException(
-                status_code=404,
-                detail=f"Discussion with id {discussion_id} not found"
+                status_code=404, detail=f"Discussion with id {discussion_id} not found"
             )
         raise HTTPException(
-            status_code=500,
-            detail=f"Error fetching discussion: {str(e)}"
+            status_code=500, detail=f"Error fetching discussion: {str(e)}"
         )
 
 
@@ -560,25 +561,110 @@ async def get_discussion_comments(discussion_id: str):
             .order("created_at", desc=False)  # Oldest first
             .execute()
         )
-        
-        return {
-            "data": response.data,
-            "total": len(response.data)
-        }
-        
+
+        return {"data": response.data, "total": len(response.data)}
+
     except Exception as e:
         raise HTTPException(
-            status_code=500,
-            detail=f"Error fetching comments: {str(e)}"
+            status_code=500, detail=f"Error fetching comments: {str(e)}"
         )
 
 
-# Route for posting thumbnails for discussions
-@app.post("threads/{thread_id}/thumbnail")
-async def post_discussion_thumbnail(thumbnail: UploadFile):
+# Route for making new discussions
+@app.post("/discussion")
+async def post_new_discussion(
+    title: str = Form(...),
+    body: str = Form(...),
+    is_spoiler: bool = Form(...),
+    is_locked: bool = Form(...),
+    thumbnail: UploadFile | None = File(None),
+    episode_number: int | None = Form(None),
+    season_number: int | None = Form(None),
+):
     # store the thumbnail in order to send off
-    # access the storage bucket
-    pass
+    thumbnail_path = None
+    thumbnail_public_url = None
+    # check if there is a thumbnail
+    if thumbnail is not None:
+        # allowed types
+        allowed = {"image/jpeg", "image/png", "image/webp"}
+        # check to see if the file type is allowed
+        if thumbnail.content_type not in allowed:
+            raise HTTPException(
+                status_code=415, detail="Thumnail must be a png, jpeg or webp file"
+            )
+        file_bytes = await thumbnail.read()
+
+        # make the max bytes 5mb
+        max_bytes = 5 * 1024 * 1024
+        if len(file_bytes) > max_bytes:
+            raise HTTPException(
+                status_code=413,
+                detail="Thumbnail is too large to be uploaded (max: 5mb)",
+            )
+        # get the file type from the name
+        ext = ext_from_filename(thumbnail.filename or "")
+
+        if not ext:
+            # make which ever one matches the content type
+            ext = {
+                "image/jpeg": ".jpg",
+                "image/png": ".png",
+                "image/webp": ".webp",
+            }[thumbnail.content_type]
+
+        # create uniqe file path to send to the bucket
+        thumbnail_path = f"threads/{uuid.uuid4().hex}{ext}"
+
+        try:
+            supabase.storage.from_(storage_key_discussion).upload(
+                path=thumbnail_path,  # custom file path
+                file=file_bytes,  # file bytes that get stored up
+                file_options={"content-type": thumbnail.content_type, "upsert": False},
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Upload of file failed: {e}")
+
+        try:
+            # try to get the public url to store into the database
+            thumbnail_public_url = supabase.storage.from_(
+                storage_key_discussion
+            ).get_public_url(thumbnail_path)
+        except Exception:
+            # if not store none seeing as there must be no thumbnail posted
+            thumbnail_public_url = None
+
+    # Payload that i'll send back
+    payload = {
+        "title": title.strip(),  # get rid of extra spaces (might change)
+        "body": body.strip(),
+        "is_spoiler": is_spoiler,
+        "is_locked": is_locked,
+        "thumbnail_path": thumbnail_path,
+        "thumbnail_url": thumbnail_public_url,
+    }
+
+    # try to send the needed data to the database
+    try:
+        # add the data from the request to the database
+        res = supabase.table("discussions").insert(payload).execute()
+    except Exception as e:
+        # if there is a path for the thumbnail
+        if thumbnail_path:
+            try:
+                # remove the file if it fails to add to the database
+                supabase.storage.from_(storage_key_discussion).remove([thumbnail_path])
+            except Exception:
+                # doesn't matter
+                pass
+        # return a regular failed message
+        raise HTTPException(status_code=500, detail=f"DB insert failed: {e}")
+
+    # store the data to return to validate success
+    success = (res.data or None)[0]
+
+    # return the data
+    return {"discussion": success}
 
 
 # TODO: MAKE A ROUTE FOR THE SPECIFIC DISCUSSION PAGE TO POST DISCUSSIONS TO THE DB

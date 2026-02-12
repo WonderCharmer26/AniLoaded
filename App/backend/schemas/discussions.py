@@ -1,4 +1,5 @@
 from typing import List, Optional
+from fastapi import UploadFile
 from pydantic import BaseModel
 from uuid import UUID
 
@@ -21,6 +22,21 @@ class Discussions(BaseModel):
     comment_count: int
     upvote_count: int
     season_number: int
+
+
+# function for the discussion posting
+class DiscussionsRequest(BaseModel):
+    id: str
+    anime_id: Optional[int]
+    category_id: Optional[UUID]
+    created_by: Optional[UUID]  # make required after integrating with user
+    title: str
+    body: str
+    thumbnail: Optional[UploadFile]  # will be a file sent to the backend
+    is_locked: bool
+    is_spoiler: bool
+    episode_number: Optional[int]
+    season_number: Optional[int]
 
 
 # Discussions Comments

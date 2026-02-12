@@ -1,6 +1,6 @@
 // Types describing anime discussion primitives used across the app
 
-export interface Discussions {
+export interface Discussion {
   id: string;
   anime_id: number;
   category_id: string;
@@ -11,12 +11,31 @@ export interface Discussions {
   is_pinned: boolean;
   is_spoiler: boolean;
   thumbnail_url?: string; // optional to incase the user wants pictures
+  thumbnail_path: string;
   episode_number: number;
   created_at: string;
   last_activity_at: string;
   comment_count: number;
   upvote_count: number;
   season_number: number;
+}
+
+export interface DiscussionResponse {
+  discussion: Discussion;
+}
+
+export interface DiscussionRequest {
+  id?: string;
+  anime_id?: number;
+  category_id?: string;
+  created_by?: string; // TODO: NEEDS TO BE CHANGED IN SUPABASE TO AUTH ID
+  title: string;
+  body: string;
+  thumbnail: File | null;
+  is_locked: boolean;
+  is_spoiler: boolean;
+  episode_number?: number;
+  season_number?: number;
 }
 
 export interface DiscussionsComments {
@@ -41,6 +60,6 @@ export interface DiscussionsCategories {
 }
 
 export interface DiscussionsResponse {
-  data: Discussions[];
+  data: Discussion[];
   total?: number;
 }
