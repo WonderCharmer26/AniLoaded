@@ -59,6 +59,7 @@ export default function DiscussionSubmitPage() {
           <DiscussionBodySection form={form} />
           <DiscussionThumbnailSection form={form} />
           <DiscussionToggleSection form={form} />
+
           {/* Submit button */}
           <div className="flex justify-end">
             <button
