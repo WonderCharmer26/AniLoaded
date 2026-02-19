@@ -36,6 +36,7 @@ export async function getDiscussionComments(
 
 // Post
 export async function submitDiscussion({
+  category_id,
   title,
   body,
   thumbnail,
@@ -43,10 +44,13 @@ export async function submitDiscussion({
   is_spoiler,
 }: DiscussionRequest): Promise<DiscussionResponse> {
   const formData = new FormData();
+  formData.append("category_id", category_id);
   formData.append("title", title);
   formData.append("body", body);
-  formData.append("is_locked", String(is_locked));
-  formData.append("is_spoiler", String(is_spoiler));
+  formData.append("is_locked", String(is_locked)); // make bool on the backend (form doesn't take bools)
+  formData.append("is_spoiler", String(is_spoiler)); // make bool on the backend (form doesn't take bools)
+
+  // add the thumbnail file if user uploads one
   if (thumbnail) formData.append("thumbnail", thumbnail);
 
   const res = await axios.post(`${backendUrl}/discussion`, formData);

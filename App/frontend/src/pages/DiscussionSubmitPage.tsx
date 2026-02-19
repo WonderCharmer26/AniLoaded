@@ -1,4 +1,5 @@
 import DiscussionBodySection from "@/components/forms/DiscussionBodySection";
+import DiscussionCategorySection from "@/components/forms/DiscussionCategorySection";
 import DiscussionThumbnailSection from "@/components/forms/DiscussionThumbnailSection";
 import DiscussionTitleSection from "@/components/forms/DiscussionTitleSection";
 import DiscussionToggleSection from "@/components/forms/DiscussionToggleSection";
@@ -12,6 +13,7 @@ import { useForm } from "@tanstack/react-form";
 export default function DiscussionSubmitPage() {
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
+    category_id: "55555555-5555-5555-5555-555555555555",
     title: "",
     body: "",
     thumbnail: null,
@@ -30,6 +32,7 @@ export default function DiscussionSubmitPage() {
     onSubmit: async ({ value }) => {
       try {
         await submitDiscussion({
+          category_id: value.category_id,
           title: value.title,
           body: value.body,
           thumbnail: value.thumbnail,
@@ -55,20 +58,25 @@ export default function DiscussionSubmitPage() {
           className="space-y-6"
         >
           {/* Different sections of the form */}
+          <DiscussionCategorySection form={form} />
           <DiscussionTitleSection form={form} />
           <DiscussionBodySection form={form} />
           <DiscussionThumbnailSection form={form} />
           <DiscussionToggleSection form={form} />
 
           {/* Submit button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="rounded-xl bg-black px-4 py-2 font-semibold text-white"
-            >
-              Submit
-            </button>
-          </div>
+          {/* Handles the state of the button based on the form*/}
+          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+            {([canSubmit, isSubmitting]) => (
+              <button
+                type="submit"
+                disabled={!canSubmit || isSubmitting}
+                className="rounded-xl bg-black px-4 py-2 font-semibold text-white"
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+            )}
+          </form.Subscribe>
         </form>
       </div>
     </div>

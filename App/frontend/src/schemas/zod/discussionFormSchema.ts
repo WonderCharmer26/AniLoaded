@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // discussion schema for the discussion form
 export const DiscussionSchema = z.object({
+  category_id: z.string(),
   title: z.string(),
   body: z.string(),
   thumbnail: z.instanceof(File).nullable(),
