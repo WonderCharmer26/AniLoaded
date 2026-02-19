@@ -11,8 +11,8 @@ export interface Discussion {
   is_pinned: boolean;
   is_spoiler: boolean;
   thumbnail_url?: string; // optional to incase the user wants pictures
-  thumbnail_path: string;
-  episode_number: number;
+  thumbnail_path?: string;
+  episode_number?: number;
   created_at: string;
   last_activity_at: string;
   comment_count: number;

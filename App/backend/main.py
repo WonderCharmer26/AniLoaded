@@ -18,12 +18,12 @@ app.add_middleware(
         "http://localhost:5173"
         # "*"
     ],  # allow all origins (change to site url later on in prod)
-    allow_credentials=True,  # allow credentials
+    allow_credentials=False,  # allow credentials
     allow_methods=["*"],  # means allow all methods
     allow_headers=["*"],  # allow all headers
 )
 
 # routes
-app.include_router(health_router) # app health
-app.include_router(anime_router) # all the anime routes that call anilist
-app.include_router(discussions_router) # routes for the anime
+app.include_router(health_router)  # app health
+app.include_router(anime_router)  # all the anime routes that call anilist
+app.include_router(discussions_router)  # routes for the anime

@@ -8,6 +8,7 @@ from schemas.discussions import DiscussionsResponse
 from utilities.fileFunctions import ext_from_filename
 
 
+# Api router
 router = APIRouter()
 
 # load in env
@@ -18,6 +19,7 @@ storage_key_discussion = os.getenv("STORAGE_KEY_DISCUSSION")
 
 print(storage_key_discussion)
 
+
 # gets all the discussions from the database
 @router.get("/discussions", response_model=DiscussionsResponse)
 async def get_discussions():
@@ -27,8 +29,6 @@ async def get_discussions():
     try:
         # get all the discussions
         response = supabase.table("discussions").select("*").execute()
-
-        # test
 
         # return data
         return {
@@ -108,14 +108,14 @@ async def post_new_discussion(
     body: str = Form(...),
     is_spoiler: bool = Form(...),
     is_locked: bool = Form(...),
-    thumbnail: UploadFile | None = File(None), # optional params
-    episode_number: int | None = Form(None), # optional params
-    season_number: int | None = Form(None), # optional params
+    thumbnail: UploadFile | None = File(None),  # optional params
+    episode_number: int | None = Form(None),  # optional params
+    season_number: int | None = Form(None),  # optional params
 ):
     # variables to hold the thumbnail info
     thumbnail_path = None
     thumbnail_public_url = None
-    
+
     # check if there is a thumbnail in the request
     if thumbnail is not None:
         # allowed types for the file sent (might not need)

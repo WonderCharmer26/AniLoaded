@@ -9,8 +9,6 @@ import {
 } from "../../schemas/discussion";
 import { backendUrl } from "./fetchAnimes";
 
-// dummy data (won't need soon)
-
 export async function getDiscussionThreads(): Promise<[]> {
   return [];
 }
@@ -20,11 +18,13 @@ export async function getAllDiscussions(): Promise<Discussion[]> {
   return res.data.data;
 }
 
+// get the specific discussions
 export async function getDiscussionById(id: string): Promise<Discussion> {
   const res = await axios.get<Discussion>(`${backendUrl}/discussions/${id}`);
   return res.data;
 }
 
+// function for the discussion comments
 export async function getDiscussionComments(
   discussionId: string,
 ): Promise<DiscussionsComments[]> {
@@ -34,7 +34,7 @@ export async function getDiscussionComments(
   return res.data.data;
 }
 
-// Post
+// Subits discussion to the backend
 export async function submitDiscussion({
   category_id,
   title,

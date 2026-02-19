@@ -10,13 +10,16 @@ import {
 import { submitDiscussion } from "@/services/api/discussionService";
 import { useForm } from "@tanstack/react-form";
 
+// TODO: ADD IN SEASON_NUMBER, ANIME NUMBER, EPISODE NUMBER
+// TODO: ANIME NUMBER: Should have a search component that gets the anime and the anime number to send to the backend
+
 export default function DiscussionSubmitPage() {
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
-    category_id: "55555555-5555-5555-5555-555555555555",
+    category_id: "55555555-5555-5555-5555-555555555555", // value if the category picked
     title: "",
     body: "",
-    thumbnail: null,
+    thumbnail: null, // incase user doesn't post a thumbnail
     is_spoiler: false,
     is_locked: false,
   };
@@ -58,15 +61,17 @@ export default function DiscussionSubmitPage() {
           className="space-y-6"
         >
           {/* Different sections of the form */}
+          <DiscussionThumbnailSection form={form} />
           <DiscussionCategorySection form={form} />
           <DiscussionTitleSection form={form} />
           <DiscussionBodySection form={form} />
-          <DiscussionThumbnailSection form={form} />
           <DiscussionToggleSection form={form} />
 
           {/* Submit button */}
           {/* Handles the state of the button based on the form*/}
-          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
             {([canSubmit, isSubmitting]) => (
               <button
                 type="submit"

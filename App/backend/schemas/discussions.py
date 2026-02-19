@@ -13,10 +13,11 @@ class Discussions(BaseModel):
     title: str
     body: str
     thumbnail_url: Optional[str]
+    thumbnail_path: Optional[str]
     is_locked: bool
     is_pinned: bool  # might not need
     is_spoiler: bool
-    episode_number: int
+    episode_number: Optional[int]
     created_at: str
     last_activity_at: str
     comment_count: int

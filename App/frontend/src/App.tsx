@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       {
         // Discussion Page
         // TODO: Replace with the actual data fetching functions
-        path: "discussion",
+        path: "discussions",
         element: <DiscussionPage />,
         loader: discussionPageLoader(queryClient),
       },

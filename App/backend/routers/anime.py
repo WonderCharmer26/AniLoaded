@@ -2,10 +2,25 @@ import httpx  # for handling the requests on the backend to get data from the An
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from schemas.category_requests import CategoryFilter
+from utilities.cache import get_cache, set_cache
 from utilities.genreFunctions import ANILIST_URL, get_cached_genre
 from utilities.seasonFunctions import get_cached_seasons
 
 router = APIRouter()
+
+# Constant times for the cache
+CATEGORIES_CACHE_TTL_SECONDS = 300
+POPULAR_CACHE_TTL_SECONDS = 600
+TRENDING_CACHE_TTL_SECONDS = 600
+TOP_CACHE_TTL_SECONDS = 600
+ANIME_BY_ID_CACHE_TTL_SECONDS = 1800
+
+
+def build_cache_key(prefix: str, **parts: object) -> str:
+    ordered_parts = [f"{key}={parts[key]}" for key in sorted(parts)]
+    if not ordered_parts:
+        return prefix
+    return f"{prefix}:{':'.join(ordered_parts)}"
 
 
 # route to get genres from AniList (might update the params to get the genre and pass it in to fetch from the anilist)
@@ -45,9 +60,21 @@ async def get_categories(filters: CategoryFilter = Depends()):
     # account for the pages params if there are any
     if filters.page:
         variables["page"] = filters.page
-    # NOTE: Might not use the perPage section, might harwire in the backend
     if filters.perPage:
         variables["perPage"] = filters.perPage
+
+    cache_key = build_cache_key(
+        "anime:categories",
+        genres=filters.genres or "",
+        page=variables.get("page", 1),
+        perPage=variables.get("perPage", 10),
+        search=filters.search or "",
+        season=filters.season or "",
+        sort=variables["sort"][0],
+    )
+    cached_data = get_cache(cache_key)
+    if cached_data is not None:
+        return cached_data
 
     # query for anilist (genre and season passed into the query)
     # NOTE: ADD IN PAGINATION SO THAT THERE ARE ONLY A VIEW ANIME PER PAGE AND THE USER CAN SCOURE THROUGH THE REST
@@ -106,6 +133,8 @@ async def get_categories(filters: CategoryFilter = Depends()):
                 print(f"GraphQL error: {data['errors']}")
                 raise HTTPException(status_code=400, detail=data["errors"])
 
+            set_cache(cache_key, data, CATEGORIES_CACHE_TTL_SECONDS)
+
             # otherwise return the data
             return data
 
@@ -152,6 +181,13 @@ async def get_anime_popular():
         "perPage": 10,
     }  # amount of anime retrieved I might change later on
 
+    cache_key = build_cache_key(
+        "anime:popular", page=variables["page"], perPage=variables["perPage"]
+    )
+    cached_data = get_cache(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # send the query with the variables to get teh popular anime
     async with httpx.AsyncClient() as client:
         # make a post request to the Ani-list api
@@ -173,6 +209,8 @@ async def get_anime_popular():
             if "errors" in data:
                 print(f"GraphQL error: {data['errors']}")
                 raise HTTPException(status_code=400, detail=data["errors"])
+
+            set_cache(cache_key, data, POPULAR_CACHE_TTL_SECONDS)
 
             # return the data
             return data
@@ -234,6 +272,13 @@ async def get_anime_trending():
         "perPage": 10,
     }  # set the amount items per page, might tweak to have more later on
 
+    cache_key = build_cache_key(
+        "anime:trending", page=variables["page"], perPage=variables["perPage"]
+    )
+    cached_data = get_cache(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # send the query to the Ani-list api
     async with httpx.AsyncClient() as client:  # use httpx to make the request to handle everything about the request
         # make a post request to the Ani-list api
@@ -256,6 +301,8 @@ async def get_anime_trending():
             if "errors" in data:
                 print(f"GraphQL error: {data['errors']}")
                 raise HTTPException(status_code=400, detail=data["errors"])
+
+            set_cache(cache_key, data, TRENDING_CACHE_TTL_SECONDS)
 
             # return the data
             return data
@@ -305,6 +352,13 @@ async def get_anime_top():  # NOTE: may add in param from the frontend if needed
     # get the 1st page, will swap to get the params from the frontend call
     variables = {"page": 1, "perPage": 10}
 
+    cache_key = build_cache_key(
+        "anime:top", page=variables["page"], perPage=variables["perPage"]
+    )
+    cached_data = get_cache(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # make the call to get the data
     async with httpx.AsyncClient() as client:
         try:
@@ -329,6 +383,8 @@ async def get_anime_top():  # NOTE: may add in param from the frontend if needed
                 print(f"Here is the error in the data:{data['errors']}")
                 # raise an error close the func
                 raise HTTPException(status_code=400, detail=data["errors"])
+
+            set_cache(cache_key, data, TOP_CACHE_TTL_SECONDS)
 
             # return the data to the frontend if the fetch was successful
             return data
@@ -418,6 +474,11 @@ async def get_anime_by_id(
     # variables that will be used to get the anime by its id
     variables = {"id": anime_id}
 
+    cache_key = build_cache_key("anime:by_id", anime_id=anime_id)
+    cached_data = get_cache(cache_key)
+    if cached_data is not None:
+        return cached_data
+
     # send the query to the Ani-list api
     async with httpx.AsyncClient() as client:
         try:
@@ -428,6 +489,8 @@ async def get_anime_by_id(
             )
             response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx) if one happens
             data = response.json()
+
+            set_cache(cache_key, data, ANIME_BY_ID_CACHE_TTL_SECONDS)
 
             # return the data needed for the anime pages
             return data
