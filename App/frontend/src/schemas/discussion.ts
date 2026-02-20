@@ -26,7 +26,7 @@ export interface DiscussionResponse {
 
 export interface DiscussionRequest {
   id?: string;
-  anime_id?: number;
+  anime_id: number;
   category_id: string;
   created_by?: string; // TODO: NEEDS TO BE CHANGED IN SUPABASE TO AUTH ID
   title: string;

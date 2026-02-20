@@ -36,6 +36,7 @@ export async function getDiscussionComments(
 
 // Subits discussion to the backend
 export async function submitDiscussion({
+  anime_id,
   category_id,
   title,
   body,
@@ -44,6 +45,7 @@ export async function submitDiscussion({
   is_spoiler,
 }: DiscussionRequest): Promise<DiscussionResponse> {
   const formData = new FormData();
+  formData.append("anime_id", String(anime_id));
   formData.append("category_id", category_id);
   formData.append("title", title);
   formData.append("body", body);

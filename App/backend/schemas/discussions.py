@@ -28,7 +28,7 @@ class Discussions(BaseModel):
 # function for the discussion posting
 class DiscussionsRequest(BaseModel):
     id: str
-    anime_id: Optional[int]
+    anime_id: int
     category_id: Optional[UUID]
     created_by: Optional[UUID]  # make required after integrating with user
     title: str

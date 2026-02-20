@@ -1,4 +1,5 @@
 import DiscussionBodySection from "@/components/forms/DiscussionBodySection";
+import DiscussionAnimeSearchSection from "@/components/forms/DiscussionAnimeSearchSection";
 import DiscussionCategorySection from "@/components/forms/DiscussionCategorySection";
 import DiscussionThumbnailSection from "@/components/forms/DiscussionThumbnailSection";
 import DiscussionTitleSection from "@/components/forms/DiscussionTitleSection";
@@ -16,6 +17,7 @@ import { useForm } from "@tanstack/react-form";
 export default function DiscussionSubmitPage() {
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
+    anime_id: 0,
     category_id: "55555555-5555-5555-5555-555555555555", // value if the category picked
     title: "",
     body: "",
@@ -35,6 +37,7 @@ export default function DiscussionSubmitPage() {
     onSubmit: async ({ value }) => {
       try {
         await submitDiscussion({
+          anime_id: value.anime_id,
           category_id: value.category_id,
           title: value.title,
           body: value.body,
@@ -62,6 +65,7 @@ export default function DiscussionSubmitPage() {
         >
           {/* Different sections of the form */}
           <DiscussionThumbnailSection form={form} />
+          <DiscussionAnimeSearchSection form={form} />
           <DiscussionCategorySection form={form} />
           <DiscussionTitleSection form={form} />
           <DiscussionBodySection form={form} />

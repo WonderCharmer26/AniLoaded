@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // discussion schema for the discussion form
 export const DiscussionSchema = z.object({
+  anime_id: z.number().int().positive("Please select an anime."),
   category_id: z.string(),
   title: z.string(),
   body: z.string(),

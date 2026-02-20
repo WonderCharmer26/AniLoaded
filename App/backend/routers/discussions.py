@@ -103,6 +103,7 @@ async def get_discussion_comments(discussion_id: str):
 @router.post("/discussion")
 async def post_new_discussion(
     # get the form info from frontend
+    anime_id: int = Form(...),
     category_id: str = Form(...),
     title: str = Form(...),
     body: str = Form(...),
@@ -112,6 +113,9 @@ async def post_new_discussion(
     episode_number: int | None = Form(None),  # optional params
     season_number: int | None = Form(None),  # optional params
 ):
+    if anime_id <= 0:
+        raise HTTPException(status_code=422, detail="anime_id must be a positive integer")
+
     # variables to hold the thumbnail info
     thumbnail_path = None
     thumbnail_public_url = None
@@ -171,6 +175,7 @@ async def post_new_discussion(
 
     # Payload that i'll send to the database
     payload = {
+        "anime_id": anime_id,
         "category_id": category_id,
         "title": title.strip(),  # get rid of extra spaces (might change)
         "body": body.strip(),
