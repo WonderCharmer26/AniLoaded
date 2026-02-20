@@ -1,10 +1,12 @@
 import os
 import uuid
+import httpx
 from dotenv import load_dotenv
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.exceptions import HTTPException
 from database.supabase_client import supabase
 from schemas.discussions import DiscussionsResponse
+from utilities.genreFunctions import ANILIST_URL
 from utilities.fileFunctions import ext_from_filename
 
 
@@ -17,7 +19,47 @@ load_dotenv()
 # key for the storage container in supabase
 storage_key_discussion = os.getenv("STORAGE_KEY_DISCUSSION")
 
-print(storage_key_discussion)
+
+ANILIST_MEDIA_EXISTS_QUERY = """
+query ($id: Int) {
+  Media(id: $id, type: ANIME) {
+    id
+  }
+}
+"""
+
+
+async def validate_anime_exists(anime_id: int) -> bool:
+    """Validate that an anime exists in AniList by ID."""
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            response = await client.post(
+                ANILIST_URL,
+                json={
+                    "query": ANILIST_MEDIA_EXISTS_QUERY,
+                    "variables": {"id": anime_id},
+                },
+                headers={"Content-Type": "application/json"},
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            if "errors" in data:
+                return False
+
+            return data.get("data", {}).get("Media") is not None
+        except httpx.HTTPStatusError as error:
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    f"AniList validation failed: {error.response.status_code}"
+                ),
+            )
+        except httpx.RequestError as error:
+            raise HTTPException(
+                status_code=503,
+                detail=f"AniList validation request error: {error}",
+            )
 
 
 # gets all the discussions from the database
@@ -115,6 +157,13 @@ async def post_new_discussion(
 ):
     if anime_id <= 0:
         raise HTTPException(status_code=422, detail="anime_id must be a positive integer")
+
+    anime_exists = await validate_anime_exists(anime_id)
+    if not anime_exists:
+        raise HTTPException(
+            status_code=422,
+            detail="anime_id does not map to a valid AniList anime",
+        )
 
     # variables to hold the thumbnail info
     thumbnail_path = None
