@@ -9,13 +9,14 @@ from utilities.seasonFunctions import get_cached_seasons
 router = APIRouter()
 
 # Constant times for the cache
-CATEGORIES_CACHE_TTL_SECONDS = 300
-POPULAR_CACHE_TTL_SECONDS = 600
-TRENDING_CACHE_TTL_SECONDS = 600
-TOP_CACHE_TTL_SECONDS = 600
-ANIME_BY_ID_CACHE_TTL_SECONDS = 1800
+CATEGORIES_CACHE_TTL_SECONDS = 300  # 5 min
+POPULAR_CACHE_TTL_SECONDS = 600  # 10 min
+TRENDING_CACHE_TTL_SECONDS = 600  # 10 mmin
+TOP_CACHE_TTL_SECONDS = 600  # 10 min
+ANIME_BY_ID_CACHE_TTL_SECONDS = 1800  # 30 min
 
 
+# function to build a cache key
 def build_cache_key(prefix: str, **parts: object) -> str:
     ordered_parts = [f"{key}={parts[key]}" for key in sorted(parts)]
     if not ordered_parts:
@@ -37,7 +38,7 @@ async def get_seasons():
     return {"seasons": await get_cached_seasons()}
 
 
-# route to get the filtered anime options from AniList
+# route to get the filtered anime options from AniList (handles the searches as well)
 @router.get("/anime/categories")
 async def get_categories(filters: CategoryFilter = Depends()):
     # filter is set up in a seperate schema file
@@ -133,6 +134,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
                 print(f"GraphQL error: {data['errors']}")
                 raise HTTPException(status_code=400, detail=data["errors"])
 
+            # set the cache data
             set_cache(cache_key, data, CATEGORIES_CACHE_TTL_SECONDS)
 
             # otherwise return the data
@@ -181,9 +183,12 @@ async def get_anime_popular():
         "perPage": 10,
     }  # amount of anime retrieved I might change later on
 
+    # build the cache
     cache_key = build_cache_key(
         "anime:popular", page=variables["page"], perPage=variables["perPage"]
     )
+
+    # get the data
     cached_data = get_cache(cache_key)
     if cached_data is not None:
         return cached_data
