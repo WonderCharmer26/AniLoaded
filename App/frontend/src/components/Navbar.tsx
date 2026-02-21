@@ -2,8 +2,20 @@ import { Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { Menu } from "lucide-react";
 import AniLoadedLogo from "../assets/images/Ani-Loaded Logo.svg";
+import { useState, useEffect } from "react";
+import { supabase } from "../services/supabase/supabaseConnection";
 
 export const Navbar = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
+
   interface NavbarLinksI {
     id: number;
     label: string;
@@ -47,13 +59,34 @@ export const Navbar = () => {
       {/* TODO: Add User Icon */}
       <div className="flex items-center">
         <div className="flex flex-row mr-2">
-          <Link to="auth/login">
-            <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
-              Sign In
-            </button>
-          </Link>
+          {user ? (
+            <Link to="/profile">
+              <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
+                Profile
+              </button>
+            </Link>
+          ) : (
+            <Link to="auth/login">
+              <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
+                Sign In
+              </button>
+            </Link>
+          )}
         </div>
-        <Menu size={30} />
+        {user ? (
+          <div className="flex items-center space-x-2">
+            <span className="text-white text-sm">{user.user_metadata?.username || 'User'}</span>
+            <Link to="/profile">
+              <img
+                src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+                alt="User Avatar"
+                className="w-8 h-8 rounded-full object-cover border-2 border-gray-600 hover:border-gray-400 cursor-pointer"
+              />
+            </Link>
+          </div>
+        ) : (
+          <Menu size={30} />
+        )}
       </div>
     </nav>
   );
