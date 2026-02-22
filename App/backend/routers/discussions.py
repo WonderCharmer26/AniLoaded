@@ -20,6 +20,7 @@ load_dotenv()
 storage_key_discussion = os.getenv("STORAGE_KEY_DISCUSSION")
 
 
+# AniList query to check if the anime exists
 ANILIST_MEDIA_EXISTS_QUERY = """
 query ($id: Int) {
   Media(id: $id, type: ANIME) {
@@ -29,10 +30,13 @@ query ($id: Int) {
 """
 
 
+# TODO: refactor this into another tile
+# validator fucntion to check if the anime from the form is in the database
 async def validate_anime_exists(anime_id: int) -> bool:
     """Validate that an anime exists in AniList by ID."""
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
+            # send request
             response = await client.post(
                 ANILIST_URL,
                 json={
@@ -41,7 +45,10 @@ async def validate_anime_exists(anime_id: int) -> bool:
                 },
                 headers={"Content-Type": "application/json"},
             )
+            # error checks
             response.raise_for_status()
+
+            # res
             data = response.json()
 
             if "errors" in data:
@@ -228,6 +235,8 @@ async def post_new_discussion(
         "category_id": category_id,
         "title": title.strip(),  # get rid of extra spaces (might change)
         "body": body.strip(),
+        "episode_number": episode_number,
+        "season_number": season_number,
         "is_spoiler": is_spoiler,
         "is_locked": is_locked,
         "thumbnail_path": thumbnail_path,

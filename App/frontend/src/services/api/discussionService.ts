@@ -40,6 +40,8 @@ export async function submitDiscussion({
   category_id,
   title,
   body,
+  episode_number,
+  season_number,
   thumbnail,
   is_locked,
   is_spoiler,
@@ -49,6 +51,12 @@ export async function submitDiscussion({
   formData.append("category_id", category_id);
   formData.append("title", title);
   formData.append("body", body);
+  if (episode_number !== undefined) {
+    formData.append("episode_number", String(episode_number));
+  }
+  if (season_number !== undefined) {
+    formData.append("season_number", String(season_number));
+  }
   formData.append("is_locked", String(is_locked)); // make bool on the backend (form doesn't take bools)
   formData.append("is_spoiler", String(is_spoiler)); // make bool on the backend (form doesn't take bools)
 

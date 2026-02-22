@@ -17,7 +17,7 @@ export interface Discussion {
   last_activity_at: string;
   comment_count: number;
   upvote_count: number;
-  season_number: number;
+  season_number?: number;
 }
 
 export interface DiscussionResponse {

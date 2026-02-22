@@ -1,6 +1,8 @@
 import DiscussionBodySection from "@/components/forms/DiscussionBodySection";
 import DiscussionAnimeSearchSection from "@/components/forms/DiscussionAnimeSearchSection";
 import DiscussionCategorySection from "@/components/forms/DiscussionCategorySection";
+import DiscussionEpisodeNumberSection from "@/components/forms/DiscussionEpisodeNumberSection";
+import DiscussionSeasonNumberSection from "@/components/forms/DiscussionSeasonNumberSection";
 import DiscussionThumbnailSection from "@/components/forms/DiscussionThumbnailSection";
 import DiscussionTitleSection from "@/components/forms/DiscussionTitleSection";
 import DiscussionToggleSection from "@/components/forms/DiscussionToggleSection";
@@ -21,6 +23,8 @@ export default function DiscussionSubmitPage() {
     category_id: "55555555-5555-5555-5555-555555555555", // value if the category picked
     title: "",
     body: "",
+    episode_number: undefined,
+    season_number: undefined,
     thumbnail: null, // incase user doesn't post a thumbnail
     is_spoiler: false,
     is_locked: false,
@@ -38,10 +42,12 @@ export default function DiscussionSubmitPage() {
       try {
         await submitDiscussion({
           anime_id: value.anime_id,
+          thumbnail: value.thumbnail,
           category_id: value.category_id,
           title: value.title,
           body: value.body,
-          thumbnail: value.thumbnail,
+          episode_number: value.episode_number,
+          season_number: value.season_number,
           is_spoiler: value.is_spoiler,
           is_locked: value.is_locked,
         });
@@ -66,6 +72,8 @@ export default function DiscussionSubmitPage() {
           {/* Different sections of the form */}
           <DiscussionThumbnailSection form={form} />
           <DiscussionAnimeSearchSection form={form} />
+          <DiscussionEpisodeNumberSection form={form} />
+          <DiscussionSeasonNumberSection form={form} />
           <DiscussionCategorySection form={form} />
           <DiscussionTitleSection form={form} />
           <DiscussionBodySection form={form} />

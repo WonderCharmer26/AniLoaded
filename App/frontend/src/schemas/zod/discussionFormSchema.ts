@@ -6,9 +6,10 @@ export const DiscussionSchema = z.object({
   category_id: z.string(),
   title: z.string(),
   body: z.string(),
+  episode_number: z.number().int().nonnegative().optional(),
+  season_number: z.number().int().nonnegative().optional(),
   thumbnail: z.instanceof(File).nullable(),
   is_spoiler: z.boolean(),
-  episode_number: z.number().int().optional(),
   is_locked: z.boolean(),
 });
 

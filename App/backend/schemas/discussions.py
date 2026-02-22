@@ -22,7 +22,7 @@ class Discussions(BaseModel):
     last_activity_at: str
     comment_count: int
     upvote_count: int
-    season_number: int
+    season_number: Optional[int]
 
 
 # function for the discussion posting
