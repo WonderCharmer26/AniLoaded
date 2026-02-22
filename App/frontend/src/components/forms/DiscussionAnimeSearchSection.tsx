@@ -7,6 +7,7 @@ import { getFieldErrorMessage } from "./getFieldErrorMessage";
 
 type DiscussionAnimeSearchSectionProps = {
   form: DiscussionFormApi;
+  onAnimeSelect?: (anime: AniListMedia | null) => void;
 };
 
 type AnimeFieldApi = {
@@ -23,7 +24,13 @@ type AnimeFieldApi = {
 const SEARCH_DELAY_MS = 300;
 const SEARCH_RESULTS_LIMIT = 6;
 
-function AnimeField({ field }: { field: AnimeFieldApi }) {
+function AnimeField({
+  field,
+  onAnimeSelect,
+}: {
+  field: AnimeFieldApi;
+  onAnimeSelect?: (anime: AniListMedia | null) => void;
+}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<AniListMedia[]>([]);
   const [selectedAnimeTitle, setSelectedAnimeTitle] = useState("");
@@ -98,6 +105,7 @@ function AnimeField({ field }: { field: AnimeFieldApi }) {
           if (field.state.value > 0) {
             field.handleChange(0);
             setSelectedAnimeTitle("");
+            onAnimeSelect?.(null);
           }
           setQuery(event.target.value);
         }}
@@ -115,6 +123,7 @@ function AnimeField({ field }: { field: AnimeFieldApi }) {
               field.handleChange(0);
               setSelectedAnimeTitle("");
               setQuery("");
+              onAnimeSelect?.(null);
             }}
           >
             Clear
@@ -142,6 +151,7 @@ function AnimeField({ field }: { field: AnimeFieldApi }) {
                     setSelectedAnimeTitle(displayTitle);
                     setQuery(displayTitle);
                     setResults([]);
+                    onAnimeSelect?.(anime);
                   }}
                 >
                   {anime.coverImage?.medium ? (
@@ -170,10 +180,13 @@ function AnimeField({ field }: { field: AnimeFieldApi }) {
 
 export default function DiscussionAnimeSearchSection({
   form,
+  onAnimeSelect,
 }: DiscussionAnimeSearchSectionProps) {
   return (
     <form.Field name="anime_id">
-      {(field: AnimeFieldApi) => <AnimeField field={field} />}
+      {(field: AnimeFieldApi) => (
+        <AnimeField field={field} onAnimeSelect={onAnimeSelect} />
+      )}
     </form.Field>
   );
 }

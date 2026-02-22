@@ -27,6 +27,12 @@ export interface DiscussionResponse {
 export interface DiscussionRequest {
   id?: string;
   anime_id: number;
+  title_romaji?: string;
+  title_english?: string;
+  cover_image_url?: string;
+  status?: string;
+  season?: string;
+  season_year?: number;
   category_id: string;
   created_by?: string; // TODO: NEEDS TO BE CHANGED IN SUPABASE TO AUTH ID
   title: string;

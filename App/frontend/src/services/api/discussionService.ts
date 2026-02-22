@@ -37,6 +37,12 @@ export async function getDiscussionComments(
 // Subits discussion to the backend
 export async function submitDiscussion({
   anime_id,
+  title_romaji,
+  title_english,
+  cover_image_url,
+  status,
+  season,
+  season_year,
   category_id,
   title,
   body,
@@ -48,6 +54,14 @@ export async function submitDiscussion({
 }: DiscussionRequest): Promise<DiscussionResponse> {
   const formData = new FormData();
   formData.append("anime_id", String(anime_id));
+  if (title_romaji) formData.append("title_romaji", title_romaji);
+  if (title_english) formData.append("title_english", title_english);
+  if (cover_image_url) formData.append("cover_image_url", cover_image_url);
+  if (status) formData.append("status", status);
+  if (season) formData.append("season", season);
+  if (season_year !== undefined) {
+    formData.append("season_year", String(season_year));
+  }
   formData.append("category_id", category_id);
   formData.append("title", title);
   formData.append("body", body);

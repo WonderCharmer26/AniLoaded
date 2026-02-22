@@ -101,6 +101,7 @@ async def get_categories(filters: CategoryFilter = Depends()):
                 }
                 genres
                 season
+                seasonYear
                 averageScore
                 status(version: 2)
             }

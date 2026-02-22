@@ -10,13 +10,17 @@ import {
   DiscussionSchema,
   DiscussionValues,
 } from "@/schemas/zod/discussionFormSchema";
+import type { AniListMedia } from "@/schemas/animeSchemas";
 import { submitDiscussion } from "@/services/api/discussionService";
 import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
 
 // TODO: ADD IN SEASON_NUMBER, ANIME NUMBER, EPISODE NUMBER
 // TODO: ANIME NUMBER: Should have a search component that gets the anime and the anime number to send to the backend
 
 export default function DiscussionSubmitPage() {
+  const [selectedAnime, setSelectedAnime] = useState<AniListMedia | null>(null);
+
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
     anime_id: 0,
@@ -42,6 +46,15 @@ export default function DiscussionSubmitPage() {
       try {
         await submitDiscussion({
           anime_id: value.anime_id,
+          title_romaji: selectedAnime?.title?.romaji ?? undefined,
+          title_english: selectedAnime?.title?.english ?? undefined,
+          cover_image_url:
+            selectedAnime?.coverImage?.large ??
+            selectedAnime?.coverImage?.medium ??
+            undefined,
+          status: selectedAnime?.status ?? undefined,
+          season: selectedAnime?.season ?? undefined,
+          season_year: selectedAnime?.seasonYear ?? undefined,
           thumbnail: value.thumbnail,
           category_id: value.category_id,
           title: value.title,
@@ -71,7 +84,10 @@ export default function DiscussionSubmitPage() {
         >
           {/* Different sections of the form */}
           <DiscussionThumbnailSection form={form} />
-          <DiscussionAnimeSearchSection form={form} />
+          <DiscussionAnimeSearchSection
+            form={form}
+            onAnimeSelect={setSelectedAnime}
+          />
           <DiscussionEpisodeNumberSection form={form} />
           <DiscussionSeasonNumberSection form={form} />
           <DiscussionCategorySection form={form} />

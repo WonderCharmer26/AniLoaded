@@ -30,6 +30,7 @@ export interface AniListMedia {
   coverImage: AniListImage;
   bannerImage?: string; // might make a req for a banner depending on the fetch
   season?: string;
+  seasonYear?: number | null;
   genres?: string[]; // will get back an array of different genres
   description?: string | null; // description of the plot of the anime
   averageScore?: number | null;

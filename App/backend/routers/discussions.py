@@ -30,6 +30,14 @@ query ($id: Int) {
 """
 
 
+def normalize_optional_text(value: str | None) -> str | None:
+    if value is None:
+        return None
+
+    stripped = value.strip()
+    return stripped or None
+
+
 # TODO: refactor this into another tile
 # validator fucntion to check if the anime from the form is in the database
 async def validate_anime_exists(anime_id: int) -> bool:
@@ -158,6 +166,12 @@ async def post_new_discussion(
     body: str = Form(...),
     is_spoiler: bool = Form(...),
     is_locked: bool = Form(...),
+    title_romaji: str | None = Form(None),
+    title_english: str | None = Form(None),
+    cover_image_url: str | None = Form(None),
+    status: str | None = Form(None),
+    season: str | None = Form(None),
+    season_year: int | None = Form(None),
     thumbnail: UploadFile | None = File(None),  # optional params
     episode_number: int | None = Form(None),  # optional params
     season_number: int | None = Form(None),  # optional params
@@ -171,6 +185,21 @@ async def post_new_discussion(
             status_code=422,
             detail="anime_id does not map to a valid AniList anime",
         )
+
+    anime_payload = {
+        "id": anime_id,
+        "title_romaji": normalize_optional_text(title_romaji),
+        "title_english": normalize_optional_text(title_english),
+        "cover_image_url": normalize_optional_text(cover_image_url),
+        "status": normalize_optional_text(status),
+        "season": normalize_optional_text(season),
+        "season_year": season_year,
+    }
+
+    try:
+        supabase.table("anime").upsert(anime_payload, on_conflict="id").execute()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Anime upsert failed: {e}")
 
     # variables to hold the thumbnail info
     thumbnail_path = None
