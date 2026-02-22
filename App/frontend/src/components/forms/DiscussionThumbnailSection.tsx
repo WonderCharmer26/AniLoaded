@@ -1,5 +1,6 @@
 import { DiscussionFormApi } from "@/types/discussionForm";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getFieldErrorMessage } from "./getFieldErrorMessage";
 
 // Props for this component
 type DiscussionThumbnailSectionProps = {
@@ -12,7 +13,7 @@ type ThumbnailFieldApi = {
   state: {
     value: File | null;
     meta: {
-      errors?: string[];
+      errors?: unknown[];
     };
   };
   handleChange: (value: File | null) => void;
@@ -89,7 +90,8 @@ function ThumbnailField({ field }: ThumbnailFieldProps) {
   }, [field.state.value]);
 
   const openFileDialog = () => fileInputRef.current?.click();
-  const combinedError = errorMessage ?? field.state.meta.errors?.[0] ?? null;
+  const fieldError = getFieldErrorMessage(field.state.meta.errors?.[0]);
+  const combinedError = errorMessage ?? fieldError;
 
   return (
     <div className="space-y-2">

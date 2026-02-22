@@ -33,9 +33,9 @@ export default function DiscussionSubmitPage() {
   // set up the form with Zod validation wired into TanStack Form
   const form = useForm({
     defaultValues,
-    // Zod schema validates all fields on change via Standard Schema support
+    // Zod schema validates fields on blur to avoid noisy global errors while typing
     validators: {
-      onChange: DiscussionSchema,
+      onBlur: DiscussionSchema,
     },
     // onSubmit only fires when validation passes
     onSubmit: async ({ value }) => {

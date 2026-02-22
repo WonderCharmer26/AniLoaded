@@ -3,6 +3,7 @@ import type { AniListMedia } from "@/schemas/animeSchemas";
 import { getAnimeByCategory } from "@/services/api/animeCategoriesService";
 import { DiscussionFormApi } from "@/types/discussionForm";
 import { useEffect, useState } from "react";
+import { getFieldErrorMessage } from "./getFieldErrorMessage";
 
 type DiscussionAnimeSearchSectionProps = {
   form: DiscussionFormApi;
@@ -12,7 +13,7 @@ type AnimeFieldApi = {
   state: {
     value: number;
     meta: {
-      errors?: string[];
+      errors?: unknown[];
     };
   };
   handleBlur: () => void;
@@ -82,7 +83,7 @@ function AnimeField({ field }: { field: AnimeFieldApi }) {
     };
   }, [query]);
 
-  const fieldError = field.state.meta.errors?.[0];
+  const fieldError = getFieldErrorMessage(field.state.meta.errors?.[0]);
 
   return (
     <div className="space-y-2">
