@@ -28,40 +28,6 @@ const genreOptions = [
 // seasonOptions to be sent to the backend
 const seasonOptions = ["WINTER", "SPRING", "SUMMER", "FALL"];
 
-// filler anime info
-const makeAnime = (
-  id: number,
-  title: string,
-  genres: string[],
-): AniListMedia => ({
-  id,
-  title: { english: title },
-  episodes: 24,
-  coverImage: {
-    large:
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=400&q=80",
-    medium:
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=400&q=80",
-  },
-  bannerImage: undefined,
-  genres,
-  description: "Mock payload until API wiring is complete.",
-  averageScore: 78,
-  status: "FINISHED",
-  studios: { nodes: [] },
-  characters: { edges: [] },
-});
-
-// dummy data
-const mockAnimePool: AniListMedia[] = [
-  makeAnime(100, "Haikyuu!!", ["Sports", "Drama"]),
-  makeAnime(101, "Jujutsu Kaisen", ["Action", "Fantasy"]),
-  makeAnime(102, "Toradora!", ["Romance", "Slice of Life"]),
-  makeAnime(103, "Made in Abyss", ["Fantasy", "Drama"]),
-  makeAnime(104, "Blue Lock", ["Sports"]),
-  makeAnime(105, "Skip and Loafer", ["Slice of Life"]),
-];
-
 // interface for the filters (same as the backend)
 interface CategoryFilters {
   // might make also null as well

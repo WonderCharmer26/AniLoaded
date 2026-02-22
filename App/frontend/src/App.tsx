@@ -25,9 +25,13 @@ import { discussionPageLoader } from "./services/loaders/discussionPageLoader";
 import { listsPageLoader } from "./services/loaders/listsPageLoader";
 import { animeCategoriesLoader } from "./services/loaders/animeCategoriesLoader";
 import { recommendationsPageLoader } from "./services/loaders/recommendationsPageLoader";
+import DiscussionInfoPage from "./pages/DiscussionInfoPage";
+import { discussionInfoPrefetcher } from "./services/loaders/discussionInfoPrefetcher";
+import ErrorBoundary from "./components/ErrorBoundary";
+import DiscussionSubmitPage from "./pages/DiscussionSubmitPage";
 
 // Fetching functions to get data for the HomePage
-const demoUserId = "demo-user";
+const demoUserId = "demo-user"; // TODO: plug in real user data, supabase useAuth might handle this for me
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -44,9 +48,22 @@ const router = createBrowserRouter([
       {
         // Discussion Page
         // TODO: Replace with the actual data fetching functions
-        path: "discussion",
+        path: "discussions",
         element: <DiscussionPage />,
         loader: discussionPageLoader(queryClient),
+      },
+      {
+        // Individual Discussion Info Page
+        path: "discussion/:id",
+        element: <DiscussionInfoPage />,
+        loader: discussionInfoPrefetcher(queryClient),
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: "discussion/submit",
+        element: <DiscussionSubmitPage />,
+        // add in loader
+        // might add in error
       },
       {
         // Lists Page

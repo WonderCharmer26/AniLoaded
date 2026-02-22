@@ -1,61 +1,84 @@
-// TODO: Make functions that get real discussion from the database
-import type { DiscussionThread, DiscussionTopic } from "../../schemas/discussion";
+import "axios";
+import axios from "axios";
+import {
+  Discussion,
+  DiscussionsResponse,
+  DiscussionsComments,
+  DiscussionRequest,
+  DiscussionResponse,
+} from "../../schemas/discussion";
+import { backendUrl } from "./fetchAnimes";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const mockThreads: DiscussionThread[] = [
-  {
-    id: "thread-1",
-    title: "Is the 90s still the golden era of anime?",
-    excerpt:
-      "From Evangelion to Cowboy Bebop, fans keep returning to 90s series. What gives them staying power?",
-    author: "RetroRin",
-    tags: ["RETRO", "MECHA"],
-    replies: 48,
-    likes: 132,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "thread-2",
-    title: "Seasonal hot take: Skip the hype and watch sleepers",
-    excerpt:
-      "Share your favorite under-the-radar picks from the current season before everyone else notices them.",
-    author: "SleeperSensei",
-    tags: ["SEASONAL", "SLICE OF LIFE"],
-    replies: 21,
-    likes: 67,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "thread-3",
-    title: "Villain redemption arcs that actually worked",
-    excerpt:
-      "Let\'s talk about antagonists who earned their redemption instead of getting one handed to them.",
-    author: "PanelPusher",
-    tags: ["CHARACTERS"],
-    replies: 35,
-    likes: 94,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-const mockTopics: DiscussionTopic[] = [
-  { id: "topic-1", label: "Winter 2025", mentions: 320 },
-  { id: "topic-2", label: "Sports Anime", mentions: 188 },
-  { id: "topic-3", label: "Best OST", mentions: 154 },
-  { id: "topic-4", label: "Peak Villains", mentions: 98 },
-];
-
-export async function getDiscussionThreads(): Promise<DiscussionThread[]> {
-  await delay(250);
-  return mockThreads;
+export async function getDiscussionThreads(): Promise<[]> {
+  return [];
 }
 
-export async function getTrendingTopics(): Promise<DiscussionTopic[]> {
-  await delay(150);
-  return mockTopics;
+export async function getAllDiscussions(): Promise<Discussion[]> {
+  const res = await axios.get<DiscussionsResponse>(`${backendUrl}/discussions`);
+  return res.data.data;
 }
 
+// get the specific discussions
+export async function getDiscussionById(id: string): Promise<Discussion> {
+  const res = await axios.get<Discussion>(`${backendUrl}/discussions/${id}`);
+  return res.data;
+}
+
+// function for the discussion comments
+export async function getDiscussionComments(
+  discussionId: string,
+): Promise<DiscussionsComments[]> {
+  const res = await axios.get<{ data: DiscussionsComments[]; total: number }>(
+    `${backendUrl}/discussions/${discussionId}/comments`,
+  );
+  return res.data.data;
+}
+
+// Subits discussion to the backend
+export async function submitDiscussion({
+  anime_id,
+  title_romaji,
+  title_english,
+  cover_image_url,
+  status,
+  season,
+  season_year,
+  category_id,
+  title,
+  body,
+  episode_number,
+  season_number,
+  thumbnail,
+  is_locked,
+  is_spoiler,
+}: DiscussionRequest): Promise<DiscussionResponse> {
+  const formData = new FormData();
+  formData.append("anime_id", String(anime_id));
+  if (title_romaji) formData.append("title_romaji", title_romaji);
+  if (title_english) formData.append("title_english", title_english);
+  if (cover_image_url) formData.append("cover_image_url", cover_image_url);
+  if (status) formData.append("status", status);
+  if (season) formData.append("season", season);
+  if (season_year !== undefined) {
+    formData.append("season_year", String(season_year));
+  }
+  formData.append("category_id", category_id);
+  formData.append("title", title);
+  formData.append("body", body);
+  if (episode_number !== undefined) {
+    formData.append("episode_number", String(episode_number));
+  }
+  if (season_number !== undefined) {
+    formData.append("season_number", String(season_number));
+  }
+  formData.append("is_locked", String(is_locked)); // make bool on the backend (form doesn't take bools)
+  formData.append("is_spoiler", String(is_spoiler)); // make bool on the backend (form doesn't take bools)
+
+  // add the thumbnail file if user uploads one
+  if (thumbnail) formData.append("thumbnail", thumbnail);
+
+  const res = await axios.post(`${backendUrl}/discussion`, formData);
+
+  if (!res.data) throw new Error("Error posting discussion");
+  return res.data;
+}

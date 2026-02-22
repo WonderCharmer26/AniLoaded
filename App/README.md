@@ -25,3 +25,19 @@ git commit -m "Add package-name dependency"
 
 type "deactivate" in the same terminal you opened to launch the venv
 
+## Docker development (frontend + backend)
+
+Use Docker Compose for cross-OS local development with live reload:
+
+```bash
+docker compose up --build
+```
+
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8000
+
+Stop containers:
+
+```bash
+docker compose down
+```

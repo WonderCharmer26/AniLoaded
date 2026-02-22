@@ -18,10 +18,12 @@ export default function AnimeInfoPage() {
   const anime_id = Number(id);
   const isValidAnimeId = Number.isInteger(anime_id) && anime_id > 0;
 
+  // scrolls to the top of the page when new anime loads
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [anime_id]);
 
+  // function gets the anime info
   const { data, isFetched, isLoading, isError } = useQuery<AniListMedia, Error>(
     {
       queryKey: ["animeInfo", anime_id],
@@ -37,16 +39,20 @@ export default function AnimeInfoPage() {
     queryFn: getTrending,
   });
 
+  // builds and array of anime
   const featuredAnime = Array.isArray(trendingAnime) ? trendingAnime : [];
 
+  // handle case when the anime id isn't valid
   if (!isValidAnimeId) {
     return <p>Invalid anime ID</p>;
   }
 
+  // error handling
   if (isError) {
     return <p>there was an error</p>;
   }
 
+  // skeleton to show for the banner
   if (isLoading) {
     return <AnimeBannerSkeleton />;
   }
@@ -65,6 +71,7 @@ export default function AnimeInfoPage() {
             <h2 className="section-titles">PLOT</h2>
           </div>
           <div className="h-[250px] w-[700px] mt-2 no-scrollbar overflow-scroll">
+            {/*Handles the raw html data from anilist to make sure its displayed propper*/}
             {isFetched && data?.description && data.description?.length > 0 ? (
               <div
                 className="flex text-start flex-col whitespace-pre-line"
@@ -108,7 +115,7 @@ export default function AnimeInfoPage() {
                     return (
                       <li
                         key={edge.node.id}
-                        className="flex items-center relative w-md gap-4 rounded-xl bg-[#1A2227] p-3.5"
+                        className="flex items-center relative w-md gap-4 rounded-xl bg-[#1A2227] p-3.5 cursor-pointer"
                       >
                         {imageSrc ? (
                           <img

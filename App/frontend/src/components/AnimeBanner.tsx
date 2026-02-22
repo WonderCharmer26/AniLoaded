@@ -19,7 +19,7 @@ export const AnimeBanner: React.FC<AnimeBannerProps> = ({ anime }) => {
 
   return (
     <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen">
-      <div className="absolute z-[1] bottom-3 left-2/7 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
+      <div className="absolute z-[1] bottom-3 left-2/7 md: left-5/16 flex w-full max-w-5xl -translate-x-1/2 flex-row scale-80 px-6">
         <div className="flex h-14 w-14 items-center justify-center rounded-4xl border-[6px] border-[#3CB4FF] text-2xl font-bold mr-2">
           {anime.averageScore}
         </div>
