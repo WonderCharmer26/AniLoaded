@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from fastapi import UploadFile
 from pydantic import BaseModel
 from uuid import UUID
