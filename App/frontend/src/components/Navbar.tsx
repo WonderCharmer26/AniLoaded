@@ -25,7 +25,7 @@ export const Navbar = () => {
 
   const navbarLinks: NavbarLinksI[] = [
     { id: 1, label: "HOME", link: "/" },
-    { id: 2, label: "DISCUSSION", link: "/discussion" },
+    { id: 2, label: "DISCUSSIONS", link: "/discussions" },
     { id: 3, label: "LISTS", link: "/lists" },
     { id: 4, label: "ANIME", link: "/anime" },
     { id: 5, label: "RECOMMENDATION", link: "/recommendations" },
