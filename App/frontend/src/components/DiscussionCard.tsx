@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { Discussion } from "../schemas/discussion";
 
 export default function DiscussionCard({ thread }: { thread: Discussion }) {
+
   // trim the title of the anime
   const title = thread.title.trim().split(/\s+/);
   //title preview to format and make sure the sentence not greater than 6
