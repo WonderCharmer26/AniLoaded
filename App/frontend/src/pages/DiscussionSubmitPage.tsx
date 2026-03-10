@@ -14,12 +14,21 @@ import type { AniListMedia } from "@/schemas/animeSchemas";
 import { submitDiscussion } from "@/services/api/discussionService";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
-// TODO: ADD IN SEASON_NUMBER, ANIME NUMBER, EPISODE NUMBER
-// TODO: ANIME NUMBER: Should have a search component that gets the anime and the anime number to send to the backend
+// TODO: MAKE THE USER NAVIGATE BACK TO THE DISCUSSION PAGE
+// TODO: LOOK INTO HOW THE TANSTACK FORM WORK WITH DATA MUTATION
 
 export default function DiscussionSubmitPage() {
+  // houses current selectedAnime
   const [selectedAnime, setSelectedAnime] = useState<AniListMedia | null>(null);
+
+  // for set up of naviagation to main page
+  const navigate = useNavigate()
+
+  // for query invalidation
+  const queryClient = useQueryClient()
 
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
@@ -44,6 +53,8 @@ export default function DiscussionSubmitPage() {
     // onSubmit only fires when validation passes
     onSubmit: async ({ value }) => {
       try {
+        // submit the Discussion
+        // TODO: SEE IF THERE IS A WAY TO VALIDATE THUMBNAILS
         await submitDiscussion({
           anime_id: value.anime_id,
           title_romaji: selectedAnime?.title?.romaji ?? undefined,
@@ -64,6 +75,11 @@ export default function DiscussionSubmitPage() {
           is_spoiler: value.is_spoiler,
           is_locked: value.is_locked,
         });
+        // invalidate the query key for discussions to trigger refresh
+        queryClient.invalidateQueries({ queryKey: ['discussions'] })
+
+        // navigate back to the list of discussions 
+        navigate("/discussions")
       } catch (error) {
         console.error("Discussion submit failed", error);
       }
