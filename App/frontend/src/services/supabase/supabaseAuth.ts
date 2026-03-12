@@ -14,6 +14,7 @@ export const signOutUser = async () => {
 };
 
 export const getCurrentUser = async () => {
+  // NOTE: has jwt param that we can pass in
   return supabase.auth.getUser();
 };
 

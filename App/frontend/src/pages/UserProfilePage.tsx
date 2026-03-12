@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-  getCurrentUser,
   signOutUser,
   updateUserMetadata,
   updateUserPassword,
 } from "../services/supabase/supabaseAuth";
 
 // supabases built in user class
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "@/services/supabase/hooks/useAuth";
 
 export default function UserProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -24,6 +21,9 @@ export default function UserProfilePage() {
   const [username, setUsername] = useState("");
   const [updatingUsername, setUpdatingUsername] = useState(false);
 
+  // useAuth for helping to get the auth state
+  const { user, loading, refreshUser } = useAuth(); // handles user state management logic
+
   // Predefined anime avatars
   const avatarOptions = [
     "https://api.dicebear.com/7.x/avataaars/svg?seed=anime1",
@@ -34,25 +34,7 @@ export default function UserProfilePage() {
     "https://api.dicebear.com/7.x/avataaars/svg?seed=anime6",
   ];
 
-  // TODO: Might make a hook for getting the user on each of the pages.
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-        error,
-      } = await getCurrentUser();
-      if (error) {
-        console.error("Error fetching user:", error);
-      } else {
-        setUser(user);
-        setUsername(user?.user_metadata?.username || "");
-      }
-      setLoading(false);
-    };
-    // activate on page load
-    getUser();
-  }, []);
-
+  //TODO: might make a function that can be reused
   const handleSignOut = async () => {
     const { error } = await signOutUser();
     if (error) {
@@ -85,6 +67,7 @@ export default function UserProfilePage() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      await refreshUser();
     }
   };
 
@@ -103,10 +86,8 @@ export default function UserProfilePage() {
     } else {
       setSettingsSuccess("Avatar updated successfully!");
       // Refresh user data
-      const {
-        data: { user: updatedUser },
-      } = await getCurrentUser();
-      setUser(updatedUser);
+      await refreshUser();
+      // reset
       setSelectedAvatar(null);
       setAvatarModalOpen(false); // Close modal
     }
@@ -131,11 +112,9 @@ export default function UserProfilePage() {
     } else {
       setSettingsSuccess("Username updated successfully!");
       // Refresh user data
-      const {
-        data: { user: updatedUser },
-      } = await getCurrentUser();
-      setUser(updatedUser);
+      await refreshUser();
     }
+    // loading state
     setUpdatingUsername(false);
   };
 
