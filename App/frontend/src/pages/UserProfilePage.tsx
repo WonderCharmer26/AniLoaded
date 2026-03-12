@@ -6,7 +6,7 @@ import {
 } from "../services/supabase/supabaseAuth";
 
 // supabases built in user class
-import { useAuth } from "@/services/supabase/hooks/useAuth";
+import { useAuthContext } from "../services/supabase/hooks/AuthProvider";
 
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -21,8 +21,13 @@ export default function UserProfilePage() {
   const [username, setUsername] = useState("");
   const [updatingUsername, setUpdatingUsername] = useState(false);
 
-  // useAuth for helping to get the auth state
-  const { user, loading, refreshUser } = useAuth(); // handles user state management logic
+  // Read shared auth state from provider so every page uses the same source.
+  const { user, loading, refreshUser } = useAuthContext();
+
+  // Keep form field in sync when auth user metadata updates.
+  useEffect(() => {
+    setUsername(user?.user_metadata?.username || "");
+  }, [user]);
 
   // Predefined anime avatars
   const avatarOptions = [

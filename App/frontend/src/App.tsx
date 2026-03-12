@@ -29,6 +29,7 @@ import DiscussionInfoPage from "./pages/DiscussionInfoPage";
 import { discussionInfoPrefetcher } from "./services/loaders/discussionInfoPrefetcher";
 import ErrorBoundary from "./components/ErrorBoundary";
 import DiscussionSubmitPage from "./pages/DiscussionSubmitPage";
+import { AuthProvider } from "./services/supabase/hooks/AuthProvider";
 
 // Fetching functions to get data for the HomePage
 const demoUserId = "demo-user"; // TODO: plug in real user data, supabase useAuth might handle this for me
@@ -123,7 +124,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  // Wrap the router once so every route can read auth state.
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;
