@@ -4,13 +4,16 @@ import { Menu } from "lucide-react";
 import AniLoadedLogo from "../assets/images/Ani-Loaded Logo.svg";
 import { useState, useEffect } from "react";
 import { supabase } from "../services/supabase/supabaseConnection";
+import { User } from "@supabase/supabase-js";
 
 export const Navbar = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
     };
     getUser();
@@ -75,10 +78,15 @@ export const Navbar = () => {
         </div>
         {user ? (
           <div className="flex items-center space-x-2">
-            <span className="text-white text-sm">{user.user_metadata?.username || 'User'}</span>
+            <span className="text-white text-sm">
+              {user.user_metadata?.username || "User"}
+            </span>
             <Link to="/profile">
               <img
-                src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+                src={
+                  user.user_metadata?.avatar_url ||
+                  "https://api.dicebear.com/7.x/avataaars/svg?seed=default"
+                }
                 alt="User Avatar"
                 className="w-8 h-8 rounded-full object-cover border-2 border-gray-600 hover:border-gray-400 cursor-pointer"
               />
