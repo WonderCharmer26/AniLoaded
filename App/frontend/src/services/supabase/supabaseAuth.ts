@@ -3,6 +3,8 @@ import type { UserAttributes } from "@supabase/supabase-js";
 import { supabase } from "./supabaseConnection";
 import { toast } from "sonner";
 
+// NOTE: Make sure that the session doesn't persist so that the user has to sign back in
+
 export const signUpWithEmail = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signUp({

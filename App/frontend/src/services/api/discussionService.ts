@@ -8,6 +8,8 @@ import {
   DiscussionResponse,
 } from "../../schemas/discussion";
 import { backendUrl } from "./fetchAnimes";
+import { useAuthContext } from "../supabase/hooks/AuthProvider";
+import { supabase } from "../supabase/supabaseConnection";
 
 // funtion gets all discussions
 export async function getAllDiscussions(): Promise<Discussion[]> {
@@ -49,7 +51,7 @@ export async function submitDiscussion({
   is_locked,
   is_spoiler,
 }: DiscussionRequest): Promise<DiscussionResponse> {
-  // create form obj
+  // create form obj to send off
   const formData = new FormData();
 
   // add inputs to form
@@ -84,10 +86,19 @@ export async function submitDiscussion({
   // add the thumbnail file if user uploads one
   if (thumbnail) formData.append("thumbnail", thumbnail);
 
+  // get users current session
+  const { data: sessionData, error } = await supabase.auth.getSession();
+
+  if (error) {
+    throw new Error("There was an error validating your session");
+  }
+
   // send to the form to the backend
   const res = await axios.post(`${backendUrl}/discussion`, formData);
 
   // if we don't get data from the backend
-  if (!res.data) throw new Error("Error posting discussion");
+  if (!res.data) {
+    throw new Error("Error posting discussion");
+  }
   return res.data;
 }

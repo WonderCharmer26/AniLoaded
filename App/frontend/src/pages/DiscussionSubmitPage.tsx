@@ -16,6 +16,7 @@ import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 // TODO: send user token with request when sending the form, have backend handle the validation and adding the username
 // TODO: MAKE THE USER NAVIGATE BACK TO THE DISCUSSION PAGE
@@ -56,7 +57,7 @@ export default function DiscussionSubmitPage() {
       try {
         // submit the Discussion
         // TODO: SEE IF THERE IS A WAY TO VALIDATE THUMBNAILS
-        await submitDiscussion({
+        const submitted = await submitDiscussion({
           anime_id: value.anime_id,
           title_romaji: selectedAnime?.title?.romaji ?? undefined,
           title_english: selectedAnime?.title?.english ?? undefined,
@@ -76,13 +77,20 @@ export default function DiscussionSubmitPage() {
           is_spoiler: value.is_spoiler,
           is_locked: value.is_locked,
         });
-        // invalidate the query key for discussions to trigger refresh
-        queryClient.invalidateQueries({ queryKey: ["discussions"] });
 
-        // navigate back to the list of discussions
-        navigate("/discussions");
+        if (submitted) {
+          // invalidate the query key for discussions to trigger refresh
+          queryClient.invalidateQueries({ queryKey: ["discussions"] });
+
+          // notify the user
+          toast("Your discussion has been posted");
+
+          // NOTE: might just clear the form and keep the user there
+          navigate("/discussions");
+          // navigate back to the list of discussions
+        }
       } catch (error) {
-        console.error("Discussion submit failed", error);
+        toast.error(`Discussion submition failed: ${error}`);
       }
     },
   });
