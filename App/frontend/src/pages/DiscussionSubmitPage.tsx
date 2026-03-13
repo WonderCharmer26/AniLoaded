@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
+// TODO: send user token with request when sending the form, have backend handle the validation and adding the username
 // TODO: MAKE THE USER NAVIGATE BACK TO THE DISCUSSION PAGE
 // TODO: LOOK INTO HOW THE TANSTACK FORM WORK WITH DATA MUTATION
 
@@ -25,10 +26,10 @@ export default function DiscussionSubmitPage() {
   const [selectedAnime, setSelectedAnime] = useState<AniListMedia | null>(null);
 
   // for set up of naviagation to main page
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // for query invalidation
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   // set up the default values for the form
   const defaultValues: DiscussionValues = {
@@ -76,10 +77,10 @@ export default function DiscussionSubmitPage() {
           is_locked: value.is_locked,
         });
         // invalidate the query key for discussions to trigger refresh
-        queryClient.invalidateQueries({ queryKey: ['discussions'] })
+        queryClient.invalidateQueries({ queryKey: ["discussions"] });
 
-        // navigate back to the list of discussions 
-        navigate("/discussions")
+        // navigate back to the list of discussions
+        navigate("/discussions");
       } catch (error) {
         console.error("Discussion submit failed", error);
       }

@@ -5,19 +5,11 @@ import AniLoadedLogo from "../assets/images/Ani-Loaded Logo.svg";
 import { useState, useEffect } from "react";
 import { supabase } from "../services/supabase/supabaseConnection";
 import { User } from "@supabase/supabase-js";
+import { useAuthContext } from "@/services/supabase/hooks/AuthProvider";
 
 export const Navbar = () => {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    getUser();
-  }, []);
+  // get the user data
+  const { user, loading } = useAuthContext();
 
   interface NavbarLinksI {
     id: number;
@@ -33,6 +25,8 @@ export const Navbar = () => {
     { id: 4, label: "ANIME", link: "/anime" },
     { id: 5, label: "RECOMMENDATION", link: "/recommendations" },
   ];
+
+  // account for loading user data like pfp's
 
   return (
     // NOTE: Space between the navbar and the rest of the content changable by the mt-4
@@ -69,7 +63,7 @@ export const Navbar = () => {
               </button>
             </Link>
           ) : (
-            <Link to="auth/login">
+            <Link to="/auth/login">
               <button className="bg-[#0066a5] cursor-pointer font-semibold text-white px-3.5 py-1.5 rounded-4xl ml-2">
                 Sign In
               </button>

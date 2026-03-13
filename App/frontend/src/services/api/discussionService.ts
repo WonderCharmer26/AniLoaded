@@ -49,7 +49,6 @@ export async function submitDiscussion({
   is_locked,
   is_spoiler,
 }: DiscussionRequest): Promise<DiscussionResponse> {
-
   // create form obj
   const formData = new FormData();
 

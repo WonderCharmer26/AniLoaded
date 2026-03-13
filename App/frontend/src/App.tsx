@@ -30,9 +30,12 @@ import { discussionInfoPrefetcher } from "./services/loaders/discussionInfoPrefe
 import ErrorBoundary from "./components/ErrorBoundary";
 import DiscussionSubmitPage from "./pages/DiscussionSubmitPage";
 import { AuthProvider } from "./services/supabase/hooks/AuthProvider";
+import { Toaster } from "sonner";
 
 // Fetching functions to get data for the HomePage
 const demoUserId = "demo-user"; // TODO: plug in real user data, supabase useAuth might handle this for me
+// NOTE: might use supabase.auth.getUser to help with getting data for protected routes
+//
 // Create router configuration with layouts
 const router = createBrowserRouter([
   {
@@ -127,6 +130,7 @@ function App() {
   // Wrap the router once so every route can read auth state.
   return (
     <AuthProvider>
+      <Toaster />
       <RouterProvider router={router} />
     </AuthProvider>
   );
